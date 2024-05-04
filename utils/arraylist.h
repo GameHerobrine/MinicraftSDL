@@ -1,0 +1,18 @@
+#ifndef UTILS_ARRAYLIST_H_
+#define UTILS_ARRAYLIST_H_
+
+typedef struct{
+	int capacity;
+	int size;
+	void** elements;
+} ArrayList;
+
+void create_arraylist(ArrayList* list);
+void arraylist_push(ArrayList* list, void* element);
+void* arraylist_pop(ArrayList* list);
+void* arraylist_get(ArrayList* list, int index);
+void arraylist_remove_and_dealloc_each(ArrayList* list);
+void arraylist_remove(ArrayList* list);
+
+#endif /* UTILS_ARRAYLIST_H_ */
+
