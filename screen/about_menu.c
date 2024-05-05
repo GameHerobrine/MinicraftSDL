@@ -2,14 +2,14 @@
 #include "menu.h"
 #include "../inputhandler.h"
 
-char s1[] = "About Minicraft"; //i made the worst str2upper func
-char s2[] = "Minicraft was made";
-char s3[] = "by Markus Persson";
-char s4[] = "For the 22'nd ludum";
-char s5[] = "dare competition in";
-char s6[] = "december 2011.";
-char s7[] = "it is dedicated to";
-char s8[] = "my father. <3";
+static char s1[] = "About Minicraft"; //i made the worst str2upper func
+static char s2[] = "Minicraft was made";
+static char s3[] = "by Markus Persson";
+static char s4[] = "For the 22'nd ludum";
+static char s5[] = "dare competition in";
+static char s6[] = "december 2011.";
+static char s7[] = "it is dedicated to";
+static char s8[] = "my father. <3";
 
 const menu_vt aboutmenu_vt = {
 	&aboutmenu_tick,

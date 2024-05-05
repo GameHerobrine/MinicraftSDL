@@ -7,6 +7,8 @@
 
 #include "title_menu.h"
 #include "about_menu.h"
+#include "instructions_menu.h"
+
 #define MENUS_SIZE 16
 char _next[] = ">";
 char _prev[] = "<";
@@ -22,6 +24,7 @@ void init_menus(){
 	
 	menus[mid_TITLE] = &titlemenu_vt;
 	menus[mid_ABOUT] = &aboutmenu_vt;
+	menus[mid_INSTRUCTIONS] = &instructionsmenu_vt;
 }
 
 void tick_menu(enum menu_id menu){

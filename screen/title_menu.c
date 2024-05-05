@@ -74,7 +74,10 @@ void titlemenu_tick(){
 			//TODO game->setMenu(null);
 		}
 		
-		if(titlemenu_selected == 1) game_set_menu(mid_INSTRUCTIONS);
+		if(titlemenu_selected == 1) {
+			menu_parent = mid_TITLE;
+			game_set_menu(mid_INSTRUCTIONS);
+		}
 		if(titlemenu_selected == 2) {
 			menu_parent = mid_TITLE;
 			game_set_menu(mid_ABOUT);
