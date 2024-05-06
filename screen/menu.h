@@ -23,6 +23,8 @@ enum menu_id{
 	mid_WON
 };
 
+void init_menus();
+
 void init_menu(enum menu_id menu);
 void tick_menu(enum menu_id menu);
 void render_menu(enum menu_id menu, Screen* screen);
