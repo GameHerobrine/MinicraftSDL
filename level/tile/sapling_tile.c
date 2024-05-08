@@ -4,8 +4,8 @@ void saplingtile_init(TileID id, TileID onType, TileID growsTo){
 	tile_init(id);
 	
 	Tile* tile = tiles + id;
-	tile->additionalData = onType;
-	tile->additionalData2 = growsTo;
+	tile->add.sapling.onType = onType;
+	tile->add.sapling.growsTo = growsTo;
 	
 	Tile* on = tiles + onType;
 	

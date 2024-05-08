@@ -2,40 +2,22 @@
 #define LEVEL_TILE_TILE_H_
 
 #include "../../utils/javarandom.h"
+#include "stairs_tile.h"
+#include "sapling_tile.h"
+#include "ore_tile.h"
+#include "tileids.h"
 
-typedef enum{
-	GRASS,
-	ROCK,
-	WATER,
-	FLOWER,
-	TREE,
-	DIRT,
-	SAND,
-	CACTUS,
-	HOLE,
-	TREE_SAPLING,
-	CACTUS_SAPLING,
-	FARMLAND,
-	WHEAT,
-	LAVA,
-	STAIRS_DOWN,
-	STAIRS_UP,
-	INFINITE_FALL,
-	CLOUD,
-	HARD_ROCK,
-	IRON_ORE,
-	GOLD_ORE,
-	GEM_ORE,
-	CLOUD_CACTUS
-} TileID;
 
 typedef struct{
 	Random random;
 	
 	TileID id;
 	
-	int additionalData; //added to not use mallocs/frees
-	int additionalData2;
+	union{
+		add_stairs_ stairs;
+		add_sapling_ sapling;
+		add_ore_ ore;
+	} add;
 	
 	char connectsToGrass : 1;
 	char connectsToSand : 1;

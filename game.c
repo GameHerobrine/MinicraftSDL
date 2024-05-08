@@ -7,6 +7,7 @@
 #include "utils/utils.h"
 #include "screen/menu.h"
 #include "level/tile/tile.h"
+#include "item/resource/resource.h"
 
 SpriteSheet icons_spritesheet;
 Screen game_screen;
@@ -27,6 +28,7 @@ void game_set_menu(enum menu_id menu){
 
 void game_init(){
 	font_pre_init();
+	init_resources();
 	init_tiles();
 	init_menus();
 	

@@ -14,6 +14,7 @@
 #include "stairs_tile.h"
 
 #include "../../gfx/screen.h"
+#include "../../item/resource/resource.h"
 
 Tile tiles[256];
 
@@ -42,9 +43,9 @@ void init_tiles(){
 	tile_init(INFINITE_FALL);
 	tile_init(CLOUD);
 	tile_init(HARD_ROCK);
-	//IRON_ORE TODO Resource
-	//GOLD_ORE TODO Resource
-	//GEM_ORE TODO Resource
+	oretile_init(IRON_ORE, &ironOre);
+	oretile_init(GOLD_ORE, &goldOre);
+	oretile_init(GEM_ORE, &gem);
 	tile_init(CLOUD_CACTUS);
 }
 
