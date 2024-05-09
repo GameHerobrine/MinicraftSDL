@@ -25,6 +25,38 @@ void game_set_menu(enum menu_id menu){
 	current_menu = menu;
 	init_menu(menu);
 }
+int game_playerDeadTime = 0;
+int game_wonTimer = 0;
+int game_gameTime = 0;
+char game_hasWon = 0;
+Level game_levels[5] = {0};
+int game_currentLevel;
+Level* game_level;
+
+void game_reset(){
+	game_playerDeadTime = 0;
+	game_wonTimer = 0;
+	game_gameTime = 0;
+	game_hasWon = 0;
+	
+	for(int i = 0; i < 5; ++i){
+		printf("Freeing level %d\n", i);
+		level_free(game_levels + i);
+	}
+	
+	memset(game_levels, 0, sizeof(game_levels));
+	game_currentLevel = 3;
+	level_init(game_levels + 4, 128, 128, 1, 0);
+	level_init(game_levels + 3, 128, 128, 0, game_levels + 4);
+	level_init(game_levels + 2, 128, 128, -1, game_levels + 3);
+	level_init(game_levels + 1, 128, 128, -2, game_levels + 2);
+	level_init(game_levels + 0, 128, 128, -3, game_levels + 1);
+	
+	game_level = game_levels + game_currentLevel;
+	//TODO player
+	
+	//TODO 5 times: levels.trySpawn(5000);
+}
 
 void game_init(){
 	levelgen_preinit();
@@ -56,7 +88,9 @@ void game_init(){
 	fclose(f);
 	
 	create_screen(&game_screen, WIDTH, HEIGHT, &icons_spritesheet);
+	//TODO lightScreen
 	
+	game_reset();
 	game_set_menu(mid_TITLE);
 }
 
@@ -77,6 +111,8 @@ void game_tick(){
 			tick_menu(current_menu);
 		}else{
 			//TODO tick player
+			
+			++tile_tickCount;
 		}
 	}
 }
@@ -150,35 +186,42 @@ void game_renderFocusNagger(){
 }
 
 void game_render(){
-	/* TODO
-	 int xScroll = player.x - screen.w / 2;
-		int yScroll = player.y - (screen.h - 8) / 2;
-		if (xScroll < 16) xScroll = 16;
-		if (yScroll < 16) yScroll = 16;
-		if (xScroll > level.w * 16 - screen.w - 16) xScroll = level.w * 16 - screen.w - 16;
-		if (yScroll > level.h * 16 - screen.h - 16) yScroll = level.h * 16 - screen.h - 16;
-		if (currentLevel > 3) {
-			int col = Color.get(20, 20, 121, 121);
-			for (int y = 0; y < 14; y++)
-				for (int x = 0; x < 24; x++) {
-					screen.render(x * 8 - ((xScroll / 4) & 7), y * 8 - ((yScroll / 4) & 7), 0, col, 0);
-				}
+	int xScroll = 1688, yScroll = 1168;
+	//int xScroll = player.x - screen.w / 2; TODO Player
+	//int yScroll = player.y - (screen.h - 8) / 2;
+	
+	if (xScroll < 16) xScroll = 16;
+	if (yScroll < 16) yScroll = 16;
+	if (xScroll > game_level->w * 16 - game_screen.w - 16) xScroll = game_level->w * 16 - game_screen.w - 16;
+	if (yScroll > game_level->h * 16 - game_screen.h - 16) yScroll = game_level->h * 16 - game_screen.h - 16;
+	
+	if(game_currentLevel > 3){
+		int col = getColor4(20, 20, 121, 121);
+		
+		for(int y = 0; y < 14; ++y){
+			for(int x = 0; x < 24; ++x){
+				render_screen(&game_screen, x * 8 - ((xScroll / 4) & 7), y * 8 - ((yScroll / 4) & 7), 0, col, 0);
+			}
 		}
-
-		level.renderBackground(screen, xScroll, yScroll);
-		level.renderSprites(screen, xScroll, yScroll);
-
-		if (currentLevel < 3) {
-			lightScreen.clear(0);
+	}
+		
+	level_renderBackground(game_level, &game_screen, xScroll, yScroll);
+	//TODO level.renderSprites(screen, xScroll, yScroll);
+		
+	if(game_currentLevel < 3){
+		//TODO render light
+		/*
+		 * lightScreen.clear(0);
 			level.renderLight(lightScreen, xScroll, yScroll);
 			screen.overlay(lightScreen, xScroll, yScroll);
-		}
-	 */
-	
-	game_renderGui();
-	if(!game_hasfocus){
-		game_renderFocusNagger();
+		 */
 	}
+	
+	
+	//game_renderGui();
+	//if(!game_hasfocus){
+	//	game_renderFocusNagger();
+	//}
 	
 	
 	
@@ -214,7 +257,7 @@ int main(int argc, char** argv){
 		ret = 1;
 		goto QUIT;
 	}
-#define LEVELGENTEST
+	
 #ifdef LEVELGENTEST
 #define set_px(x, y, color) {\
 	pixel.x = x*SCALE;\
@@ -328,6 +371,9 @@ int main(int argc, char** argv){
 	SDL_Quit();
 	delete_screen(&game_screen);
 	//TODO delete_screen(&game_lightScreen);
-	
+	for(int i = 0; i < 5; ++i){
+		printf("Freeing level %d\n", i);
+		level_free(game_levels + i);
+	}
 	return ret;
 }

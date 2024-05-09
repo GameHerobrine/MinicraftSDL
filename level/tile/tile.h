@@ -6,7 +6,8 @@
 #include "sapling_tile.h"
 #include "ore_tile.h"
 #include "tileids.h"
-
+#include "../level.h"
+#include "../../gfx/screen.h"
 
 typedef struct{
 	Random random;
@@ -26,8 +27,9 @@ typedef struct{
 } Tile;
 
 extern Tile tiles[256];
-
+extern int tile_tickCount;
 void init_tiles();
 void tile_init(TileID id);
+void tile_render(TileID id, Screen* screen, Level* level, int x, int y);
 
 #endif /* LEVEL_TILE_TILE_H_ */

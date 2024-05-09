@@ -13,10 +13,16 @@
 #include "lava_tile.h"
 #include "stairs_tile.h"
 
+
+
+#include "ore_tile.h"
+#include "cloud_cactus_tile.h"
 #include "../../gfx/screen.h"
 #include "../../item/resource/resource.h"
+#include "../level.h"
 
 Tile tiles[256];
+int tile_tickCount = 0;
 
 void init_tiles(){
 	
@@ -55,7 +61,76 @@ void tile_init(TileID id){
 	t->id = id;
 }
 
-//void tile_render(TileID id, Screen* screen, Level* level, int x, int y){} TODO Level*
+void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
+	//TODO render
+	switch(id){
+		case CACTUS:
+			cactustile_render(id, screen, level, x, y);
+			break;
+		case CLOUD_CACTUS:
+			cloudcactustile_render(id, screen, level, x, y);
+			break;
+		case CLOUD:
+			cloudtile_render(id, screen, level, x, y);
+			break;
+		case DIRT:
+			dirttile_render(id, screen, level, x, y);
+			break;
+		case FARMLAND:
+			farmlandtile_render(id, screen, level, x, y);
+			break;
+		case FLOWER:
+			flowertile_render(id, screen, level, x, y);
+			break;
+		case GRASS:
+			grasstile_render(id, screen, level, x, y);
+			break;
+		case HARD_ROCK:
+			//TODO render
+			break;
+		case HOLE:
+			//TODO render
+			break;
+		case LAVA:
+			//TODO render
+			break;
+		case IRON_ORE:
+		case GOLD_ORE:
+		case GEM_ORE:
+			//TODO render
+			break;
+		case ROCK:
+			//TODO render
+			break;
+		case SAND:
+			//TODO render
+			break;
+		case TREE_SAPLING:
+		case CACTUS_SAPLING:
+			//TODO render
+			break;
+		case STAIRS_UP:
+		case STAIRS_DOWN:
+			//TODO render
+			break;
+		//case STONE: XXX unused?
+		//	
+		//	break;
+		case TREE:
+			treetile_render(id, screen, level, x, y);
+			break;
+		case WATER:
+			watertile_render(id, screen, level, x, y);
+			break;
+		case WHEAT:
+			//TODO render
+			break;
+		default:
+		case INFINITE_FALL:
+			//render nothing
+			break;
+	}
+}
 
 //char tile_mayPass(TileID id, Level* level, int x, int y){
 //	return 1;

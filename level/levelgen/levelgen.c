@@ -15,7 +15,7 @@ static inline double sample(LevelGen* gen, int x, int y){
 }
 
 void levelgen_preinit(){
-	random_set_seed(&lg_random, 0); //getTimeUS() / 1000); TODO reenable 
+	random_set_seed(&lg_random, getTimeUS() / 1000); 
 }
 
 void levelgen_free(LevelGen* gen){
