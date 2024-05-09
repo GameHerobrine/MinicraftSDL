@@ -195,6 +195,81 @@ void createUndergroundMap(unsigned char** map_r, unsigned char** data_r, int w, 
 	levelgen_free(&noise2);
 }
 
+void createSkyMap(unsigned char** map_r, unsigned char** data_r, int w, int h){
+	LevelGen noise1, noise2;
+	levelgen_init(&noise1, w, h, 8);
+	levelgen_init(&noise2, w, h, 8);
+	unsigned char* map = malloc(w*h);
+	unsigned char* data = malloc(w*h);
+	memset(map, 0, w*h);
+	memset(data, 0, w*h);
+	
+	for(int y = 0; y < h; ++y){
+		for(int x = 0; x < w; ++x){
+			int i = x + y*w;
+			
+			double val = dabs(noise1.values[i] - noise2.values[i]) * 3 - 2;
+			
+			double xd = x / (w - 1.0) * 2 - 1;
+			double yd = y / (h - 1.0) * 2 - 1;
+			
+			if(xd < 0) xd = -xd;
+			if(yd < 0) yd = -yd;
+			
+			double dist = xd >= yd ? xd : yd;
+			dist = dist * dist * dist * dist;
+			dist = dist * dist * dist * dist;
+			val = -val * 1 - 2.2;
+			val = val + 1 - dist * 20;
+			
+			if(val < -0.25) map[i] = INFINITE_FALL;
+			else map[i] = CLOUD;
+		}
+	}
+	
+	for(int i = 0; i < w*h / 50; ++i){
+		int x = random_next_int(&lg_random, w-2) + 1;
+		int y = random_next_int(&lg_random, h-2) + 1;
+		
+		for(int yy = y-1; yy <= y + 1; ++yy){
+			for(int xx = x - 1; xx <= x + 1; ++xx){
+				if(map[xx + yy * w] != CLOUD) goto loop_cloudcacti_fail;
+			}
+		}
+		
+		map[x + y*w] = CLOUD_CACTUS;
+		
+		loop_cloudcacti_fail:
+		continue;
+	}
+	
+	int count = 0;
+	for(int i = 0; i < w*h; ++i){
+		int x = random_next_int(&lg_random, w - 2) + 1;
+		int y = random_next_int(&lg_random, h - 2) + 1;
+		
+		for(int yy = y - 1; yy <= y + 1; ++yy){
+			for(int xx = x - 1; xx <= x + 1; ++xx){
+				if(map[xx + yy*w] != CLOUD) goto loop_stairs_fail;
+			}
+		}
+		
+		map[x + y * w] = STAIRS_DOWN;
+		++count;
+		if(count == 2) break;
+		
+		loop_stairs_fail:
+		continue;
+	}
+	
+	
+	*map_r = map;
+	*data_r = data;
+	levelgen_free(&noise1);
+	levelgen_free(&noise2);
+}
+
+
 void createTopMap(unsigned char** map_r, unsigned char** data_r, int w, int h){
 	LevelGen mnoise1, mnoise2, mnoise3, noise1, noise2;
 	
@@ -326,6 +401,30 @@ void createTopMap(unsigned char** map_r, unsigned char** data_r, int w, int h){
 	levelgen_free(&noise1);
 	levelgen_free(&noise2);
 }
+
+void createAndValidateSkyMap(unsigned char** map_r, unsigned char** data_r, int w, int h){
+	int count[256];
+	
+	do{
+		memset(count, 0, sizeof(int)*256);
+		createSkyMap(map_r, data_r, w, h);
+		unsigned char* map = *map_r;
+		
+		for(int i = 0; i < w*h; ++i){
+			++count[map[i]];
+		}
+		
+		if(count[CLOUD] < 2000) goto genfail;
+		if(count[STAIRS_DOWN] < 2) goto genfail;
+		
+		break;
+		genfail:
+		printf("gen failed %d %d\n", count[CLOUD], count[STAIRS_DOWN]);
+		free(map);
+		free(*data_r);
+	}while(1);
+}
+
 void createAndValidateUndergroundMap(unsigned char** map_r, unsigned char** data_r, int w, int h, int depth){
 	int count[256];
 	
@@ -345,7 +444,6 @@ void createAndValidateUndergroundMap(unsigned char** map_r, unsigned char** data
 		
 		break;
 		genfail:
-		printf("gen fail %d %d %d %d\n", count[ROCK], count[DIRT], count[IRON_ORE + depth - 1], count[STAIRS_DOWN]);
 		free(map);
 		free(*data_r);
 	}while(1);

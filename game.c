@@ -228,7 +228,7 @@ int main(int argc, char** argv){
 	unsigned char* data;
 	pixel.w = SCALE;
 	pixel.h = SCALE;
-	createAndValidateUndergroundMap(&map, &data, w, h, 3);
+	createAndValidateSkyMap(&map, &data, w, h, 3);
 	printf("gen stopped\n");
 	surface = SDL_SetVideoMode(w*SCALE, h*SCALE, 32, SDL_HWPALETTE|SDL_DOUBLEBUF);
 	for(int y = 0; y < h; ++y){
