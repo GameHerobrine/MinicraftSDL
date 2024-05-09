@@ -27,6 +27,7 @@ void game_set_menu(enum menu_id menu){
 }
 
 void game_init(){
+	levelgen_preinit();
 	font_pre_init();
 	init_resources();
 	init_tiles();
@@ -213,6 +214,56 @@ int main(int argc, char** argv){
 		ret = 1;
 		goto QUIT;
 	}
+#define LEVELGENTEST
+#ifdef LEVELGENTEST
+#define set_px(x, y, color) {\
+	pixel.x = x*SCALE;\
+	pixel.y = y*SCALE;\
+	SDL_FillRect(surface, &pixel, color);\
+}	
+	
+	int w = 128;
+	int h = 128;
+	unsigned char* map;
+	unsigned char* data;
+	pixel.w = SCALE;
+	pixel.h = SCALE;
+	createAndValidateTopMap(&map, &data, w, h);
+	printf("gen stopped\n");
+	surface = SDL_SetVideoMode(w*SCALE, h*SCALE, 32, SDL_HWPALETTE|SDL_DOUBLEBUF);
+	for(int y = 0; y < h; ++y){
+		for(int x = 0; x < w; ++x){
+			int i = x + y * w;
+			
+			if(map[i] == WATER) set_px(x, y, 0x000080);
+			if(map[i] == GRASS) set_px(x, y, 0x208020);
+			if(map[i] == ROCK) set_px(x, y, 0xa0a0a0);
+			if(map[i] == DIRT) set_px(x, y, 0x604040);
+			if(map[i] == SAND) set_px(x, y, 0xa0a040);
+			if(map[i] == TREE) set_px(x, y, 0x003000);
+			if(map[i] == LAVA) set_px(x, y, 0xff2020);
+			if(map[i] == CLOUD) set_px(x, y, 0xa0a0a0);
+			if(map[i] == STAIRS_DOWN) set_px(x, y, 0xffffff);
+			if(map[i] == STAIRS_UP) set_px(x, y, 0xffffff);
+			if(map[i] == CLOUD_CACTUS) set_px(x, y, 0xff00ff);
+		}
+	}
+	SDL_Flip(surface);
+	while(running)
+	{
+		while(SDL_PollEvent(&event)){
+			switch(event.type){
+				case SDL_QUIT:
+					running = 0;
+					break;
+			}
+		}
+	}
+	free(map);
+	free(data);
+	goto QUIT;
+#endif
+	
 	
 	while(running)
 	{

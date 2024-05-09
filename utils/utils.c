@@ -14,3 +14,7 @@ unsigned long long int getTimeUS(){
 	gettimeofday(&tv, 0);
 	return (tv.tv_sec*1000000)+(tv.tv_usec);
 }
+
+double dabs(double d){
+	return d < 0 ? -d : d;
+}

@@ -5,4 +5,5 @@ void strToUpper(char* str, int size);
 
 unsigned long long int getTimeUS();
 
+double dabs(double d);
 #endif
