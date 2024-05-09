@@ -1,2 +1,2 @@
 # MinicraftSDL
-Port of Minicraft to SDL1
+Port of [Minicraft](https://github.com/skeeto/Minicraft) to SDL1
