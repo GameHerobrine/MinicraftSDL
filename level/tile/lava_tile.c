@@ -1,11 +1,13 @@
 #include "tile.h"
 static Random wRandom;
+static Random trandom;
 
 void lavatile_init(TileID id){
 	tile_init(id);
 	
 	Tile* tile = tiles + id;
 	tile->connectsToSand = tile->connectsToLava = 1;
+	random_set_seed(&trandom, getTimeUS() / 1000); 
 }
 
 void lavatile_render(TileID id, Screen* screen, Level* level, int x, int y){
@@ -37,4 +39,14 @@ void lavatile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
 }
 
-//TODO mayPass, tick, getlightRadius -> 6
+void lavatile_tick(TileID id, Level* level, int xt, int yt){
+	int xn = xt;
+	int yn = yt;
+	
+	if(random_next_boolean(&trandom)) xn += random_next_int(&trandom, 2) * 2 - 1;
+	else yn += random_next_int(&trandom, 2) * 2 - 1;
+	
+	if(level_get_tile(level, xn, yn) == HOLE) level_set_tile(level, xn, yn, id, 0);
+}
+
+//TODO mayPass

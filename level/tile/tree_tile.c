@@ -31,5 +31,11 @@ void treetile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	if(d && dr && r) render_screen(screen, x * 16 + 8, y * 16 + 8, 10 + 1 * 32, col, 0);
 	else render_screen(screen, x * 16 + 8, y * 16 + 8, 10 + 3 * 32, barkCol2, 0);
 }
-//TODO override: render, tick, mayPass -> false, hurt, interact + private hurt(Level*, x, y, int dmg);
+
+void treetile_tick(TileID id, Level* level, int xt, int yt){
+	int damage = level_get_data(level, xt, yt);
+	if(damage) level_set_data(level, xt, yt, damage - 1);
+}
+
+//TODO override: mayPass -> false, hurt, interact + private hurt(Level*, x, y, int dmg);
 

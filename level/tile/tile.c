@@ -42,7 +42,7 @@ void init_tiles(){
 	saplingtile_init(TREE_SAPLING, GRASS, TREE);
 	saplingtile_init(CACTUS_SAPLING, SAND, CACTUS);
 	tile_init(FARMLAND);
-	tile_init(WHEAT);
+	wheat_tile_init(WHEAT);
 	lavatile_init(LAVA);
 	stairstile_init(STAIRS_DOWN, 0);
 	stairstile_init(STAIRS_UP, 1);
@@ -62,7 +62,6 @@ void tile_init(TileID id){
 }
 
 void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
-	//TODO render
 	switch(id){
 		case CACTUS:
 			cactustile_render(id, screen, level, x, y);
@@ -132,19 +131,65 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	}
 }
 
-//char tile_mayPass(TileID id, Level* level, int x, int y){
+//char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e){
 //	return 1;
-//} TODO Level*
+//} TODO Entity*
 
-//int tile_getLightRadius(TileID id, Level* level, int x, int y){
-//	return 0;
-//} TODO Level*
+int tile_getLightRadius(TileID id, Level* level, int x, int y){
+	switch(id){
+		case LAVA:
+			return 6;
+		default:
+			return 0;
+	}
+}
 
 //void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){} TODO Level*, Mob*
 
 //void tile_bumpedInto(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
 
-//void tile_tick(TileID id, Level* level, int xt, int yt){} TODO Level*
+void tile_tick(TileID id, Level* level, int xt, int yt){
+	switch(id){
+		case CACTUS:
+			cactustile_tick(id, level, xt, yt);
+			break;
+		case FARMLAND:
+			farmland_tick(id, level, xt, yt);
+			break;
+		case GRASS:
+			grasstile_tick(id, level, xt, yt);
+			break;
+		case HARD_ROCK:
+			hardrocktile_tick(id, level, xt, yt);
+			break;
+		case LAVA:
+			lavatile_tick(id, level, xt, yt);
+			break;
+		case ROCK:
+			rocktile_tick(id, level, xt, yt);
+			break;
+		case SAND:
+			sandtile_tick(id, level, xt, yt);
+			break;
+		case TREE_SAPLING:
+		case CACTUS_SAPLING:
+			saplingtile_tick(id, level, xt, yt);
+			break;
+		case TREE:
+			treetile_tick(id, level, xt, yt);
+			break;
+		case WATER:
+			watertile_tick(id, level, xt, yt);
+			break;
+		case WHEAT:
+			wheattile_tick(id, level, xt, yt);
+			break;
+		case INFINITE_FALL:
+		default:
+			//do nothing
+			break;
+	}
+}
 
 //void tile_steppedOns(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
 

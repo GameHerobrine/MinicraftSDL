@@ -113,7 +113,18 @@ void level_set_data(Level* level, int x, int y, int val){
 //TODO getEntities()
 
 void level_tick(Level* level){
-	//TODO level_tick
+	//TODO trySpawn(1);
+	
+	for(int i = 0; i < level->w*level->h / 50; ++i){
+		int xt = random_next_int(&level->random, level->w);
+		int yt = random_next_int(&level->random, level->w);
+		
+		tile_tick(level_get_tile(level, xt, yt), level, xt, yt);
+		
+	}
+	
+	//TODO entities
+	
 }
 
 void level_free(Level* lvl){

@@ -21,4 +21,10 @@ void saplingtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	render_screen(screen, x * 16 + 4, y * 16 + 4, 11 + 3 * 32, col, 0);
 }
 
-//TODO override render, tick, hurt
+void saplingtile_tick(TileID id, Level* level, int xt, int yt){
+	int age = level_get_data(level, xt, yt) + 1;
+	if(age > 100) level_set_tile(level, xt, yt, tiles[id].add.sapling.growsTo, 0);
+	else level_set_data(xt, yt, age);
+}
+
+//TODO override render, hurt

@@ -5,7 +5,12 @@ void sandtile_init(TileID id){
 	tiles[id].connectsToSand = 1;
 }
 
-//TODO tick, steppedOn(entity instance of Mob -> level.setData(x, y, 10)), interact
+void sandtile_tick(TileID id, Level* level, int xt, int yt){
+	int damage = level_get_data(level, xt, yt);
+	if(damage) level_set_data(level, xt, yt, damage - 1);
+}
+
+//TODO steppedOn(entity instance of Mob -> level.setData(x, y, 10)), interact
 void sandtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(level->sandColor + 2, level->sandColor, level->sandColor - 110, level->sandColor - 110);
 	int transitionColor = getColor4(level->sandColor - 110, level->sandColor, level->sandColor - 110, level->dirtColor);

@@ -112,6 +112,8 @@ void game_tick(){
 		}else{
 			//TODO tick player
 			
+			
+			level_tick(game_level);
 			++tile_tickCount;
 		}
 	}

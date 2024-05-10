@@ -4,7 +4,7 @@
 //	return 1;
 //} TODO Level*
 
-//TODO override hurt, tick, interact
+//TODO override hurt, interact
 
 void rocktile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 444, 333, 333);
@@ -39,4 +39,9 @@ void rocktile_render(TileID id, Screen* screen, Level* level, int x, int y){
 		if (!dr) render_screen(screen, x * 16 + 8, y * 16 + 8, 3, col, 0);
 		else render_screen(screen, x * 16 + 8, y * 16 + 8, 8 + 1 * 32, transitionColor, 3);
 	}else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 4 : 5) + (d ? 0 : 1) * 32, transitionColor, 3);
+}
+
+void rocktile_tick(TileID id, Level* level, int xt, int yt){
+	int damage = level_get_data(level, xt, yt);
+	if(damage) level_set_data(level, xt, yt, damage - 1);
 }

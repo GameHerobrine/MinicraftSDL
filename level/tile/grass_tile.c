@@ -1,8 +1,11 @@
 #include "tile.h"
 
+static Random trandom;
+
 void grasstile_init(TileID id){
 	tile_init(id);
 	Tile* t = tiles + id;
+	random_set_seed(&trandom, getTimeUS() / 1000); 
 	
 	t->connectsToGrass = 1;
 }
@@ -27,4 +30,17 @@ void grasstile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	if (!d && !r) render_screen(screen, x * 16 + 8, y * 16 + 8, 3, col, 0);
 	else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 13 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
 }	
-//TODO override tick, interact 
+
+void grasstile_tick(TileID id, Level* level, int xt, int yt){
+	if(random_next_int(&trandom, 40)) return;
+	
+	int xn = xt;
+	int yn = yt;
+	
+	if(random_next_boolean(&trandom)) xn += random_next_int(&trandom, 2) * 2 - 1;
+	else yn += random_next_int(&trandom, 2) * 2 - 1;
+	
+	if(level_get_tile(level, xn, yn) == DIRT) level_set_tile(level, xn, yn, id, 0);
+}
+
+//TODO override interact 

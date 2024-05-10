@@ -18,7 +18,9 @@ int random_next(Random* random, int bits){
 	
 	return (int)((unsigned long long int)nextseed >> (48 - bits));
 }
-
+char random_next_boolean(Random* random){
+	return random_next(random, 1) != 0;
+}
 int random_next_int(Random* random, int bound){
 	
 	int r = random_next(random, 31);

@@ -1,10 +1,11 @@
 #include "tile.h"
 #include "../../utils/javarandom.h"
 static Random wRandom;
+static Random trandom;
 
 void watertile_init(TileID id){
 	tile_init(id);
-	
+	random_set_seed(&trandom, getTimeUS() / 1000); 
 	Tile* tile = tiles + id;
 	tile->connectsToSand = 1;
 	tile->connectsToWater = 1;
@@ -37,6 +38,16 @@ void watertile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	
 	if(!d && !r) render_screen(screen, x * 16 + 8, y * 16 + 8, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
 	else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+}
+
+void watertile_tick(TileID id, Level* level, int xt, int yt){
+	int xn = xt;
+	int yn = yt;
+	
+	if(random_next_boolean(&trandom)) xn += random_next_int(&trandom, 2) * 2 - 1;
+	else yn += random_next_int(&trandom, 2) * 2 - 1;
+	
+	if(level_get_tile(level, xn, yn) == HOLE) level_set_tile(level, xn, yn, id, 0);
 }
 
 //TODO override: mayPass, tick.
