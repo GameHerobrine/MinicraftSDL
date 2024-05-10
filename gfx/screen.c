@@ -9,14 +9,14 @@ void create_screen(Screen* screen, int w, int h, SpriteSheet* sheet){
 	screen->w = w;
 	screen->h = h;
 
-	screen->pixels = malloc(sizeof(int)*(w*h));
+	screen->pixels = malloc((w*h));
 	for(int i = 0; i < w*h; ++i) screen->pixels[i] = 0;
 	screen->pixelsSize =w*h;
 }
 
 void clear_screen(Screen* screen, int color){
 	for(int i = 0; i < screen->pixelsSize; ++i){
-		screen->pixels[i] = color;
+		screen->pixels[i] = color & 255;
 	}
 }
 
@@ -40,7 +40,7 @@ void render_screen(Screen* screen, int xp, int yp, int tile, int colors, int bit
 
 			int xs = x;
 			if(mirrorX) xs = 7 - x;
-			int col = (colors >> (screen->sheet->pixels[xs + ys * screen->sheet->width + toffs] * 8)) & 255;
+			unsigned char col = (colors >> (screen->sheet->pixels[xs + ys * screen->sheet->width + toffs] * 8)) & 255;
 			if(col < 255) screen->pixels[(x + xp) + (y + yp) * screen->w] = col;
 		}
 	}

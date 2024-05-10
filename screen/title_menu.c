@@ -70,8 +70,8 @@ void titlemenu_tick(){
 	if(attack.clicked || menu.clicked){
 		if(titlemenu_selected == 0){
 			//TODO Sound.test.play();
-			//TODO game->resetGame();
-			//TODO game->setMenu(null);
+			game_reset();
+			game_set_menu(0);
 		}
 		
 		if(titlemenu_selected == 1) {

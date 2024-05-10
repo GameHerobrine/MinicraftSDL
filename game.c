@@ -218,13 +218,10 @@ void game_render(){
 	}
 	
 	
-	//game_renderGui();
-	//if(!game_hasfocus){
-	//	game_renderFocusNagger();
-	//}
-	
-	
-	
+	game_renderGui();
+	if(!game_hasfocus){
+		game_renderFocusNagger();
+	}
 }
 
 int main(int argc, char** argv){

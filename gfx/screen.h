@@ -13,7 +13,7 @@ typedef struct{
 
 	int w;
 	int h;
-	int* pixels;
+	unsigned char* pixels;
 	int pixelsSize;
 
 	SpriteSheet* sheet;

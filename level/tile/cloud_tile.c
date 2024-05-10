@@ -5,7 +5,7 @@
 void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 444, 555, 555);
 	int transitionColor = getColor4(333, 444, 555, -1);
-	
+	//TODO broken
 	char u = level_get_tile(level, x, y - 1) == INFINITE_FALL;
 	char d = level_get_tile(level, x, y + 1) == INFINITE_FALL;
 	char l = level_get_tile(level, x - 1, y) == INFINITE_FALL;

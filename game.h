@@ -2,7 +2,7 @@
 
 extern SpriteSheet icons_spritesheet;
 
-#define HEIGHT 120*3
-#define WIDTH 160*3
-#define SCALE 1
+#define HEIGHT 120
+#define WIDTH 160
+#define SCALE 3
 
