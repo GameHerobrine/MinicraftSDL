@@ -21,10 +21,10 @@ void watertile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	char l = !tiles[level_get_tile(level, x - 1, y)].connectsToWater;
 	char r = !tiles[level_get_tile(level, x + 1, y)].connectsToWater;
 	
-	char su = !tiles[level_get_tile(level, x, y - 1)].connectsToSand;
-	char sd = !tiles[level_get_tile(level, x, y + 1)].connectsToSand;
-	char sl = !tiles[level_get_tile(level, x - 1, y)].connectsToSand;
-	char sr = !tiles[level_get_tile(level, x + 1, y)].connectsToSand;
+	char su = u && tiles[level_get_tile(level, x, y - 1)].connectsToSand;
+	char sd = d && tiles[level_get_tile(level, x, y + 1)].connectsToSand;
+	char sl = l && tiles[level_get_tile(level, x - 1, y)].connectsToSand;
+	char sr = r && tiles[level_get_tile(level, x + 1, y)].connectsToSand;
 	
 	if(!u && !l) render_screen(screen, x * 16 + 0, y * 16 + 0, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
 	else render_screen(screen, x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);

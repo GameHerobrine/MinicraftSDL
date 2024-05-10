@@ -14,7 +14,7 @@
 #include "stairs_tile.h"
 
 
-
+#include "hard_rock_tile.h"
 #include "ore_tile.h"
 #include "cloud_cactus_tile.h"
 #include "../../gfx/screen.h"
@@ -86,32 +86,32 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
 			grasstile_render(id, screen, level, x, y);
 			break;
 		case HARD_ROCK:
-			//TODO render
+			hardrocktile_render(id, screen, level, x, y);
 			break;
 		case HOLE:
-			//TODO render
+			holetile_render(id, screen, level, x, y);
 			break;
 		case LAVA:
-			//TODO render
+			lavatile_render(id, screen, level, x, y);
 			break;
 		case IRON_ORE:
 		case GOLD_ORE:
 		case GEM_ORE:
-			//TODO render
+			oretile_render(id, screen, level, x, y);
 			break;
 		case ROCK:
-			//TODO render
+			rocktile_render(id, screen, level, x, y);
 			break;
 		case SAND:
-			//TODO render
+			sandtile_render(id, screen, level, x, y);
 			break;
 		case TREE_SAPLING:
 		case CACTUS_SAPLING:
-			//TODO render
+			saplingtile_render(id, screen, level, x, y);
 			break;
 		case STAIRS_UP:
 		case STAIRS_DOWN:
-			//TODO render
+			stairstile_render(id, screen, level, x, y);
 			break;
 		//case STONE: XXX unused?
 		//	
@@ -123,7 +123,7 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
 			watertile_render(id, screen, level, x, y);
 			break;
 		case WHEAT:
-			//TODO render
+			wheattile_render(id, screen, level, x, y);
 			break;
 		default:
 		case INFINITE_FALL:
