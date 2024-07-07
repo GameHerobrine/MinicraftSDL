@@ -37,5 +37,5 @@ void treetile_tick(TileID id, Level* level, int xt, int yt){
 	if(damage) level_set_data(level, xt, yt, damage - 1);
 }
 
-//TODO override: mayPass -> false, hurt, interact + private hurt(Level*, x, y, int dmg);
+//TODO override: hurt, interact + private hurt(Level*, x, y, int dmg);
 

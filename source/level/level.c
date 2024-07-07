@@ -1,12 +1,14 @@
-#include "../utils/javarandom.h"
-#include "../utils/utils.h"
+#include <utils/javarandom.h>
+#include <utils/utils.h>
 #include "../gfx/screen.h"
 #include "tile/tile.h"
+#include <utils/arraylist.h>
 #include "level.h"
 #include "levelgen/levelgen.h"
 
 void level_init(Level* lvl, int w, int h, int level, Level* parent){
-	random_set_seed(&lvl->random, getTimeUS() / 1000);
+	random_set_seed(&lvl->random, getTimeMS());
+	create_arraylist(&lvl->entities);
 	lvl->dirtColor = level < 0 ? 222 : 322;
 	lvl->grassColor = 141;
 	lvl->sandColor = 550;
@@ -29,13 +31,38 @@ void level_init(Level* lvl, int w, int h, int level, Level* parent){
 	if(parent){
 		for(int y = 0; y < h; ++y){
 			for(int x = 0; x < w; ++x){
-				//if() TODO level_get_tile();
+				if(level_get_tile(parent, x, y) == STAIRS_DOWN){
+					level_set_tile(lvl, x, y, STAIRS_UP, 0);
+
+					if(level == 0){
+						level_set_tile(lvl, x - 1, y, (int)HARD_ROCK, 0);
+						level_set_tile(lvl, x + 1, y, (int)HARD_ROCK, 0);
+						level_set_tile(lvl, x, y - 1, (int)HARD_ROCK, 0);
+						level_set_tile(lvl, x, y + 1, (int)HARD_ROCK, 0);
+						level_set_tile(lvl, x - 1, y - 1, (int)HARD_ROCK, 0);
+						level_set_tile(lvl, x - 1, y + 1, (int)HARD_ROCK, 0);
+						level_set_tile(lvl, x + 1, y - 1, (int)HARD_ROCK, 0);
+						level_set_tile(lvl, x + 1, y + 1, (int)HARD_ROCK, 0);
+					}else{
+						level_set_tile(lvl, x - 1, y, (int)DIRT, 0);
+						level_set_tile(lvl, x + 1, y, (int)DIRT, 0);
+						level_set_tile(lvl, x, y - 1, (int)DIRT, 0);
+						level_set_tile(lvl, x, y + 1, (int)DIRT, 0);
+						level_set_tile(lvl, x - 1, y - 1, (int)DIRT, 0);
+						level_set_tile(lvl, x - 1, y + 1, (int)DIRT, 0);
+						level_set_tile(lvl, x + 1, y - 1, (int)DIRT, 0);
+						level_set_tile(lvl, x + 1, y + 1, (int)DIRT, 0);
+					}
+				}
 			}
 		}
 	}
 	
-	//TODO entitiesInTile
-	
+	lvl->entitiesInTiles = malloc(sizeof(ArrayList)*w*h);
+	for(int i = 0; i < w*h; ++i){
+		create_arraylist(lvl->entitiesInTiles + i);
+	}
+
 	if(level == 1){
 		//TODO spawn AirWizard
 	}
@@ -106,6 +133,7 @@ unsigned char level_get_tile(Level* level, int x, int y){
 	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return ROCK;
 	return level->tiles[x + y*level->w];
 }
+
 void level_set_tile(Level* level, int x, int y, int id, int data){
 	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return;
 	level->tiles[x + y*level->w] = id;
@@ -147,6 +175,10 @@ void level_tick(Level* level){
 void level_free(Level* lvl){
 	if(lvl->tiles) free(lvl->tiles);
 	if(lvl->data) free(lvl->data);
-	
-	
+	if(lvl->entitiesInTiles){
+		for(int i = 0; i < lvl->w*lvl->h; ++i){
+			arraylist_remove_and_dealloc_each(lvl->entitiesInTiles + i);
+		}
+		free(lvl->entitiesInTiles);
+	}
 }

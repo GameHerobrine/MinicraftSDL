@@ -36,6 +36,3 @@ void holetile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	if (!d && !r) render_screen(screen, x * 16 + 8, y * 16 + 8, 3, col, 0);
 	else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
 }
-	
-
-//TODO override mayPass -> e->canSwim();

@@ -15,6 +15,10 @@ unsigned long long int getTimeUS(){
 	return (tv.tv_sec*1000000)+(tv.tv_usec);
 }
 
+unsigned long long int getTimeMS(){
+	return getTimeUS() / 1000;
+}
+
 double dabs(double d){
 	return d < 0 ? -d : d;
 }

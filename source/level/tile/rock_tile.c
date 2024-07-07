@@ -1,10 +1,6 @@
 #include "tile.h"
 #include <gfx/color.h>
 
-//char rocktile_mayPass(TileID id, Level* level, int x, int y){
-//	return 1;
-//} TODO Level*
-
 //TODO override hurt, interact
 
 void rocktile_render(TileID id, Screen* screen, Level* level, int x, int y){

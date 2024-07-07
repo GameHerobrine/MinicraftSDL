@@ -1,7 +1,7 @@
 #include "tile.h"
 #include <gfx/color.h>
 
-//TODO mayPass, hurt, interact, bumpedInto + add hurt
+//TODO hurt, interact, bumpedInto + add hurt
 
 void cloudcactustile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 111, 333, 555);

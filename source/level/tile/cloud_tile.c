@@ -1,6 +1,6 @@
 #include "tile.h"
 #include <gfx/color.h>
-//TODO override interact, mayPass
+//TODO override interact
 
 void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 444, 555, 555);

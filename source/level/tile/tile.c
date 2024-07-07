@@ -21,6 +21,8 @@
 #include "../../item/resource/resource.h"
 #include "../level.h"
 
+#include <entity/entity.h>
+
 Tile tiles[256];
 int tile_tickCount = 0;
 
@@ -131,9 +133,30 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	}
 }
 
-//char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e){
-//	return 1;
-//} TODO Entity*
+char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e){
+	switch(id){ //TODO WIP
+		case CACTUS:
+		case HARD_ROCK:
+		case GEM_ORE:
+		case GOLD_ORE:
+		case IRON_ORE:
+		case ROCK:
+		//XXX unused case STONE:
+		case TREE:
+			return 0;
+		case CLOUD_CACTUS:
+		case INFINITE_FALL:
+			//TODO: AirWizard? 1
+			return 0;
+		case HOLE:
+		case LAVA:
+		case WATER:
+			return entity_canSwim(e);
+		case CLOUD:
+		default:
+			return 1;
+	}
+}
 
 int tile_getLightRadius(TileID id, Level* level, int x, int y){
 	switch(id){

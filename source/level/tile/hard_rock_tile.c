@@ -1,6 +1,6 @@
 #include "tile.h"
 #include <gfx/color.h>
-//TODO override interact, mayPass, hurt + add a method hurt
+//TODO override interact, hurt + add a method hurt
 
 void hardrocktile_tick(TileID id, Level* level, int xt, int yt){
 	int damage = level_get_data(level, xt, yt);

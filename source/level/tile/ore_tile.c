@@ -18,7 +18,6 @@ void oretile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	render_screen(screen, x * 16 + 8, y * 16 + 8, 18 + 2 * 32, tiles[id].add.ore.color, 0);
 }
 
-//TODO mayPass: Level*, Entity* -> return false;
 //TODO hurt: Level*, Mob*
 //TODO interact: Level*, PLayer*, Item*
 //TODO custom hurt
