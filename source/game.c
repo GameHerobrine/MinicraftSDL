@@ -10,6 +10,7 @@
 #include <item/resource/resource.h>
 #include <level/level.h>
 #include <gfx/color.h>
+#include <linux/limits.h>
 
 SpriteSheet icons_spritesheet;
 Screen game_screen;
@@ -94,7 +95,7 @@ void game_init(){
 	fclose(f);
 	
 	create_screen(&game_screen, WIDTH, HEIGHT, &icons_spritesheet);
-	//TODO lightScreen
+	create_screen(&game_lightScreen, WIDTH, HEIGHT, &icons_spritesheet);
 	
 	game_reset();
 	game_set_menu(mid_TITLE);
@@ -214,15 +215,12 @@ void game_render(){
 	}
 		
 	level_renderBackground(game_level, &game_screen, xScroll, yScroll);
-	//TODO level.renderSprites(screen, xScroll, yScroll);
-		
+	level_renderSprites(game_level, &game_screen, xScroll, yScroll);
+
 	if(game_currentLevel < 3){
-		//TODO render light
-		/*
-		 * lightScreen.clear(0);
-			level.renderLight(lightScreen, xScroll, yScroll);
-			screen.overlay(lightScreen, xScroll, yScroll);
-		 */
+		clear_screen(&game_lightScreen, 0);
+		renderLight(game_level, &game_lightScreen, xScroll, yScroll);
+		screen_overlay(&game_screen, &game_lightScreen, xScroll, yScroll);
 	}
 	
 	
@@ -231,7 +229,7 @@ void game_render(){
 		game_renderFocusNagger();
 	}
 }
-#include <linux/limits.h>
+
 int main(int argc, char** argv){
 	unsigned long long int lastTime = getTimeUS();
 	unsigned long long int lastPrinted = lastTime;
@@ -265,7 +263,7 @@ int main(int argc, char** argv){
 		ret = 1;
 		goto QUIT;
 	}
-	
+
 #ifdef LEVELGENTEST
 #define set_px(x, y, color) {\
 	pixel.x = x*SCALE;\

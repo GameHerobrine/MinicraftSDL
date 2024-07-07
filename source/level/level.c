@@ -59,7 +59,24 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 	
 }
 
-//TODO renderSprites
+void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll){
+
+	int xo = xScroll >> 4;
+	int yo = yScroll >> 4;
+	int w = (screen->w + 15) >> 4;
+	int h = (screen->h + 15) >> 4;
+
+	screen_set_offset(screen, xScroll, yScroll);
+	for(int y = yo; y < h+yo; ++y){
+		for(int x = xo; x <= w+xo; ++x){
+			//TODO renderSprites
+		}
+	}
+
+	screen_set_offset(screen, 0, 0);
+}
+
+
 
 void renderLight(Level* level, Screen* screen, int xScroll, int yScroll){
 	int xo = xScroll >> 4;

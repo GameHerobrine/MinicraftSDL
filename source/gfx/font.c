@@ -8,7 +8,8 @@ const char chars[] = "AABCDEFGHIJKLMNOPQRSTUVWXYZ      0123456789.,!?'\"-+=/\\%(
 unsigned char chars_lookup[256];
 
 void font_pre_init(){
-	for(size_t i = 0; i < strlen(chars); ++i){
+	size_t d = strlen(chars);
+	for(size_t i = d-1; i > 0; --i){
 		chars_lookup[(int) chars[i]] = i;
 	}
 	chars_lookup[0] = 0;

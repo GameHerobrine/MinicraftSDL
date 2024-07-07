@@ -24,6 +24,7 @@ unsigned char level_get_data(Level* level, int x, int y);
 void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScroll);
 void level_tick(Level* level);
 void level_set_data(Level* level, int x, int y, int val);
+void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll);
 
 void level_free(Level* lvl);
 #endif /* LEVEL_LEVEL_H_ */
