@@ -27,5 +27,5 @@ void wheattile_tick(TileID id, Level* level, int xt, int yt){
 	if(random_next_int(&trandom, 2) == 0) return;
 	
 	int age = level_get_data(level, xt, yt);
-	if(age < 50) level_set_data(xt, yt, age + 1);
+	if(age < 50) level_set_data(level, xt, yt, age + 1);
 }

@@ -1,5 +1,7 @@
 #include "tile.h"
-#include "../../item/resource/resource.h"
+#include <item/resource/resource.h>
+#include <gfx/color.h>
+#include <gfx/color.h>
 
 void oretile_init(TileID id, Resource* toDrop){
 	tile_init(id);
@@ -8,7 +10,7 @@ void oretile_init(TileID id, Resource* toDrop){
 	t->add.ore.color = toDrop->color & 0xffff00;
 }
 void oretile_render(TileID id, Screen* screen, Level* level, int x, int y){
-	tiles[id].add.ore.color = (tiles[id].add.ore.toDrop->color & 0xffffff00) + getColor4(level->dirtColor);
+	tiles[id].add.ore.color = (tiles[id].add.ore.toDrop->color & 0xffffff00) + getColor(level->dirtColor);
 	
 	render_screen(screen, x * 16 + 0, y * 16 + 0, 17 + 1 * 32, tiles[id].add.ore.color, 0);
 	render_screen(screen, x * 16 + 8, y * 16 + 0, 18 + 1 * 32, tiles[id].add.ore.color, 0);

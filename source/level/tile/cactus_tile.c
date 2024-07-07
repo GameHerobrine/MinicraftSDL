@@ -1,4 +1,5 @@
 #include "tile.h"
+#include <gfx/color.h>
 
 void cactustile_init(TileID id){
 	tile_init(id);

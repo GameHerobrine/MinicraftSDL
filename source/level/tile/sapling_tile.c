@@ -1,5 +1,5 @@
 #include "tile.h"
-
+#include <level/level.h>
 void saplingtile_init(TileID id, TileID onType, TileID growsTo){
 	tile_init(id);
 	
@@ -24,7 +24,7 @@ void saplingtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 void saplingtile_tick(TileID id, Level* level, int xt, int yt){
 	int age = level_get_data(level, xt, yt) + 1;
 	if(age > 100) level_set_tile(level, xt, yt, tiles[id].add.sapling.growsTo, 0);
-	else level_set_data(xt, yt, age);
+	else level_set_data(level, xt, yt, age);
 }
 
 //TODO override render, hurt

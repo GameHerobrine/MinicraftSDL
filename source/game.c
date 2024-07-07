@@ -1,13 +1,15 @@
-#include "gfx/spritesheet.h"
-#include "gfx/font.h"
+#include <gfx/spritesheet.h>
+#include <gfx/font.h>
 #include <SDL/SDL.h>
-#include "game.h"
-#include "inputhandler.h"
-#include "utils/arraylist.h"
-#include "utils/utils.h"
-#include "screen/menu.h"
-#include "level/tile/tile.h"
-#include "item/resource/resource.h"
+#include <game.h>
+#include <inputhandler.h>
+#include <utils/arraylist.h>
+#include <utils/utils.h>
+#include <screen/menu.h>
+#include <level/tile/tile.h>
+#include <item/resource/resource.h>
+#include <level/level.h>
+#include <gfx/color.h>
 
 SpriteSheet icons_spritesheet;
 Screen game_screen;
@@ -84,6 +86,10 @@ void game_init(){
 	
 	
 	FILE* f = fopen("icons.rimg", "rb");
+	if(!f){
+		printf("Failed to open icons!\n");
+		return;
+	}
 	create_spritesheet(&icons_spritesheet, f, 256, 256);
 	fclose(f);
 	
@@ -122,7 +128,7 @@ void game_tick(){
 void game_renderGui(){
 	for(int y = 0; y < 2; ++y){
 		for(int x = 0; x < 20; ++x){
-			render_screen(&game_screen, x*8, game_screen.h - 16 + y*8, 0 + 12 * 32, getColor4(0, 0, 0), 0);
+			render_screen(&game_screen, x*8, game_screen.h - 16 + y*8, 0 + 12 * 32, getColor4(0, 0, 0, 0), 0);
 		}
 	}
 	
@@ -225,7 +231,7 @@ void game_render(){
 		game_renderFocusNagger();
 	}
 }
-
+#include <linux/limits.h>
 int main(int argc, char** argv){
 	unsigned long long int lastTime = getTimeUS();
 	unsigned long long int lastPrinted = lastTime;
@@ -244,7 +250,10 @@ int main(int argc, char** argv){
 	SDL_Event event;
 	SDL_KeyboardEvent* keyEvent = &event; 
 	SDL_Rect pixel = {0, 0, SCALE, SCALE};
-	
+	char cwd[PATH_MAX];
+	if (getcwd(cwd, sizeof(cwd)) != NULL) {
+		printf("Current working dir: %s\n", cwd);
+	}
 	game_init();
 	
 	SDL_Init(SDL_INIT_VIDEO);

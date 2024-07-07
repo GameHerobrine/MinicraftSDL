@@ -1,5 +1,5 @@
 #include "tile.h"
-
+#include <gfx/color.h>
 //TODO override interact, mayPass
 
 void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){

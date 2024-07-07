@@ -2,7 +2,7 @@
 #ifndef LEVEL_TILE_STAIRS_TILE_H_
 #define LEVEL_TILE_STAIRS_TILE_H_
 
-#include "tile.h";
+#include "tile.h"
 enum tileid_;
 typedef struct{
 	char leadsUp;
