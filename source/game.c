@@ -247,7 +247,7 @@ int main(int argc, char** argv){
 	unsigned long long int now  = 0;
 	unsigned long long int ticks = 0; //perf measure
 	unsigned long long int frames = 0; //perf measure
-	
+	unsigned char* prevBuf = 0;
 	int ret = 0;
 	int winHeight = HEIGHT*SCALE;
 	int winWidth = WIDTH*SCALE;
@@ -322,7 +322,9 @@ int main(int argc, char** argv){
 	goto QUIT;
 #endif
 	
-	
+	prevBuf = malloc(game_screen.h*game_screen.w);
+	for(int i = 0; i < game_screen.h*game_screen.w; ++i) prevBuf[i] = 0;
+
 	while(running)
 	{
 		now = getTimeUS();
@@ -361,12 +363,17 @@ int main(int argc, char** argv){
 			for(int x = 0; x < game_screen.w; ++x){
 				pixel.x = x*SCALE;
 				pixel.y = y*SCALE;
-				
-				int screen_px = game_screen.pixels[y * game_screen.w + x];
-				SDL_FillRect(surface, &pixel, game_colors[screen_px]);
+				int index = y * game_screen.w + x;
+				int screen_px = game_screen.pixels[index];
+				if(screen_px != prevBuf[index]){
+					prevBuf[index] = screen_px;
+					SDL_FillRect(surface, &pixel, game_colors[screen_px]);
+				}
 			}
 		}
 		
+
+
 		SDL_Flip(surface);
 		
 		if(now - lastPrinted > 1000000){
@@ -380,6 +387,7 @@ int main(int argc, char** argv){
 	}
 	
 	QUIT:
+	if(prevBuf) free(prevBuf);
 	// Quit SDL
 	SDL_Quit();
 	delete_screen(&game_screen);

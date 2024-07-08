@@ -36,6 +36,7 @@ void* arraylist_removeElement(ArrayList* list, void* element){
 	}
 
 	printf("Tried removing unknown element from array (%p)!\n", element);
+	return 0;
 }
 void* arraylist_removeId(ArrayList* list, int index){
 	void* element = list->elements[index];
