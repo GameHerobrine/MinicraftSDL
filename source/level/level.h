@@ -2,8 +2,8 @@
 #define LEVEL_LEVEL_H_
 #include <gfx/screen.h>
 #include <utils/arraylist.h>
-#include "../utils/javarandom.h"
-
+#include <utils/javarandom.h>
+#include <entity/entity.h>
 
 typedef struct level_{
 	Random random;
@@ -27,6 +27,9 @@ void level_tick(Level* level);
 void level_set_tile(Level* level, int x, int y, int id, int data);
 void level_set_data(Level* level, int x, int y, int val);
 void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll);
+void level_removeEntity(Level* level, int x, int y, Entity* entity);
+void level_addEntity(Level* level, Entity* entity);
+void level_insertEntity(Level* level, int x, int y, Entity* entity);
 
 void level_free(Level* lvl);
 #endif /* LEVEL_LEVEL_H_ */

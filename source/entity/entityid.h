@@ -1,0 +1,19 @@
+#ifndef ENTITYID_H
+#define ENTITYID_H
+
+typedef enum{
+	AIRWIZARD,
+	ANVIL,
+	CHEST,
+	FURNACE,
+	ITEMENTITY,
+	LANTERN,
+	OVEN,
+	PLAYER,
+	SLIME,
+	SPARK,
+	WORKBENCH,
+	ZOMBIE
+} EntityId;
+
+#endif // ENTITYID_H

@@ -11,6 +11,7 @@
 #include <level/level.h>
 #include <gfx/color.h>
 #include <linux/limits.h>
+#include <entity/player.h>
 
 SpriteSheet icons_spritesheet;
 Screen game_screen;
@@ -36,12 +37,14 @@ Level game_levels[5] = {0};
 int game_currentLevel;
 Level* game_level;
 
+Player* game_player = 0;
+
 void game_reset(){
 	game_playerDeadTime = 0;
 	game_wonTimer = 0;
 	game_gameTime = 0;
 	game_hasWon = 0;
-	
+
 	for(int i = 0; i < 5; ++i){
 		printf("Freeing level %d\n", i);
 		level_free(game_levels + i);
@@ -56,8 +59,12 @@ void game_reset(){
 	level_init(game_levels + 0, 128, 128, -3, game_levels + 1);
 	
 	game_level = game_levels + game_currentLevel;
-	//TODO player
-	
+	game_player = (Player*) malloc(sizeof(Player));
+	player_create(game_player);
+	player_findStartPos(game_player, game_level);
+
+	level_addEntity(game_level, game_player);
+
 	//TODO 5 times: levels.trySpawn(5000);
 }
 
@@ -118,8 +125,7 @@ void game_tick(){
 			tick_menu(current_menu);
 		}else{
 			//TODO tick player
-			
-			
+
 			level_tick(game_level);
 			++tile_tickCount;
 		}
@@ -195,9 +201,9 @@ void game_renderFocusNagger(){
 }
 
 void game_render(){
-	int xScroll = 1688, yScroll = 1168;
-	//int xScroll = player.x - screen.w / 2; TODO Player
-	//int yScroll = player.y - (screen.h - 8) / 2;
+	//int xScroll = 1688, yScroll = 1168;
+	int xScroll = game_player->mob.entity.x - game_screen.w / 2;
+	int yScroll = game_player->mob.entity.y - (game_screen.h - 8) / 2;
 	
 	if (xScroll < 16) xScroll = 16;
 	if (yScroll < 16) yScroll = 16;

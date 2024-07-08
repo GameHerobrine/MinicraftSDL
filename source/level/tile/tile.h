@@ -1,13 +1,14 @@
 #ifndef LEVEL_TILE_TILE_H_
 #define LEVEL_TILE_TILE_H_
 
-#include "../../utils/javarandom.h"
+#include <utils/javarandom.h>
 #include "stairs_tile.h"
 #include "sapling_tile.h"
 #include "ore_tile.h"
 #include "tileids.h"
 #include "../level.h"
-#include "../../gfx/screen.h"
+#include <gfx/screen.h>
+#include <entity/entity.h>
 
 typedef struct{
 	Random random;
@@ -31,5 +32,6 @@ extern int tile_tickCount;
 void init_tiles();
 void tile_init(TileID id);
 void tile_render(TileID id, Screen* screen, Level* level, int x, int y);
+char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e);
 
 #endif /* LEVEL_TILE_TILE_H_ */

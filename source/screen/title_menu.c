@@ -1,8 +1,9 @@
 #include "menu.h"
-#include "../inputhandler.h"
+#include <inputhandler.h>
 #include "title_menu.h"
-#include "../gfx/color.h"
-#include "../gfx/font.h"
+#include <gfx/color.h>
+#include <gfx/font.h>
+#include <game.h>
 
 char start_game[] = "Start game";
 char how_to_play[] = "How to play";

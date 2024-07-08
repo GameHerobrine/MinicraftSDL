@@ -5,6 +5,8 @@
 #include <utils/arraylist.h>
 #include "level.h"
 #include "levelgen/levelgen.h"
+#include <entity/_entity_caller.h>
+
 
 void level_init(Level* lvl, int w, int h, int level, Level* parent){
 	random_set_seed(&lvl->random, getTimeMS());
@@ -86,8 +88,24 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 	
 }
 
-void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll){
+int _cmpEnt(const void* ent, const void* ent2){
+	Entity* e = (Entity*) ent;
+	Entity* e2 = (Entity*) ent2;
 
+	if(e2->y < e->y) return 1;
+	if(e2->y > e->y) return -1;
+	return 0;
+}
+
+void level_sortAndRender(Level* level, Screen* screen, ArrayList* list){
+	qsort(list->elements, list->size, sizeof(*list->elements), _cmpEnt);
+	for(int i = 0; i < list->size; ++i){
+		call_entity_render((Entity*) list->elements[i], screen);
+	}
+}
+void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll){
+	ArrayList rowSprites;
+	create_arraylist(&rowSprites);
 	int xo = xScroll >> 4;
 	int yo = yScroll >> 4;
 	int w = (screen->w + 15) >> 4;
@@ -96,10 +114,17 @@ void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll)
 	screen_set_offset(screen, xScroll, yScroll);
 	for(int y = yo; y < h+yo; ++y){
 		for(int x = xo; x <= w+xo; ++x){
-			//TODO renderSprites
+			if(x < 0 || y < 0 || x >= level->w || y >= level->h) continue;
+			ArrayList* ents = &level->entitiesInTiles[x + y * level->w];
+			for(int i = 0; i < ents->size; ++i) arraylist_push(&rowSprites, ents->elements[i]); //TODO uses memcpy?
 		}
-	}
 
+		if(rowSprites.size > 0){
+			level_sortAndRender(level, screen, &rowSprites);
+		}
+		arraylist_clear(&rowSprites);
+	}
+	arraylist_remove(&rowSprites);
 	screen_set_offset(screen, 0, 0);
 }
 
@@ -149,10 +174,26 @@ void level_set_data(Level* level, int x, int y, int val){
 	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return;
 	level->data[x + y*level->w] = val;
 }
+void level_insertEntity(Level* level, int x, int y, Entity* entity){
+	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return;
+	arraylist_push(&level->entitiesInTiles[x+y*level->w], entity);
+}
+void level_addEntity(Level* level, Entity* entity){
+	//XXX if(e is player) level->player = e;
 
-//TODO add(Entity*)
+	entity->removed = 0;
+	arraylist_push(&level->entities, entity);
+	entity_init(entity, level);
+
+	level_insertEntity(level, entity->x >> 4, entity->y >> 4, entity);
+}
+
+void level_removeEntity(Level* level, int x, int y, Entity* entity){
+	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return;
+	arraylist_removeElement(&level->entitiesInTiles[x+y*level->w], entity);
+}
+
 //TODO remove(Entity*)
-//TODO insertEntity
 //TODO removeEntity
 //TODO trySpawn
 //TODO getEntities()
@@ -169,12 +210,37 @@ void level_tick(Level* level){
 	}
 	
 	//TODO entities
-	
+	for(int i = 0; i < level->entities.size; ++i){
+		Entity* e = (Entity*) arraylist_get(&level->entities, i);
+		int xto = e->x >> 4;
+		int yto = e->y >> 4;
+
+		call_entity_tick(e);
+
+		if(e->removed){
+			arraylist_removeId(&level->entities, i--);
+			level_removeEntity(level, xto, yto, e);
+			free(e);
+		}else{
+			int xt = e->x >> 4;
+			int yt = e->y >> 4;
+
+			if(xto != xt || yto != yt){
+				level_removeEntity(level, xto, yto, e);
+				level_insertEntity(level, xt, yt, e);
+			}
+		}
+	}
 }
 
 void level_free(Level* lvl){
 	if(lvl->tiles) free(lvl->tiles);
 	if(lvl->data) free(lvl->data);
+
+	if(lvl->entities.elements){
+		arraylist_remove(&lvl->entities);
+	}
+
 	if(lvl->entitiesInTiles){
 		for(int i = 0; i < lvl->w*lvl->h; ++i){
 			arraylist_remove_and_dealloc_each(lvl->entitiesInTiles + i);
