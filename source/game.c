@@ -369,6 +369,7 @@ int main(int argc, char** argv){
 					prevBuf[index] = screen_px;
 					SDL_FillRect(surface, &pixel, game_colors[screen_px]);
 				}
+
 			}
 		}
 		

@@ -1,10 +1,12 @@
 #include "javarandom.h"
+#include <math.h>
 static const long long int multiplier = 0x5DEECE66D;
 static const long long int mask = ((long long int)1 << 48) - 1;
 static const long long int addend = 0xB;
 
 void random_set_seed(Random* random, int seed){
 	random->seed = (seed ^ multiplier) & mask;
+	random->haveNextNextGaussian = 0;
 }
 
 int random_next(Random* random, int bits){
@@ -35,4 +37,26 @@ int random_next_int(Random* random, int bound){
 }
 float random_next_float(Random* random){
 	return random_next(random, 24) / (float)(1 << 24);
+}
+
+double random_next_double(Random* random){
+	return (((long long int)(random_next(random, 26)) << 27) + random_next(random, 27)) * (1.0 / ((long long int)1 << 53));
+}
+
+float random_next_gaussian(Random* random){
+	if(random->haveNextNextGaussian){
+		random->haveNextNextGaussian = 0;
+		return random->nextNextGaussian;
+	}
+
+	float v1, v2, s;
+	do{
+		v1 = 2 * random_next_double(random) - 1;
+		v2 = 2 * random_next_double(random) - 1;
+		s = v1*v1 + v2*v2;
+	}while(s >= 1 || s == 0);
+	float multiplier = sqrt(-2 * log(s)/s);
+	random->nextNextGaussian = v2 * multiplier;
+	random->haveNextNextGaussian = 1;
+	return v1*multiplier;
 }

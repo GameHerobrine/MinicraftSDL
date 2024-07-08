@@ -1,7 +1,7 @@
 #include "tile.h"
 #include <gfx/color.h>
 #include <entity/particle/smashparticle.h>
-
+#include <entity/particle/textparticle.h>
 //TODO override interact
 
 void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
@@ -10,7 +10,12 @@ void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, 
 	SmashParticle* smash = malloc(sizeof(SmashParticle));
 	smashparticle_create(smash, x * 16 + 8, y*16+8);
 	level_addEntity(level, smash);
-	//TODO level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
+
+	TextParticle* txt = malloc(sizeof(TextParticle));
+	char* tx_ = malloc(16);
+	sprintf(tx_, "%d\00", dmg);
+	textparticle_create(txt, tx_, x*16 + 8, y*16 + 8, getColor4(-1, 500, 500, 500));
+	level_addEntity(level, txt);
 
 	if(damage >= 50){
 		/*TODO: int count = random.nextInt(4) + 1;

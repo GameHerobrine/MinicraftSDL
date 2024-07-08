@@ -8,9 +8,16 @@
 #include <level/tile/tileids.h>
 #include <level/level.h>
 #include "itemids.h"
+#include <item/resource/resource.h>
 
 typedef struct{
 	ItemID id;
+	union{
+		struct{
+			Resource* resource;
+			int count;
+		} resource;
+	} add;
 } Item;
 
 int item_getColor(Item* item);

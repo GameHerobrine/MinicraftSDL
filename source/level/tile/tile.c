@@ -253,7 +253,7 @@ void tile_tick(TileID id, Level* level, int xt, int yt){
 	}
 }
 
-//void tile_steppedOns(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
+//void tile_steppedOn(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
 
 //void tile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){} TODO Level*, Player*, Item*
 

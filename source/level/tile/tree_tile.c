@@ -1,33 +1,61 @@
 #include "tile.h"
 #include <entity/particle/smashparticle.h>
+#include <entity/particle/textparticle.h>
+#include <entity/itementity.h>
+#include <item/resourceitem.h>
+#include <stdio.h>
+#include <gfx/color.h>
 
 void treetile_init(TileID id){
 	tile_init(id);
 	tiles[id].connectsToGrass = 1;
 }
 void treetile_hurt2(TileID id, Level* level, int x, int y, int dmg){
-	/*TODO:
-	 * int count = random.nextInt(10) == 0 ? 1 : 0;
-			for (int i = 0; i < count; i++) {
-				level.add(new ItemEntity(new ResourceItem(Resource.apple), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
-			}
-	*/
+	int count = random_next_int(&tiles[id].random, 10) == 0 ? 1 : 0;
+	Random* random = &tiles[id].random;
+	for (int i = 0; i < count; i++) {
+		ItemEntity* ent = malloc(sizeof(ItemEntity));
+		Item res;
+		resourceitem_create(&res, &apple);
+		int xx = x * 16 + random_next_int(random, 10) + 3;
+		int yy = y * 16 + random_next_int(random, 10) + 3;
+		itementity_create(ent, res, xx, yy);
+		level_addEntity(level, ent);
+	}
+
 	int damage = level_get_data(level, x, y) + dmg;
 	SmashParticle* smash = malloc(sizeof(SmashParticle));
 	smashparticle_create(smash, x * 16 + 8, y*16+8);
 	level_addEntity(level, smash);
-	//TODO: level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
+
+	TextParticle* txt = malloc(sizeof(TextParticle));
+	char* tx_ = malloc(16);
+	sprintf(tx_, "%d\00", dmg);
+	textparticle_create(txt, tx_, x*16 + 8, y*16 + 8, getColor4(-1, 500, 500, 500));
+	level_addEntity(level, txt);
+
 	if(damage >= 20){
-		/*TODO:
-		 * int count = random.nextInt(2) + 1;
-		for (int i = 0; i < count; i++) {
-			level.add(new ItemEntity(new ResourceItem(Resource.wood), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+		int count = random_next_int(random, 2) + 1;
+		for(int i = 0; i < count; ++i){
+			ItemEntity* ent = malloc(sizeof(ItemEntity));
+			Item res;
+			resourceitem_create(&res, &wood);
+			int xx = x * 16 + random_next_int(random, 10) + 3;
+			int yy = y * 16 + random_next_int(random, 10) + 3;
+			itementity_create(ent, res, xx, yy);
+			level_addEntity(level, ent);
 		}
-		count = random.nextInt(random.nextInt(4) + 1);
-		for (int i = 0; i < count; i++) {
-			level.add(new ItemEntity(new ResourceItem(Resource.acorn), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+		count = random_next_int(random, random_next_int(random, 4) + 1);
+		for(int i = 0; i < count; ++i){
+			ItemEntity* ent = malloc(sizeof(ItemEntity));
+			Item res;
+			resourceitem_create(&res, &acorn);
+			int xx = x * 16 + random_next_int(random, 10) + 3;
+			int yy = y * 16 + random_next_int(random, 10) + 3;
+			itementity_create(ent, res, xx, yy);
+			level_addEntity(level, ent);
 		}
-		*/
+
 		level_set_tile(level, x, y, GRASS, 0);
 	}else{
 		level_set_data(level, x, y, damage);

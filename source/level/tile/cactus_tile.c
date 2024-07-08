@@ -1,6 +1,7 @@
 #include "tile.h"
 #include <gfx/color.h>
 #include <entity/particle/smashparticle.h>
+#include <entity/particle/textparticle.h>
 void cactustile_init(TileID id){
 	tile_init(id);
 	tiles[id].connectsToSand = 1;
@@ -25,7 +26,13 @@ void cactus_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, in
 	SmashParticle* smash = malloc(sizeof(SmashParticle));
 	smashparticle_create(smash, x * 16 + 8, y*16+8);
 	level_addEntity(level, smash);
-	//TODO level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
+
+	TextParticle* txt = malloc(sizeof(TextParticle));
+	char* tx_ = malloc(16);
+	sprintf(tx_, "%d\00", dmg);
+	textparticle_create(txt, tx_, x*16 + 8, y*16 + 8, getColor4(-1, 500, 500, 500));
+	level_addEntity(level, txt);
+
 	if(damage >= 10){
 		int count = random_next_int(&tiles[id].random, 2) + 1;
 		for(int i = 0; i < count; ++i){
