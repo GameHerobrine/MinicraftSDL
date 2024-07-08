@@ -8,6 +8,7 @@ typedef struct{
 } ArrayList;
 
 void create_arraylist(ArrayList* list);
+void arraylist_pushTo(ArrayList* list, int index, void* element);
 void arraylist_push(ArrayList* list, void* element);
 void* arraylist_pop(ArrayList* list);
 void* arraylist_removeElement(ArrayList* list, void* element);

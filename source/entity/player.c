@@ -1,9 +1,12 @@
-#include "player.h"
 #include "mob.h"
 #include <level/tile/tileids.h>
 #include <level/tile/tile.h>
 #include <inputhandler.h>
 #include <entity/_entity_caller.h>
+#include <entity/inventory.h>
+#include "player.h"
+#include <item/powergloveitem.h>
+#include <screen/menu.h>
 
 void player_create(Player* player){
 	mob_create(&player->mob);
@@ -17,6 +20,14 @@ void player_create(Player* player){
 	player->mob.entity.x = 24;
 	player->mob.entity.y = 24;
 	player->stamina = player->maxStamina = 10;
+
+	inventory_create(&player->inventory);
+
+	//inventory.add(new FurnitureItem(new Workbench()));
+
+	Item* glove = malloc(sizeof(Item));
+	powergloveitem_create(glove);
+	inventory_addItem(&player->inventory, glove);
 
 	//TODO inventory
 }
@@ -159,6 +170,13 @@ void player_tick(Player* player){
 			player_attack(player);
 		}
 	}
+
+	if(menu.clicked){
+		//TODO: if(!use()){
+			game_set_menu(mid_INVENTORY);
+		//TODO:}
+	}
+
 	/*TODO:
 		if (input.menu.clicked) {
 			if (!use()) {
@@ -268,4 +286,9 @@ char player_findStartPos(Player* player, Level* level){
 			return 1;
 		}
 	}
+}
+
+void player_free(Player* player){
+	inventory_free(&player->inventory);
+	//XXX attackItem & activeItem should always be from inv
 }

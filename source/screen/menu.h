@@ -20,7 +20,8 @@ enum menu_id{
 	mid_DEAD,
 	mid_INSTRUCTIONS,
 	mid_LEVEL_TRANSITION,
-	mid_WON
+	mid_WON,
+	mid_INVENTORY
 };
 
 void init_menus();
@@ -29,6 +30,6 @@ void init_menu(enum menu_id menu);
 void tick_menu(enum menu_id menu);
 void render_menu(enum menu_id menu, Screen* screen);
 
-void menu_render_item_list(Screen* screen, int xo, int yo, int x1, int y1, ArrayList* listItems, int selected);
+void menu_render_item_list(Screen* screen, int xo, int yo, int x1, int y1, ArrayList* listItems, int selected, void* callback);
 
 #endif /* SCREEN_MENU_H_ */

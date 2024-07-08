@@ -26,3 +26,20 @@ int item_getSprite(Item* item){
 			return 0;
 	}
 }
+void item_renderInventory(Item* item, Screen* screen, int x, int y){
+	switch(item->id){
+		case POWERGLOVE:
+			powergloveitem_renderInventory(item, screen, x, y);
+			break;
+		case RESOURCE:
+			resourceitem_renderInventory(item, screen, x, y);
+			break;
+		//TODO case TOOLITEM:
+		//TODO case FURNITURE:
+		default:
+			break;
+	}
+}
+uint8_t item_matches(Item* item, Item* item2){
+	return item->id == item2->id;
+}

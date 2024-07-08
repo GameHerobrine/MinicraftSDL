@@ -2,6 +2,8 @@
 #include <gfx/color.h>
 #include <entity/particle/smashparticle.h>
 #include <entity/particle/textparticle.h>
+#include <entity/itementity.h>
+
 void cactustile_init(TileID id){
 	tile_init(id);
 	tiles[id].connectsToSand = 1;
@@ -22,7 +24,7 @@ void cactustile_render(TileID id, Screen* screen, Level* level, int x, int y){
 
 void cactus_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
 	int damage = level_get_data(level, x, y) + dmg;
-
+	Random* random = &tiles[id].random;
 	SmashParticle* smash = malloc(sizeof(SmashParticle));
 	smashparticle_create(smash, x * 16 + 8, y*16+8);
 	level_addEntity(level, smash);
@@ -34,9 +36,15 @@ void cactus_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, in
 	level_addEntity(level, txt);
 
 	if(damage >= 10){
-		int count = random_next_int(&tiles[id].random, 2) + 1;
+		int count = random_next_int(random, 2) + 1;
 		for(int i = 0; i < count; ++i){
-			//TODO: level.add(new ItemEntity(new ResourceItem(Resource.cactusFlower), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+			ItemEntity* ent = malloc(sizeof(ItemEntity));
+			Item res;
+			resourceitem_create(&res, &cactusFlower);
+			int xx = x * 16 + random_next_int(random, 10) + 3;
+			int yy = y * 16 + random_next_int(random, 10) + 3;
+			itementity_create(ent, res, xx, yy);
+			level_addEntity(level, ent);
 		}
 		level_set_tile(level, x, y, SAND, 0);
 	}else{

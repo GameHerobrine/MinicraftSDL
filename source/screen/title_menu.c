@@ -18,7 +18,7 @@ char small_help_msg[] = "(Arrow keys,X and C)";
 char* titlemenu_options[] = {start_game, how_to_play, about};
 char* s_titlemenu_options[] = {s_start_game, s_how_to_play, s_about};
 
-int titlemenu_selected;
+int titlemenu_selected = 0;
 
 const menu_vt titlemenu_vt = {
 	&titlemenu_tick, 

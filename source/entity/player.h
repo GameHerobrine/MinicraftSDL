@@ -1,12 +1,17 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+#include <entity/inventory.h>
 #include "mob.h"
 #include <level/level.h>
+#include <entity/_player.h>
+
+struct _Item;
+
 typedef struct _Player{
 	Mob mob;
 	int attackTime, attackDir;
-	//TODO: Inventory inventory;
-	//TODO: Item* attackItem, *activeItem;
+	Inventory inventory;
+	struct _Item* attackItem, *activeItem;
 	int stamina, staminaRecharge, staminaRechargeDelay;
 	int score;
 	int maxStamina;
@@ -33,5 +38,6 @@ char player_findStartPos(Player* player, Level* level);
 //TODO touchedBy
 //TODO doHurt
 //TODO gameWon
+void player_free(Player* player);
 
 #endif // PLAYER_H

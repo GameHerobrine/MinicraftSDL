@@ -28,6 +28,11 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/itementity.c
 	entity/particle/textparticle.c
 	entity/particle/textparticle.h
+	entity/inventory.h
+	entity/inventory.c
+	entity/_player.h
+	screen/inventorymenu.c
+	screen/inventory_menu.h
 )
 target_include_directories(minicraft-sdl PUBLIC ".")
 

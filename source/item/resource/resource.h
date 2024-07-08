@@ -3,7 +3,8 @@
 
 #include "food_resource.h"
 #include "plantable_resource.h"
-#include <entity/player.h>
+
+struct _Player;
 
 typedef struct _resource{
 	char name[7]; //max name len = 6 + 1 \x00
@@ -21,6 +22,6 @@ extern Resource slime, glass, cloth, cloud, gem;
 
 
 void init_resources();
-char resource_interactOn(Resource* resource, TileID tile, Level* level, int xt, int yt, Player* player, int attackDir);
+char resource_interactOn(Resource* resource, TileID tile, Level* level, int xt, int yt, struct _Player* player, int attackDir);
 
 #endif /* ITEM_RESOURCE_RESOURCE_H_ */

@@ -80,6 +80,9 @@ void call_entity_free(Entity* entity){
 	switch(entity->type){
 		case TEXTPARTICLE:
 			textparticle_free((TextParticle*) entity);
+			break;
+		case PLAYER:
+			player_free((Player*) entity);
 	}
 }
 

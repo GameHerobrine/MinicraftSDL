@@ -35,19 +35,21 @@ void font_renderFrame(Screen* screen, char* title, int titleLength, int x0, int 
 				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(-1, 1, 5, 445), 1);
 			}else if(x == x0 && y == y1){
 				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(-1, 1, 5, 445), 2);
+			}else if(x == x1 && y == y1){
+				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(-1, 1, 5, 445), 3);
 			}else if(y == y0){
-				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(-1, 1, 5, 445), 0);
+				render_screen(screen, x * 8, y * 8, 1 + 13 * 32, getColor4(-1, 1, 5, 445), 0);
 			}else if(y == y1){
-				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(-1, 1, 5, 445), 2);
+				render_screen(screen, x * 8, y * 8, 1 + 13 * 32, getColor4(-1, 1, 5, 445), 2);
 			}else if(x == x0){
-				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(-1, 1, 5, 445), 0);
+				render_screen(screen, x * 8, y * 8, 2 + 13 * 32, getColor4(-1, 1, 5, 445), 0);
 			}else if(x == x1){
-				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(-1, 1, 5, 445), 1);
+				render_screen(screen, x * 8, y * 8, 2 + 13 * 32, getColor4(-1, 1, 5, 445), 1);
 			}else{
-				render_screen(screen, x * 8, y * 8, 0 + 13 * 32, getColor4(5, 5, 5, 5), 1);
+				render_screen(screen, x * 8, y * 8, 2 + 13 * 32, getColor4(5, 5, 5, 5), 1);
 			}
 		}
 	}
 	
-	//TODO render title
+	font_draw(title, titleLength, screen, x0*8 + 8, y0*8, getColor4(5, 5, 5, 550));
 }

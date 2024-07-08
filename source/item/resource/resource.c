@@ -3,7 +3,9 @@
 #include "resource.h"
 #include "plantable_resource.h"
 #include "food_resource.h"
-#include "../../gfx/color.h"
+#include <gfx/color.h>
+#include <entity/player.h>
+
 Resource wood;
 Resource stone;
 Resource flower;

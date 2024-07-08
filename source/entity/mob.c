@@ -67,5 +67,5 @@ uint8_t mob_move(Mob* mob, int xa, int ya){
 		if(ya > 0) mob->dir = 0;
 	}
 
-	entity_move(&mob->entity, xa, ya);
+	return entity_move(&mob->entity, xa, ya);
 }

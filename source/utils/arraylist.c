@@ -6,16 +6,30 @@ void create_arraylist(ArrayList* list){
 	list->elements = 0;
 }
 
+void arraylist_pushTo(ArrayList* list, int index, void* element){
+	if(index >= list->size){
+		printf("resizing array to push to %d\n", index);
+		int size = index+1;
+		if(list->elements){
+			list->elements = realloc(list->elements, sizeof(void*) * size);
+		}else{
+			list->elements = malloc(sizeof(void*) * size);
+		}
+		list->capacity = size;
+		list->size = size;
+	}
+
+	list->elements[index] = element;
+}
+
 void arraylist_push(ArrayList* list, void* element){
 	int size = list->size + 1;
 	
 	if(size > list->capacity){
 		if(list->elements){
 			list->elements = realloc(list->elements, sizeof(void*) * size);
-			//printf("realloc %p %d \n", list->elements, size);
 		}else{
 			list->elements = malloc(sizeof(void*) * size);
-			//printf("malloc\n");
 		}
 		list->capacity = size;
 	}

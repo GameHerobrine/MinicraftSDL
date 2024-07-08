@@ -8,6 +8,7 @@
 #include "title_menu.h"
 #include "about_menu.h"
 #include "instructions_menu.h"
+#include <screen/inventory_menu.h>
 
 #define MENUS_SIZE 16
 char _next[] = ">";
@@ -25,6 +26,7 @@ void init_menus(){
 	menus[mid_TITLE] = &titlemenu_vt;
 	menus[mid_ABOUT] = &aboutmenu_vt;
 	menus[mid_INSTRUCTIONS] = &instructionsmenu_vt;
+	menus[mid_INVENTORY] = &inventorymenu_vt;
 }
 
 void tick_menu(enum menu_id menu){
@@ -49,7 +51,7 @@ void init_menu(enum menu_id menu){
 	}
 }
 
-void menu_render_item_list(Screen* screen, int xo, int yo, int x1, int y1, ArrayList* listItems, int selected){
+void menu_render_item_list(Screen* screen, int xo, int yo, int x1, int y1, ArrayList* listItems, int selected, void* callback){
 	char renderCursor = 1;
 	if(selected < 0){
 		selected = -selected - 1;
@@ -68,8 +70,8 @@ void menu_render_item_list(Screen* screen, int xo, int yo, int x1, int y1, Array
 	if(io < 0) io = 0;
 	
 	for(int i = i0; i < i1; ++i){
-		list_item_vt* item = arraylist_get(listItems, i + io);
-		item->renderInventory(screen, (1 + xo)*8, (i + 1 + yo)*8);
+		void* item = arraylist_get(listItems, i + io);
+		((void (*) (void*, Screen*, int, int)) (callback))(item, screen, (1 + xo)*8, (i + 1 + yo)*8);
 	}
 	
 	if(renderCursor){
