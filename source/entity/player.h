@@ -24,7 +24,6 @@ void player_hurt(Player* player, int x0, int y0, int x1, int y1);
 int player_getAttackDamage(Player* player, Entity* entity);
 void player_render(Player* player, Screen* screen);
 //TODO: void player_touchItem(Player* player, _ItemEntity* itemEntity);
-//TODO swim: true
 char player_findStartPos(Player* player, Level* level);
 //TODO findStartPos
 //TODO paySTamina

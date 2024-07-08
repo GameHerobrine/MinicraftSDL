@@ -9,6 +9,7 @@
 #include "../level.h"
 #include <gfx/screen.h>
 #include <entity/entity.h>
+#include <entity/mob.h>
 
 typedef struct{
 	Random random;
@@ -33,5 +34,6 @@ void init_tiles();
 void tile_init(TileID id);
 void tile_render(TileID id, Screen* screen, Level* level, int x, int y);
 char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e);
+void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir);
 
 #endif /* LEVEL_TILE_TILE_H_ */

@@ -19,5 +19,13 @@ void flowertile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	
 }
 
+void flowertile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	/*TODO: int count = random.nextInt(2) + 1;
+	for (int i = 0; i < count; i++) {
+		level.add(new ItemEntity(new ResourceItem(Resource.flower), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+	}*/
+	level_set_tile(level, x, y, GRASS, 0);
+}
 
-//TODO interact, hurt
+
+//TODO interact

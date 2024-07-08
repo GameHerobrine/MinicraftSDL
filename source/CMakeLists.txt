@@ -12,6 +12,13 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/player.h
 	entity/_entity_caller.c
 	entity/_entity_caller.h
-	entity/entityid.h)
+	entity/entityid.h
+	item/itemids.h
+	item/tooltype.h
+	item/tooltype.c
+	item/item.h
+	entity/particle/smashparticle.c
+	entity/particle/smashparticle.h
+)
 target_include_directories(minicraft-sdl PUBLIC ".")
 

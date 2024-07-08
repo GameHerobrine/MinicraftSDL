@@ -89,8 +89,8 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 }
 
 int _cmpEnt(const void* ent, const void* ent2){
-	Entity* e = (Entity*) ent;
-	Entity* e2 = (Entity*) ent2;
+	Entity* e = *(Entity**) ent;
+	Entity* e2 = *(Entity**) ent2;
 
 	if(e2->y < e->y) return 1;
 	if(e2->y > e->y) return -1;

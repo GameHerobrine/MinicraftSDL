@@ -12,12 +12,12 @@ void arraylist_push(ArrayList* list, void* element){
 	if(size > list->capacity){
 		if(list->elements){
 			list->elements = realloc(list->elements, sizeof(void*) * size);
-			printf("realloc\n");
+			//printf("realloc %p %d \n", list->elements, size);
 		}else{
-			list->elements = malloc(sizeof(void*));
-			printf("malloc\n");
+			list->elements = malloc(sizeof(void*) * size);
+			//printf("malloc\n");
 		}
-		++list->capacity;
+		list->capacity = size;
 	}
 	list->size = size;
 	
@@ -40,7 +40,7 @@ void* arraylist_removeElement(ArrayList* list, void* element){
 void* arraylist_removeId(ArrayList* list, int index){
 	void* element = list->elements[index];
 	if(index < list->size-1){
-		memcpy(list->elements + index, list->elements + index + 1, sizeof(*list->elements)*(list->size - index));
+		memcpy(list->elements + index, list->elements + index + 1, sizeof(*list->elements)*(list->size-1 - index));
 	}
 	--list->size;
 	return element;

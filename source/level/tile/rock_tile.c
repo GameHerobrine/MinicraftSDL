@@ -1,7 +1,31 @@
 #include "tile.h"
 #include <gfx/color.h>
+#include <entity/particle/smashparticle.h>
 
-//TODO override hurt, interact
+//TODO override interact
+
+void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	int damage = level_get_data(level, x, y) + dmg;
+
+	SmashParticle* smash = malloc(sizeof(SmashParticle));
+	smashparticle_create(smash, x * 16 + 8, y*16+8);
+	level_addEntity(level, smash);
+	//TODO level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
+
+	if(damage >= 50){
+		/*TODO: int count = random.nextInt(4) + 1;
+		for (int i = 0; i < count; i++) {
+			level.add(new ItemEntity(new ResourceItem(Resource.stone), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+		}
+		count = random.nextInt(2);
+		for (int i = 0; i < count; i++) {
+			level.add(new ItemEntity(new ResourceItem(Resource.coal), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+		}*/
+		level_set_tile(level, x, y, DIRT, 0);
+	}else{
+		level_set_data(level, x, y, damage);
+	}
+}
 
 void rocktile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 444, 333, 333);

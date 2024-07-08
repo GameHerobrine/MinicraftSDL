@@ -15,6 +15,11 @@ uint8_t entity_canSwim(Entity* entity){
 void entity_render(Entity* entity, Screen* screen){
 	//useless
 }
+
+void entity_remove(Entity* entity){
+	entity->removed = 1;
+}
+
 int entity_getLightRadius(Entity* entity){
 	return 0;
 }

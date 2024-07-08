@@ -139,25 +139,29 @@ void game_renderGui(){
 		}
 	}
 	
-	/*TODO
-	 for (int i = 0; i < 10; i++) {
-			if (i < player.health)
-				screen.render(i * 8, screen.h - 16, 0 + 12 * 32, Color.get(000, 200, 500, 533), 0);
-			else
-				screen.render(i * 8, screen.h - 16, 0 + 12 * 32, Color.get(000, 100, 000, 000), 0);
+	for(int i = 0; i < 10; ++i){
+		if(i < game_player->mob.health){
+			render_screen(&game_screen, i * 8, game_screen.h - 16, 0 + 12 * 32, getColor4(000, 200, 500, 533), 0);
+		}else{
+			render_screen(&game_screen, i * 8, game_screen.h - 16, 0 + 12 * 32, getColor4(000, 100, 000, 000), 0);
+		}
 
-			if (player.staminaRechargeDelay > 0) {
-				if (player.staminaRechargeDelay / 4 % 2 == 0)
-					screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 555, 000, 000), 0);
-				else
-					screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 110, 000, 000), 0);
-			} else {
-				if (i < player.stamina)
-					screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 220, 550, 553), 0);
-				else
-					screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 110, 000, 000), 0);
+		if(game_player->staminaRechargeDelay > 0){
+			if(game_player->staminaRechargeDelay / 4 % 2 == 0){
+				render_screen(&game_screen, i * 8, game_screen.h - 8, 1 + 12 * 32, getColor4(000, 555, 000, 000), 0);
+			}else{
+				render_screen(&game_screen, i * 8, game_screen.h - 8, 1 + 12 * 32, getColor4(000, 110, 000, 000), 0);
+			}
+		}else{
+			if(i < game_player->stamina){
+				render_screen(&game_screen, i * 8, game_screen.h - 8, 1 + 12 * 32, getColor4(000, 220, 550, 553), 0);
+			}else{
+				render_screen(&game_screen, i * 8, game_screen.h - 8, 1 + 12 * 32, getColor4(000, 110, 000, 000), 0);
 			}
 		}
+	}
+
+	/*TODO
 		if (player.activeItem != null) {
 			player.activeItem.renderInventory(screen, 10 * 8, screen.h - 16);
 		}
@@ -201,7 +205,6 @@ void game_renderFocusNagger(){
 }
 
 void game_render(){
-	//int xScroll = 1688, yScroll = 1168;
 	int xScroll = game_player->mob.entity.x - game_screen.w / 2;
 	int yScroll = game_player->mob.entity.y - (game_screen.h - 8) / 2;
 	
@@ -334,15 +337,13 @@ int main(int argc, char** argv){
 		
 		while(SDL_PollEvent(&event))
 		{
-			//printf("%d\n", event.type);
-			
 			switch(event.type){
 				case SDL_KEYUP:
-					printf("key up %d\n", keyEvent->keysym.sym);
+					//printf("key up %d\n", keyEvent->keysym.sym);
 					input_toggle(keyEvent->keysym.sym, 0);
 					break;
 				case SDL_KEYDOWN:
-					printf("key down %d\n", keyEvent->keysym.sym);
+					//printf("key down %d\n", keyEvent->keysym.sym);
 					input_toggle(keyEvent->keysym.sym, 1);
 					break;
 				case SDL_QUIT:
@@ -382,7 +383,8 @@ int main(int argc, char** argv){
 	// Quit SDL
 	SDL_Quit();
 	delete_screen(&game_screen);
-	//TODO delete_screen(&game_lightScreen);
+	delete_screen(&game_lightScreen);
+
 	for(int i = 0; i < 5; ++i){
 		printf("Freeing level %d\n", i);
 		level_free(game_levels + i);

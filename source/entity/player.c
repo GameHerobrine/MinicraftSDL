@@ -1,7 +1,9 @@
 #include "player.h"
 #include "mob.h"
 #include <level/tile/tileids.h>
+#include <level/tile/tile.h>
 #include <inputhandler.h>
+#include <entity/_entity_caller.h>
 
 void player_create(Player* player){
 	mob_create(&player->mob);
@@ -18,6 +20,82 @@ void player_create(Player* player){
 
 	//TODO inventory
 }
+void player_hurt(Player* player, int x0, int y0, int x1, int y1){
+	/*TODO: List<Entity> entities = level.getEntities(x0, y0, x1, y1);
+		for (int i = 0; i < entities.size(); i++) {
+			Entity e = entities.get(i);
+			if (e != this) e.hurt(this, getAttackDamage(e), attackDir);
+		}*/
+}
+void player_attack(Player* player){
+	player->mob.walkDist += 8;
+	player->attackDir = player->mob.dir;
+	//TODO player->attackItem = player->activeItem;
+	uint8_t done = 0;
+	/*TODO:
+	 * if (activeItem != null) {
+			attackTime = 10;
+			int yo = -2;
+			int range = 12;
+			if (dir == 0 && interact(x - 8, y + 4 + yo, x + 8, y + range + yo)) done = true;
+			if (dir == 1 && interact(x - 8, y - range + yo, x + 8, y - 4 + yo)) done = true;
+			if (dir == 3 && interact(x + 4, y - 8 + yo, x + range, y + 8 + yo)) done = true;
+			if (dir == 2 && interact(x - range, y - 8 + yo, x - 4, y + 8 + yo)) done = true;
+			if (done) return;
+
+			int xt = x >> 4;
+			int yt = (y + yo) >> 4;
+			int r = 12;
+			if (attackDir == 0) yt = (y + r + yo) >> 4;
+			if (attackDir == 1) yt = (y - r + yo) >> 4;
+			if (attackDir == 2) xt = (x - r) >> 4;
+			if (attackDir == 3) xt = (x + r) >> 4;
+
+			if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h) {
+				if (activeItem.interactOn(level.getTile(xt, yt), level, xt, yt, this, attackDir)) {
+					done = true;
+				} else {
+					if (level.getTile(xt, yt).interact(level, xt, yt, this, activeItem, attackDir)) {
+						done = true;
+					}
+				}
+				if (activeItem.isDepleted()) {
+					activeItem = null;
+				}
+			}
+		}
+	*/
+
+	if(done) return;
+
+
+	if (/*TODO: activeItem == null || activeItem.canAttack()*/ 1) {
+		player->attackTime = 5;
+		int yo = -2;
+		int range = 20;
+		int x = player->mob.entity.x;
+		int y = player->mob.entity.y;
+
+		if (player->mob.dir == 0) player_hurt(player, x - 8, y + 4 + yo, x + 8, y + range + yo);
+		if (player->mob.dir == 1) player_hurt(player, x - 8, y - range + yo, x + 8, y - 4 + yo);
+		if (player->mob.dir == 3) player_hurt(player, x + 4, y - 8 + yo, x + range, y + 8 + yo);
+		if (player->mob.dir == 2) player_hurt(player, x - range, y - 8 + yo, x - 4, y + 8 + yo);
+
+		int xt = player->mob.entity.x >> 4;
+		int yt = (player->mob.entity.y + yo) >> 4;
+		int r = 12;
+		if (player->attackDir == 0) yt = (y + r + yo) >> 4;
+		if (player->attackDir == 1) yt = (y - r + yo) >> 4;
+		if (player->attackDir == 2) xt = (x - r) >> 4;
+		if (player->attackDir == 3) xt = (x + r) >> 4;
+
+		if (xt >= 0 && yt >= 0 && xt < player->mob.entity.level->w && yt < player->mob.entity.level->h) {
+			TileID tile = level_get_tile(player->mob.entity.level, xt, yt);
+			tile_hurt(tile, player->mob.entity.level, xt, yt, player, random_next_int(&player->mob.entity.random, 3) + 1, player->attackDir);
+		}
+	}
+}
+
 void player_tick(Player* player){
 	mob_tick(&player->mob);
 	if(player->invulnerableTime > 0) --player->invulnerableTime;
@@ -47,13 +125,14 @@ void player_tick(Player* player){
 
 	if(player->staminaRechargeDelay == 0){
 		++player->staminaRecharge;
-		/*TODO: if (isSwimming()) {
-			staminaRecharge = 0;
+		if(call_entity_isSwimming(player)){
+			player->staminaRecharge = 0;
 		}
-		while (staminaRecharge > 10) {
-			staminaRecharge -= 10;
-			if (stamina < maxStamina) stamina++;
-		}*/
+
+		while(player->staminaRecharge > 10){
+			player->staminaRecharge -= 10;
+			if(player->stamina < player->maxStamina) ++player->stamina;
+		}
 	}
 
 	int xa = 0;
@@ -63,37 +142,32 @@ void player_tick(Player* player){
 	if(left.down) --xa;
 	if(right.down) ++xa;
 
-	/*TODO:
-	 * if (isSwimming() && tickTime % 60 == 0) {
-			if (stamina > 0) {
-				stamina--;
-			} else {
-				hurt(this, 1, dir ^ 1);
-			}
-		}
-	*/
+	if(call_entity_isSwimming(player) && player->mob.tickTime % 60 == 0){
+		if(player->stamina > 0) --player->stamina;
+		//TODO else hurt(this, 1, dir ^ 1);
+	}
 
 	if(player->staminaRechargeDelay % 2 == 0){
 		mob_move(&player->mob, xa, ya);
 	}
 
-	/*TODO:
-	 * if (input.attack.clicked) {
-			if (stamina == 0) {
-
-			} else {
-				stamina--;
-				staminaRecharge = 0;
-				attack();
-			}
+	if(attack.clicked){
+		if(player->stamina == 0){}
+		else{
+			--player->stamina;
+			player->staminaRecharge = 0;
+			player_attack(player);
 		}
+	}
+	/*TODO:
 		if (input.menu.clicked) {
 			if (!use()) {
 				game.setMenu(new InventoryMenu(this));
 			}
 		}
-		if (attackTime > 0) attackTime--;
 	*/
+
+	if (player->attackTime > 0) --player->attackTime;
 }
 void player_render(Player* player, Screen* screen){
 	int xt = 0;
@@ -180,12 +254,8 @@ void player_render(Player* player, Screen* screen){
 			furniture.render(screen);
 
 		}*/
-
-
-
-
-
 }
+
 char player_findStartPos(Player* player, Level* level){
 	Random* random = &player->mob.entity.random;
 	while(1){

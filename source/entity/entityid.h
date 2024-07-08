@@ -13,7 +13,9 @@ typedef enum{
 	SLIME,
 	SPARK,
 	WORKBENCH,
-	ZOMBIE
+	ZOMBIE,
+	SMASHPARTICLE,
+	TEXTPARTICLE
 } EntityId;
 
 #endif // ENTITYID_H

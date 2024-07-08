@@ -1,6 +1,7 @@
 #include <entity/mob.h>
 #include <entity/entity.h>
 #include <level/tile/tileids.h>
+#include <entity/_entity_caller.h>
 
 void mob_create(Mob* mob){
 	entity_create(&mob->entity);
@@ -27,29 +28,32 @@ void mob_tick(Mob* mob){
 	if(mob->hurtTime > 0) --mob->hurtTime;
 
 }
-
+uint8_t mob_isSwimming(Mob* mob){
+	TileID tile = level_get_tile(mob->entity.level, mob->entity.x >> 4, mob->entity.y >> 4);
+	return tile == WATER || tile == LAVA;
+}
 uint8_t mob_move(Mob* mob, int xa, int ya){
 	if(call_entity_isSwimming(&mob->entity)){
 		if(mob->swimTimer++ % 2 == 0) return 1;
 	}
 
 	if(mob->xKnockback < 0){
-		//TODO move2
+		entity_move2(&mob->entity, -1, 0);
 		++mob->xKnockback;
 	}
 
 	if(mob->xKnockback > 0){
-		//TODO move2
+		entity_move2(&mob->entity, 1, 0);
 		--mob->xKnockback;
 	}
 
 	if(mob->yKnockback < 0){
-		//TODO move2
+		entity_move2(&mob->entity, 0, -1);
 		++mob->yKnockback;
 	}
 
 	if(mob->yKnockback < 0){
-		//TODO move2
+		entity_move2(&mob->entity, 0, 1);
 		--mob->yKnockback;
 	}
 

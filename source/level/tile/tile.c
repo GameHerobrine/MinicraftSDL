@@ -17,11 +17,13 @@
 #include "hard_rock_tile.h"
 #include "ore_tile.h"
 #include "cloud_cactus_tile.h"
-#include "../../gfx/screen.h"
-#include "../../item/resource/resource.h"
+#include <gfx/screen.h>
+#include <item/resource/resource.h>
 #include "../level.h"
 
 #include <entity/entity.h>
+#include <entity/mob.h>
+#include <entity/_entity_caller.h>
 
 Tile tiles[256];
 int tile_tickCount = 0;
@@ -146,12 +148,12 @@ char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e){
 			return 0;
 		case CLOUD_CACTUS:
 		case INFINITE_FALL:
-			//TODO: AirWizard? 1
+			if(e->type == AIRWIZARD) return 1;
 			return 0;
 		case HOLE:
 		case LAVA:
 		case WATER:
-			return entity_canSwim(e);
+			return call_entity_canSwim(e);
 		case CLOUD:
 		default:
 			return 1;
@@ -167,7 +169,44 @@ int tile_getLightRadius(TileID id, Level* level, int x, int y){
 	}
 }
 
-//void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){} TODO Level*, Mob*
+void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	switch(id){
+		case CACTUS:
+			cactus_hurt(id, level, x, y, source, dmg, attackDir);
+			break;
+		case CLOUD_CACTUS:
+			cloudcactus_hurt(id, level, x, y, source, dmg, attackDir);
+			break;
+		case FLOWER:
+			flowertile_hurt(id, level, x, y, source, dmg, attackDir);
+			break;
+		case HARD_ROCK:
+			//TODO
+			break;
+		case GEM_ORE:
+		case GOLD_ORE:
+		case IRON_ORE:
+			//TODO
+			break;
+		case ROCK:
+			rocktile_hurt(id, level, x, y, source, dmg, attackDir);
+			break;
+		case CACTUS_SAPLING:
+		case TREE_SAPLING:
+			//TODO
+			break;
+		case TREE:
+			treetile_hurt(id, level, x, y, source, dmg, attackDir);
+			break;
+		case WHEAT:
+			//TODO
+			break;
+		default:
+			break;
+	}
+
+	//TODO
+}
 
 //void tile_bumpedInto(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
 

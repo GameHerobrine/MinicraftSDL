@@ -2,3 +2,6 @@ Release/*
 Debug/*
 build/*
 CMakeLists.txt.user
+.settings/*
+.project
+.cproject
