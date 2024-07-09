@@ -116,7 +116,7 @@ void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll)
 		for(int x = xo; x <= w+xo; ++x){
 			if(x < 0 || y < 0 || x >= level->w || y >= level->h) continue;
 			ArrayList* ents = &level->entitiesInTiles[x + y * level->w];
-			for(int i = 0; i < ents->size; ++i) arraylist_push(&rowSprites, ents->elements[i]); //TODO uses memcpy?
+			for(int i = 0; i < ents->size; ++i) arraylist_push(&rowSprites, ents->elements[i]); //TODO use memcpy?
 		}
 
 		if(rowSprites.size > 0){

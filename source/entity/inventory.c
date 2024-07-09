@@ -9,6 +9,24 @@ void inventory_create(Inventory* inv){
 void inventory_addItem(Inventory* inv, Item* item){
 	inventory_addItemIntoSlot(inv, inv->items.size, item);
 }
+
+void inventory_addItemIntoSlot_nalloc(Inventory* inv, int slot, Item* item){
+	if(item->id == RESOURCE){
+		Item* toTake = item;
+		Item* has = inventory_findResource(inv, toTake->add.resource.resource);
+
+		if(!has){
+			Item* add = toTake;
+			arraylist_pushTo(&inv->items, slot, add);
+		}else{
+			has->add.resource.count += toTake->add.resource.count;
+		}
+	}else{
+		Item* add = item;
+		arraylist_pushTo(&inv->items, slot, add);
+	}
+}
+
 void inventory_addItemIntoSlot(Inventory* inv, int slot, Item* item){
 	if(item->id == RESOURCE){
 		Item* toTake = item;
@@ -69,7 +87,8 @@ int inventory_count(Inventory* inv, Item* item){
 
 void inventory_free(Inventory* inv){
 	for(int e = 0; e < inv->items.size; ++e){
-		free(inv->items.elements[e]); //XXX maybe item_free?
+		item_free(inv->items.elements[e]);
+		free(inv->items.elements[e]);
 	}
 	free(inv->items.elements);
 }

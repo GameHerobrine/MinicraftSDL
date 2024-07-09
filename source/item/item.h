@@ -17,6 +17,10 @@ typedef struct _Item{
 			Resource* resource;
 			int count;
 		} resource;
+		struct{
+			struct _Furniture* furniture;
+			uint8_t placed;
+		} furniture;
 	} add;
 } Item;
 struct _Player;

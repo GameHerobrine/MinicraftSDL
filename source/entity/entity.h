@@ -8,7 +8,7 @@
 
 struct level_;
 
-typedef struct{
+typedef struct _Entity{
 	EntityId type;
 	Random random;
 	int x, y;
@@ -18,6 +18,8 @@ typedef struct{
 } Entity;
 
 struct _Mob;
+struct _Player;
+struct _Item;
 
 void entity_create(Entity* entity);
 void entity_tick(Entity* entity);
@@ -34,6 +36,7 @@ uint8_t entity_move2(Entity* entity, int xa, int ya);
 //TODO isBlockableBy
 //TODO TouchItem
 uint8_t entity_canSwim(Entity* entity);
+uint8_t entity_interact(Entity* entity, struct _Player* player, struct _Item* item, int attackDir);
 //TODO interact
 //TODO use
 int entity_getLightRadius(Entity* entity);

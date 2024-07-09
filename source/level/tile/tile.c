@@ -286,7 +286,10 @@ char tile_interact(TileID id, Level* level, int xt, int yt, struct _Player* play
 	}
 }
 
-//void tile_use(TileID id, Level* level, int xt, int yt, Player* player, int attackDir){} TODO Level*, Player*
+char tile_use(TileID id, Level* level, int xt, int yt, Player* player, int attackDir){
+	//doesnt do anything
+	return 0;
+}
 
 char tile_connectsToLiquid(TileID id){
 	return tiles[id].connectsToWater || tiles[id].connectsToLava;

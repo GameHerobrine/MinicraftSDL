@@ -7,7 +7,7 @@ extern const int BIT_MIRROR_X;
 extern const int BIT_MIRROR_Y;
 extern const int dither[];
 
-typedef struct{
+typedef struct _Screen{
 	int xOffset;
 	int yOffset;
 

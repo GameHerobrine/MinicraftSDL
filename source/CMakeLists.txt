@@ -35,6 +35,13 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	screen/inventory_menu.h
 	screen/dead_menu.c
 	screen/dead_menu.h
+	entity/furniture.h
+	entity/furniture.c
+	item/furniture_item.h
+	item/furniture_item.c
+	entity/workbench.h
+	entity/workbench.c
+
 )
 target_include_directories(minicraft-sdl PUBLIC ".")
 

@@ -330,7 +330,7 @@ int main(int argc, char** argv){
 	free(data);
 	goto QUIT;
 #endif
-	
+
 	prevBuf = malloc(game_screen.h*game_screen.w);
 	for(int i = 0; i < game_screen.h*game_screen.w; ++i) prevBuf[i] = 0;
 
@@ -367,7 +367,7 @@ int main(int argc, char** argv){
 		
 		++frames;
 		game_render();
-		
+
 		for(int y = 0; y < game_screen.h; ++y){
 			for(int x = 0; x < game_screen.w; ++x){
 				pixel.x = x*SCALE;
@@ -381,7 +381,7 @@ int main(int argc, char** argv){
 
 			}
 		}
-		
+
 
 
 		SDL_Flip(surface);
@@ -398,7 +398,6 @@ int main(int argc, char** argv){
 	
 	QUIT:
 	if(prevBuf) free(prevBuf);
-	if(game_player) free(game_player);
 	// Quit SDL
 	SDL_Quit();
 	delete_screen(&game_screen);
@@ -408,5 +407,8 @@ int main(int argc, char** argv){
 		printf("Freeing level %d\n", i);
 		level_free(game_levels + i);
 	}
+
+	if(game_player) free(game_player);
+
 	return ret;
 }

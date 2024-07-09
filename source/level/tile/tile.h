@@ -38,4 +38,5 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y);
 char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e);
 void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir);
 char tile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir);
+char tile_use(TileID id, Level* level, int xt, int yt, struct _Player* player, int attackDir);
 #endif /* LEVEL_TILE_TILE_H_ */

@@ -1,7 +1,7 @@
 #include "item.h"
 #include "powergloveitem.h"
 #include "resourceitem.h"
-
+#include "furniture_item.h"
 int item_getColor(Item* item){
 	switch(item->id){
 		case POWERGLOVE:
@@ -9,7 +9,8 @@ int item_getColor(Item* item){
 		case RESOURCE:
 			return resourceitem_getColor(item);
 		//TODO case TOOLITEM:
-		//TODO case FURNITURE:
+		case FURNITURE:
+			return furnitureitem_getColor(item);
 		default:
 			return 0;
 	}
@@ -21,7 +22,8 @@ int item_getSprite(Item* item){
 		case RESOURCE:
 			return resourceitem_getSprite(item);
 		//TODO case TOOLITEM:
-		//TODO case FURNITURE:
+		case FURNITURE:
+			return furnitureitem_getSprite(item);
 		default:
 			return 0;
 	}
@@ -35,16 +37,27 @@ void item_renderIcon(Item* item, Screen* screen, int x, int y){
 			resourceitem_renderIcon(item, screen, x, y);
 			break;
 		//TODO case TOOLITEM:
-		//TODO case FURNITURE:
+		case FURNITURE:
+			furnitureitem_renderIcon(item, screen, x, y);
+			break;
 		default:
 			break;
 	}
 }
+
+uint8_t item_interact(Item* item, struct _Player* player, Entity* entity, int attackDir){
+	switch(item->id){
+		case POWERGLOVE:
+			return powergloveitem_interact(item, player, entity, attackDir);
+		default:
+			return 0;
+	}
+}
+
 uint8_t item_interactOn(Item* item, TileID tile, Level* level, int xt, int yt, struct _Player* player, int attackDir){
 	switch(item->id){
 		case FURNITURE:
-			//TODO furniture
-			return 0;
+			return furnitureitem_interactOn(item, tile, level, xt, yt, player, attackDir);
 		case RESOURCE:
 			return resourceitem_interactOn(item, tile, level, xt, yt, player, attackDir);
 		default:
@@ -61,7 +74,9 @@ void item_renderInventory(Item* item, Screen* screen, int x, int y){
 			resourceitem_renderInventory(item, screen, x, y);
 			break;
 		//TODO case TOOLITEM:
-		//TODO case FURNITURE:
+		case FURNITURE:
+			furnitureitem_renderInventory(item, screen, x, y);
+			break;
 		default:
 			break;
 	}
@@ -71,7 +86,8 @@ uint8_t item_isDepleted(Item* item){
 	switch(item->id){
 		case RESOURCE:
 			return item->add.resource.count <= 0;
-		//TODO case FURNITURE: return item.add.furniture.placed;
+		case FURNITURE:
+			return item->add.furniture.placed;
 		default:
 			return 0;
 	}
@@ -98,4 +114,15 @@ uint8_t matches(Item* item, Item* item2);
 
 uint8_t item_matches(Item* item, Item* item2){
 	return item->id == item2->id;
+}
+
+void item_free(Item* item){
+	switch(item->id){
+		case FURNITURE:
+			if(item->add.furniture.furniture) {
+				call_entity_free(item->add.furniture.furniture);
+				free(item->add.furniture.furniture);
+			}
+			break;
+	}
 }

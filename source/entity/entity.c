@@ -1,12 +1,18 @@
 #include <entity/entity.h>
 #include <level/tile/tileids.h>
 #include <level/tile/tile.h>
+#include <entity/player.h>
+#include <item/item.h>
 
 void entity_create(Entity* entity){
 	entity->x = entity->y = 0;
 	entity->xr = entity->yr = 6;
 	entity->removed = 0;
 	random_set_seed(&entity->random, getTimeMS());
+}
+
+uint8_t entity_interact(Entity* entity, struct _Player* player, struct _Item* item, int attackDir){
+	return item_interact(item, player, entity, attackDir);
 }
 
 uint8_t entity_canSwim(Entity* entity){

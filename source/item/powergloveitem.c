@@ -3,6 +3,7 @@
 #include <gfx/font.h>
 #include <item/itemids.h>
 #include <string.h>
+#include <entity/furniture.h>
 
 void powergloveitem_create(Item* item){
 	item->id = POWERGLOVE;
@@ -29,10 +30,9 @@ char* powergloveitem_getName(Item* item){
 	return name;
 }
 uint8_t powergloveitem_interact(Item* item, Player* player, Entity* entity, int attackDir){
-	/*TODO: if (entity instanceof Furniture) {
-			Furniture f = (Furniture) entity;
-			f.take(player);
-			return true;
-		}*/
+	if(entity_isfurniture(entity)){
+		furniture_take(entity, player);
+		return 1;
+	}
 	return 0;
 }

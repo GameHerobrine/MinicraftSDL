@@ -2,9 +2,12 @@
 #include <gfx/color.h>
 #include <entity/particle/smashparticle.h>
 #include <entity/particle/textparticle.h>
+#include <item/item.h>
+#include <entity/player.h>
+
 //TODO bumpedInto + add hurt
 
-char cloudcactustile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+char cloudcactustile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
 	/*TODO if (item instanceof ToolItem) {
 			ToolItem tool = (ToolItem) item;
 			if (tool.type == ToolType.pickaxe) {

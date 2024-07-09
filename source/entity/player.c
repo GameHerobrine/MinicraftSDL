@@ -8,11 +8,13 @@
 #include <item/powergloveitem.h>
 #include <screen/menu.h>
 #include <entity/particle/textparticle.h>
+#include <entity/workbench.h>
+#include <item/furniture_item.h>
 
 void player_create(Player* player){
 	mob_create(&player->mob);
 	player->mob.entity.type = PLAYER;
-	player->attackTime = player->attackTime = 0;
+	player->attackTime = player->attackDir = 0;
 	player->stamina = player->staminaRecharge = player->staminaRechargeDelay = 0;
 	player->score = 0;
 	player->onStairDelay = 0;
@@ -21,11 +23,13 @@ void player_create(Player* player){
 	player->mob.entity.x = 24;
 	player->mob.entity.y = 24;
 	player->stamina = player->maxStamina = 10;
-
 	inventory_create(&player->inventory);
 
-	//TODO inventory.add(new FurnitureItem(new Workbench()));
-
+	Item iWork;
+	Workbench* workbench = malloc(sizeof(Workbench));
+	workbench_create(workbench);
+	furnitureitem_create(&iWork, workbench);
+	inventory_addItem(&player->inventory, &iWork);
 	Item glove;
 	powergloveitem_create(&glove);
 	inventory_addItem(&player->inventory, &glove);
@@ -42,13 +46,21 @@ void player_hurt(Player* player, int x0, int y0, int x1, int y1){
 }
 
 char player_interact(Player* player, int x0, int y0, int x1, int y1){
-	/*TODO:
-	 * List<Entity> entities = level.getEntities(x0, y0, x1, y1);
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			if (e != this) if (e.interact(this, activeItem, attackDir)) return true;
+	ArrayList entities;
+	create_arraylist(&entities);
+	level_getEntities(player->mob.entity.level, &entities, x0, y0, x1, y1);
+
+	for(int i = 0; i < entities.size; ++i){
+		Entity* e = entities.elements[i];
+		if(e != player){
+			if(entity_interact(e, player, player->activeItem, player->attackDir)){
+				arraylist_remove(&entities);
+				return 1;
+			}
 		}
-	*/
+	}
+
+	arraylist_remove(&entities);
 	return 0;
 }
 
@@ -89,7 +101,9 @@ void player_attack(Player* player){
 			}
 
 			if(item_isDepleted(player->activeItem)){
+				item_free(player->activeItem);
 				free(player->activeItem);
+				if(player->attackItem == player->activeItem) player->attackItem = 0;
 				player->activeItem = 0;
 			}
 		}
@@ -144,6 +158,52 @@ void player_die(Player* player){
 	mob_die(player);
 	//TODO Sound.playerDeath.play();
 }
+char player_usexy(Player* player, int x0, int y0, int x1, int y1){
+	ArrayList entities;
+	create_arraylist(&entities);
+	level_getEntities(player->mob.entity.level, &entities, x0, y0, x1, y1);
+
+	for(int i = 0; i < entities.size; ++i){
+		Entity* e = entities.elements[i];
+		if(e != player){
+			if(call_entity_use(e, player, player->attackDir)){
+				arraylist_remove(&entities);
+				return 1;
+			}
+		}
+	}
+
+	arraylist_remove(&entities);
+	return 0;
+}
+char player_use_(Player* player){
+	int yo = -2;
+	int x = player->mob.entity.x;
+	int y = player->mob.entity.y;
+	int dir = player->mob.dir;
+
+	if(dir == 0 && player_usexy(player, x - 8, y + 4 + yo, x + 8, y + 12 + yo)) return 1;
+	if(dir == 1 && player_usexy(player, x - 8, y - 12 + yo, x + 8, y - 4 + yo)) return 1;
+	if(dir == 3 && player_usexy(player, x + 4, y - 8 + yo, x + 12, y + 8 + yo)) return 1;
+	if(dir == 2 && player_usexy(player, x - 12, y - 8 + yo, x - 4, y + 8 + yo)) return 1;
+
+	int xt = x >> 4;
+	int yt = (y + yo) >> 4;
+	int r = 12;
+
+	if(player->attackDir == 0) yt = (y + r + yo) >> 4;
+	if(player->attackDir == 1) yt = (y - r + yo) >> 4;
+	if(player->attackDir == 2) xt = (x - r) >> 4;
+	if(player->attackDir == 3) xt = (x + r) >> 4;
+
+	if(xt >= 0 && yt >= 0 && xt < player->mob.entity.level->w && yt < player->mob.entity.level->h){
+		TileID tile = level_get_tile(player->mob.entity.level, xt, yt);
+		char c = tile_use(tile, player->mob.entity.level, xt, yt, player, player->attackDir);
+		if(c) return 1;
+	}
+	return 0;
+}
+
 void player_tick(Player* player){
 	mob_tick(&player->mob);
 	if(player->invulnerableTime > 0) --player->invulnerableTime;
@@ -209,9 +269,9 @@ void player_tick(Player* player){
 	}
 
 	if(menu.clicked){
-		//TODO: if(!use()){
+		if(!player_use_(player)){
 			game_set_menu(mid_INVENTORY);
-		//TODO:}
+		}
 	}
 
 	if (player->attackTime > 0) --player->attackTime;
@@ -312,20 +372,26 @@ void player_free(Player* player){
 		Item* item = player->inventory.items.elements[e];
 		if(item == player->activeItem) freeActive = 0;
 		if(item == player->attackItem) freeAttack = 0;
-		free(item); //XXX maybe item_free(item);
+		item_free(item);
+		free(item);
 	}
 	free(player->inventory.items.elements);
 
 	if(freeAttack && freeActive){
 		if(player->activeItem == player->attackItem){
+			item_free(player->activeItem);
 			free(player->activeItem);
 		}else{
+			item_free(player->activeItem);
 			free(player->activeItem);
+			item_free(player->attackItem);
 			free(player->attackItem);
 		}
 	}else if(freeAttack){
+		item_free(player->attackItem);
 		free(player->attackItem);
-	}else{
+	}else if(freeActive){
+		item_free(player->activeItem);
 		free(player->activeItem);
 	}
 }
