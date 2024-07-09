@@ -71,6 +71,6 @@ void itementity_take(ItemEntity* item, Player* player){
 	/*TODO
 	Sound.pickup.play();
 	player.score++;
-	item.onTake(this);
-	remove();*/
+	item.onTake(this);*/
+	entity_remove(item);
 }

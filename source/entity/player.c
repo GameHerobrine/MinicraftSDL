@@ -23,13 +23,14 @@ void player_create(Player* player){
 
 	inventory_create(&player->inventory);
 
-	//inventory.add(new FurnitureItem(new Workbench()));
+	//TODO inventory.add(new FurnitureItem(new Workbench()));
 
-	Item* glove = malloc(sizeof(Item));
-	powergloveitem_create(glove);
-	inventory_addItem(&player->inventory, glove);
+	Item glove;
+	powergloveitem_create(&glove);
+	inventory_addItem(&player->inventory, &glove);
 
-	//TODO inventory
+	player->activeItem = 0;
+	player->attackItem = 0;
 }
 void player_hurt(Player* player, int x0, int y0, int x1, int y1){
 	/*TODO: List<Entity> entities = level.getEntities(x0, y0, x1, y1);
@@ -38,49 +39,64 @@ void player_hurt(Player* player, int x0, int y0, int x1, int y1){
 			if (e != this) e.hurt(this, getAttackDamage(e), attackDir);
 		}*/
 }
+
+char player_interact(Player* player, int x0, int y0, int x1, int y1){
+	/*TODO:
+	 * List<Entity> entities = level.getEntities(x0, y0, x1, y1);
+		for (int i = 0; i < entities.size(); i++) {
+			Entity e = entities.get(i);
+			if (e != this) if (e.interact(this, activeItem, attackDir)) return true;
+		}
+	*/
+	return 0;
+}
+
 void player_attack(Player* player){
 	player->mob.walkDist += 8;
 	player->attackDir = player->mob.dir;
-	//TODO player->attackItem = player->activeItem;
+	player->attackItem = player->activeItem;
 	uint8_t done = 0;
-	/*TODO:
-	 * if (activeItem != null) {
-			attackTime = 10;
-			int yo = -2;
-			int range = 12;
-			if (dir == 0 && interact(x - 8, y + 4 + yo, x + 8, y + range + yo)) done = true;
-			if (dir == 1 && interact(x - 8, y - range + yo, x + 8, y - 4 + yo)) done = true;
-			if (dir == 3 && interact(x + 4, y - 8 + yo, x + range, y + 8 + yo)) done = true;
-			if (dir == 2 && interact(x - range, y - 8 + yo, x - 4, y + 8 + yo)) done = true;
-			if (done) return;
+	if(player->activeItem){
+		player->attackTime = 10;
+		int yo = -2;
+		int range = 12;
+		int dir = player->mob.dir;
+		int x = player->mob.entity.x;
+		int y = player->mob.entity.y;
+		if(dir == 0 && player_interact(player, x - 8, y + 4 + yo, x + 8, y + range + yo)) done = 1;
+		if(dir == 1 && player_interact(player, x - 8, y - range + yo, x + 8, y - 4 + yo)) done = 1;
+		if(dir == 3 && player_interact(player, x + 4, y - 8 + yo, x + range, y + 8 + yo)) done = 1;
+		if(dir == 2 && player_interact(player, x - range, y - 8 + yo, x - 4, y + 8 + yo)) done = 1;
+		if(done) return;
 
-			int xt = x >> 4;
-			int yt = (y + yo) >> 4;
-			int r = 12;
-			if (attackDir == 0) yt = (y + r + yo) >> 4;
-			if (attackDir == 1) yt = (y - r + yo) >> 4;
-			if (attackDir == 2) xt = (x - r) >> 4;
-			if (attackDir == 3) xt = (x + r) >> 4;
+		int xt = x >> 4;
+		int yt = (y + yo) >> 4;
+		int r = 12;
+		if(player->attackDir == 0) yt = (y + r + yo) >> 4;
+		if(player->attackDir == 1) yt = (y - r + yo) >> 4;
+		if(player->attackDir == 2) xt = (x - r) >> 4;
+		if(player->attackDir == 3) xt = (x + r) >> 4;
 
-			if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h) {
-				if (activeItem.interactOn(level.getTile(xt, yt), level, xt, yt, this, attackDir)) {
-					done = true;
-				} else {
-					if (level.getTile(xt, yt).interact(level, xt, yt, this, activeItem, attackDir)) {
-						done = true;
-					}
-				}
-				if (activeItem.isDepleted()) {
-					activeItem = null;
+		if(xt >= 0 && yt >= 0 && xt < player->mob.entity.level->w && yt < player->mob.entity.level->h){
+			TileID id = level_get_tile(player->mob.entity.level, xt, yt);
+			if(item_interactOn(player->activeItem, id, player->mob.entity.level, xt, yt, player, player->attackDir)){
+				done = 1;
+			}else{
+				if(tile_interact(id, player->mob.entity.level, xt, yt, player, player->activeItem, player->attackDir)){
+					done = 1;
 				}
 			}
+
+			if(item_isDepleted(player->activeItem)){
+				free(player->activeItem);
+				player->activeItem = 0;
+			}
 		}
-	*/
+	}
 
 	if(done) return;
 
-
-	if (/*TODO: activeItem == null || activeItem.canAttack()*/ 1) {
+	if (!player->activeItem || item_canAttack(player->activeItem)) {
 		player->attackTime = 5;
 		int yo = -2;
 		int range = 20;
@@ -222,7 +238,7 @@ void player_render(Player* player, Screen* screen){
 	if(player->attackTime > 0 && player->attackDir == 1){
 		render_screen(screen, xo + 0, yo - 4, 6+13*32, getColor4(-1, 555, 555, 555), 0);
 		render_screen(screen, xo + 8, yo - 4, 6+13*32, getColor4(-1, 555, 555, 555), 1);
-		//TODO attackItem != null ? attackItem.renderIcon()
+		if(player->attackItem) item_renderIcon(player->attackItem, screen, xo + 4, yo - 4);
 	}
 
 	int col = getColor4(-1, 100, 220, 532);
@@ -238,30 +254,19 @@ void player_render(Player* player, Screen* screen){
 	if(player->attackTime > 0 && player->attackDir == 2){
 		render_screen(screen, xo - 4, yo, 7 + 13*32, getColor4(-1, 555, 555, 555), 1);
 		render_screen(screen, xo - 4, yo + 8, 7 + 13*32, getColor4(-1, 555, 555, 555), 3);
-
-		/* TODO:
-			if (attackItem != null) {
-				attackItem.renderIcon(screen, xo - 4, yo + 4);
-			}
-		*/
+		if(player->attackItem) item_renderIcon(player->attackItem, screen, xo - 4, yo + 4);
 	}
 
 	if(player->attackTime > 0 && player->attackDir == 3){
 		render_screen(screen, xo + 8 + 4, yo, 7 + 13 * 32, getColor4(-1, 555, 555, 555), 0);
 		render_screen(screen, xo + 8 + 4, yo + 8, 7 + 13 * 32, getColor4(-1, 555, 555, 555), 2);
-		/* TODO:
-			if (attackItem != null) {
-				attackItem.renderIcon(screen, xo + 8 + 4, yo + 4);
-			}
-		*/
+		if(player->attackItem) item_renderIcon(player->attackItem, screen, xo + 8 + 4, yo + 4);
 	}
 
 	if(player->attackTime > 0 && player->attackDir == 0){
 		render_screen(screen, xo + 0, yo + 8 + 4, 6 + 13 * 32, getColor4(-1, 555, 555, 555), 2);
 		render_screen(screen, xo + 8, yo + 8 + 4, 6 + 13 * 32, getColor4(-1, 555, 555, 555), 3);
-		/*TODO: if (attackItem != null) {
-			attackItem.renderIcon(screen, xo + 4, yo + 8 + 4);
-		}*/
+		if(player->attackItem) item_renderIcon(player->attackItem, screen, xo + 4, yo + 8 + 4);
 	}
 
 	/* TODO:
@@ -289,6 +294,25 @@ char player_findStartPos(Player* player, Level* level){
 }
 
 void player_free(Player* player){
-	inventory_free(&player->inventory);
-	//XXX attackItem & activeItem should always be from inv
+	char freeAttack = player->attackItem != 0, freeActive = player->activeItem != 0;
+	for(int e = 0; e < player->inventory.items.size; ++e){
+		Item* item = player->inventory.items.elements[e];
+		if(item == player->activeItem) freeActive = 0;
+		if(item == player->attackItem) freeAttack = 0;
+		free(item); //XXX maybe item_free(item);
+	}
+	free(player->inventory.items.elements);
+
+	if(freeAttack && freeActive){
+		if(player->activeItem == player->attackItem){
+			free(player->activeItem);
+		}else{
+			free(player->activeItem);
+			free(player->attackItem);
+		}
+	}else if(freeAttack){
+		free(player->attackItem);
+	}else{
+		free(player->activeItem);
+	}
 }

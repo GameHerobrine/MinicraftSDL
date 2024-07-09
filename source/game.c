@@ -12,6 +12,7 @@
 #include <gfx/color.h>
 #include <linux/limits.h>
 #include <entity/player.h>
+#include <item/item.h>
 
 SpriteSheet icons_spritesheet;
 Screen game_screen;
@@ -161,11 +162,9 @@ void game_renderGui(){
 		}
 	}
 
-	/*TODO
-		if (player.activeItem != null) {
-			player.activeItem.renderInventory(screen, 10 * 8, screen.h - 16);
-		}
-	 */
+	if(game_player->activeItem){
+		item_renderInventory(game_player->activeItem, &game_screen, 10*8, game_screen.h - 16);
+	}
 	
 	if(current_menu){
 		render_menu(current_menu, &game_screen);

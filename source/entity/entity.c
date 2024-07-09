@@ -27,7 +27,9 @@ int entity_getLightRadius(Entity* entity){
 void entity_init(Entity* entity, Level* level){
 	entity->level = level;
 }
-
+uint8_t entity_intersects(Entity* entity, int x0, int y0, int x1, int y1){
+	return !(entity->x + entity->xr < x0 || entity->y + entity->yr < y0 || entity->x - entity->xr > x1 || entity->y - entity->yr > y1);
+}
 uint8_t entity_move2(Entity* entity, int xa, int ya){
 	if(xa && ya){
 		printf("Entity(%d) called move2 with xa and ya != 0!\n");
@@ -59,26 +61,42 @@ uint8_t entity_move2(Entity* entity, int xa, int ya){
 	}
 
 	if(blocked) return 0;
+	ArrayList wasInside, isInside;
+	create_arraylist(&wasInside);
+	create_arraylist(&isInside);
+	int x = entity->x;
+	int xr = entity->xr;
+	int y = entity->y;
+	int yr = entity->yr;
+	level_getEntities(entity->level, &wasInside, x - xr, y - yr, x + xr, y + yr);
+	level_getEntities(entity->level, &isInside, x + xa - xr, y + ya - yr, x + xa + xr, y + ya + yr);
 
-	/* TODO entity collisions?
-	 * List<Entity> wasInside = level.getEntities(x - xr, y - yr, x + xr, y + yr);
-		List<Entity> isInside = level.getEntities(x + xa - xr, y + ya - yr, x + xa + xr, y + ya + yr);
-		for (int i = 0; i < isInside.size(); i++) {
-			Entity e = isInside.get(i);
-			if (e == this) continue;
+	for(int i = 0; i < isInside.size; ++i){
+		Entity* e = isInside.elements[i];
+		if(e == entity) continue;
+		call_entity_touchedBy(e, entity);
+	}
 
-			e.touchedBy(this);
+	/*TODO: fix for(int i = 0; i < isInside.size; ++i){
+		for(int j = 0; j < wasInside.size; ++j){
+			Entity* e = isInside.elements[i];
+			Entity* e1 = wasInside.elements[j];
+			if(e == e1) arraylist_removeId(&isInside, i--);
 		}
-		isInside.removeAll(wasInside);
-		for (int i = 0; i < isInside.size(); i++) {
-			Entity e = isInside.get(i);
-			if (e == this) continue;
+	}*/
+	arraylist_remove(&wasInside);
 
-			if (e.blocks(this)) {
-				return false;
-			}
+	for(int i = 0; i < isInside.size; ++i){
+		Entity* e = isInside.elements[i];
+		if(e == entity) continue;
+
+		if(call_entity_blocks(e, entity)){
+			arraylist_remove(&isInside);
+			return 0;
 		}
-	*/
+	}
+
+	arraylist_remove(&isInside);
 	entity->x += xa;
 	entity->y += ya;
 

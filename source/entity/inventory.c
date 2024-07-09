@@ -15,12 +15,16 @@ void inventory_addItemIntoSlot(Inventory* inv, int slot, Item* item){
 		Item* has = inventory_findResource(inv, toTake->add.resource.resource);
 
 		if(!has){
-			arraylist_pushTo(&inv->items, slot, toTake);
+			Item* add = malloc(sizeof(Item));
+			*add = *toTake;
+			arraylist_pushTo(&inv->items, slot, add);
 		}else{
 			has->add.resource.count += toTake->add.resource.count;
 		}
 	}else{
-		arraylist_pushTo(&inv->items, slot, item);
+		Item* add = malloc(sizeof(Item));
+		*add = *item;
+		arraylist_pushTo(&inv->items, slot, add);
 	}
 }
 Item* inventory_findResource(Inventory* inv, Resource* resource){

@@ -2,7 +2,20 @@
 #include <gfx/color.h>
 #include <entity/particle/smashparticle.h>
 #include <entity/particle/textparticle.h>
-//TODO interact, bumpedInto + add hurt
+//TODO bumpedInto + add hurt
+
+char cloudcactustile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.pickaxe) {
+				if (player.payStamina(6 - tool.level)) {
+					hurt(level, xt, yt, 1);
+					return true;
+				}
+			}
+	}*/
+	return 0;
+}
 
 void cloudcactustile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 111, 333, 555);

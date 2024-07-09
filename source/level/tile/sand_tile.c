@@ -5,6 +5,20 @@ void sandtile_init(TileID id){
 	tiles[id].connectsToSand = 1;
 }
 
+char sandtile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.shovel) {
+				if (player.payStamina(4 - tool.level)) {
+					level.setTile(xt, yt, Tile.dirt, 0);
+					level.add(new ItemEntity(new ResourceItem(Resource.sand), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
+					return true;
+				}
+			}
+		}*/
+	return 0;
+}
+
 void sandtile_tick(TileID id, Level* level, int xt, int yt){
 	int damage = level_get_data(level, xt, yt);
 	if(damage) level_set_data(level, xt, yt, damage - 1);

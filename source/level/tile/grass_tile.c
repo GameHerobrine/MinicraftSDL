@@ -9,6 +9,35 @@ void grasstile_init(TileID id){
 	
 	t->connectsToGrass = 1;
 }
+
+char grasstile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.shovel) {
+				if (player.payStamina(4 - tool.level)) {
+					level.setTile(xt, yt, Tile.dirt, 0);
+					Sound.monsterHurt.play();
+					if (random.nextInt(5) == 0) {
+						level.add(new ItemEntity(new ResourceItem(Resource.seeds), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
+						return true;
+					}
+				}
+			}
+			if (tool.type == ToolType.hoe) {
+				if (player.payStamina(4 - tool.level)) {
+					Sound.monsterHurt.play();
+					if (random.nextInt(5) == 0) {
+						level.add(new ItemEntity(new ResourceItem(Resource.seeds), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
+						return true;
+					}
+					level.setTile(xt, yt, Tile.farmland, 0);
+					return true;
+				}
+			}
+		}*/
+	return 0;
+}
+
 void grasstile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(level->grassColor, level->grassColor, level->grassColor + level->grassColor + 111);
 	int transitionColor = getColor4(level->grassColor - 111, level->grassColor, level->grassColor + 111, level->dirtColor);
@@ -42,5 +71,3 @@ void grasstile_tick(TileID id, Level* level, int xt, int yt){
 	
 	if(level_get_tile(level, xn, yn) == DIRT) level_set_tile(level, xn, yn, id, 0);
 }
-
-//TODO override interact 

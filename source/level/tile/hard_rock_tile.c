@@ -1,10 +1,23 @@
 #include "tile.h"
 #include <gfx/color.h>
-//TODO override interact, hurt + add a method hurt
+//TODO hurt + add a method hurt
 
 void hardrocktile_tick(TileID id, Level* level, int xt, int yt){
 	int damage = level_get_data(level, xt, yt);
 	if(damage) level_set_data(level, xt, yt, damage - 1);
+}
+
+char hardrocktile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.pickaxe && tool.level == 4) {
+				if (player.payStamina(4 - tool.level)) {
+					hurt(level, xt, yt, random.nextInt(10) + (tool.level) * 5 + 10);
+					return true;
+				}
+			}
+		}*/
+	return 0;
 }
 
 void hardrocktile_render(TileID id, Screen* screen, Level* level, int x, int y){

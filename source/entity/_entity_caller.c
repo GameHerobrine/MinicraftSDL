@@ -3,6 +3,7 @@
 #include <entity/itementity.h>
 #include <entity/particle/smashparticle.h>
 #include <entity/particle/textparticle.h>
+#include <entity/inventory.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -24,11 +25,13 @@ void call_entity_tick(Entity* entity){
 		case LANTERN:
 		case OVEN:
 		case WORKBENCH:
-
+			//TODO furniture
 		case SPARK:
+
 		case SLIME:
 		case ZOMBIE:
 		case AIRWIZARD:
+			//TODO MOB
 		default:
 			printf("Calling entity tick on unknown entity type! %d\n", entity->type);
 			break;
@@ -76,6 +79,69 @@ void call_entity_render(Entity* entity, Screen* screen){
 	}
 }
 
+void call_entity_touchItem(Entity* entity, ItemEntity* item){
+	Player* pl;
+	switch(entity->type){
+		case PLAYER:
+			pl = (Player*) entity;
+			itementity_take(item, entity);
+			inventory_addItem(&pl->inventory, &item->item);
+			break;
+		default:
+			break;
+	}
+}
+
+void call_entity_touchedBy(Entity* entity, Entity* e){
+	switch(entity->type){
+		case AIRWIZARD:
+			//TODO airwizard
+			break;
+
+		case ANVIL:
+		case CHEST:
+		case FURNACE:
+		case LANTERN:
+		case OVEN:
+		case WORKBENCH:
+			//TODO furniture
+			break;
+		case ITEMENTITY:
+			if(((ItemEntity*)entity)->time > 30) call_entity_touchItem(e, entity);
+			break;
+		case PLAYER:
+			if(e->type != PLAYER) call_entity_touchedBy(e, entity);
+			break;
+		case SLIME:
+			//TODO Slime
+			break;
+		case ZOMBIE:
+			//TODO Zombie
+			break;
+		default:
+			break;
+	}
+}
+char call_entity_blocks(Entity* entity, Entity* e){
+	switch(entity->type){
+		case ANVIL:
+		case CHEST:
+		case FURNACE:
+		case LANTERN:
+		case OVEN:
+		case WORKBENCH:
+			//TODO furniture
+			break;
+		case SLIME:
+		case ZOMBIE:
+		case AIRWIZARD:
+		case PLAYER:
+			//TODO MOB
+			return call_entity_isBlockableBy(e, entity);
+		default:
+			return 0;
+	}
+}
 void call_entity_free(Entity* entity){
 	switch(entity->type){
 		case TEXTPARTICLE:

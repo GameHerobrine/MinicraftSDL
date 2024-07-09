@@ -5,7 +5,20 @@ void wheat_tile_init(TileID id){
 	random_set_seed(&trandom, getTimeUS() / 1000); 
 }
 
-//TODO tick, interact, steppedOn, hurt + add private harvest(Level* level, int x, int y);
+char wheattile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.shovel) {
+				if (player.payStamina(4 - tool.level)) {
+					level.setTile(xt, yt, Tile.dirt, 0);
+					return true;
+				}
+			}
+		}*/
+	return 0;
+}
+
+//TODO tick, steppedOn, hurt + add private harvest(Level* level, int x, int y);
 void wheattile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int age = level_get_data(level, x, y);
 	int col = getColor4(level->dirtColor - 121, level->dirtColor - 11, level->dirtColor, 50);

@@ -77,6 +77,6 @@ void menu_render_item_list(Screen* screen, int xo, int yo, int x1, int y1, Array
 	if(renderCursor){
 		int yy = selected + 1 - io + yo;
 		font_draw(_next, strlen(_next), screen, (xo + 0)*8, yy*8, getColor4(5, 555, 555, 555));
-		font_draw(_prev, strlen(_prev), screen, (xo + 0)*8, yy*8, getColor4(5, 555, 555, 555));
+		font_draw(_prev, strlen(_prev), screen, (xo + w)*8, yy*8, getColor4(5, 555, 555, 555));
 	}
 }

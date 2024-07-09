@@ -255,7 +255,36 @@ void tile_tick(TileID id, Level* level, int xt, int yt){
 
 //void tile_steppedOn(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
 
-//void tile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){} TODO Level*, Player*, Item*
+char tile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	switch(id){
+		case CLOUD_CACTUS:
+			return cloudcactustile_interact(id, level, xt, yt, player, item, attackDir);
+		case CLOUD:
+			return cloudtile_interact(id, level, xt, yt, player, item, attackDir);
+		case DIRT:
+			return dirttile_interact(id, level, xt, yt, player, item, attackDir);
+		case FARMLAND:
+			return farmtile_interact(id, level, xt, yt, player, item, attackDir);
+		case GRASS:
+			return grasstile_interact(id, level, xt, yt, player, item, attackDir);
+		case HARD_ROCK:
+			return hardrocktile_interact(id, level, xt, yt, player, item, attackDir);
+		case GEM_ORE:
+		case GOLD_ORE:
+		case IRON_ORE:
+			return oretile_interact(id, level, xt, yt, player, item, attackDir);
+		case ROCK:
+			return rocktile_interact(id, level, xt, yt, player, item, attackDir);
+		case SAND:
+			return sandtile_interact(id, level, xt, yt, player, item, attackDir);
+		case TREE:
+			return treetile_interact(id, level, xt, yt, player, item, attackDir);
+		case WHEAT:
+			return wheattile_interact(id, level, xt, yt, player, item, attackDir);
+		default:
+			return 0;
+	}
+}
 
 //void tile_use(TileID id, Level* level, int xt, int yt, Player* player, int attackDir){} TODO Level*, Player*
 

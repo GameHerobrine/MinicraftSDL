@@ -2,7 +2,21 @@
 #include <gfx/color.h>
 #include <entity/particle/smashparticle.h>
 #include <entity/particle/textparticle.h>
-//TODO override interact
+#include <entity/itementity.h>
+#include <item/resource/resource.h>
+
+char rocktile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.pickaxe) {
+				if (player.payStamina(4 - tool.level)) {
+					hurt(level, xt, yt, random.nextInt(10) + (tool.level) * 5 + 10);
+					return true;
+				}
+			}
+		}*/
+	return 0;
+}
 
 void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
 	int damage = level_get_data(level, x, y) + dmg;
@@ -16,16 +30,29 @@ void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, 
 	sprintf(tx_, "%d\00", dmg);
 	textparticle_create(txt, tx_, x*16 + 8, y*16 + 8, getColor4(-1, 500, 500, 500));
 	level_addEntity(level, txt);
-
+	Random* random = &tiles[id].random;
 	if(damage >= 50){
-		/*TODO: int count = random.nextInt(4) + 1;
-		for (int i = 0; i < count; i++) {
-			level.add(new ItemEntity(new ResourceItem(Resource.stone), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
+		int count = random_next_int(random, 4) + 1;
+		for(int i = 0; i < count; ++i){
+			ItemEntity* ent = malloc(sizeof(ItemEntity));
+			Item res;
+			resourceitem_create(&res, &stone);
+			int xx = x * 16 + random_next_int(random, 10) + 3;
+			int yy = y * 16 + random_next_int(random, 10) + 3;
+			itementity_create(ent, res, xx, yy);
+			level_addEntity(level, ent);
 		}
-		count = random.nextInt(2);
-		for (int i = 0; i < count; i++) {
-			level.add(new ItemEntity(new ResourceItem(Resource.coal), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
-		}*/
+
+		count = random_next_int(random, 2);
+		for(int i = 0; i < count; ++i){
+			ItemEntity* ent = malloc(sizeof(ItemEntity));
+			Item res;
+			resourceitem_create(&res, &coal);
+			int xx = x * 16 + random_next_int(random, 10) + 3;
+			int yy = y * 16 + random_next_int(random, 10) + 3;
+			itementity_create(ent, res, xx, yy);
+			level_addEntity(level, ent);
+		}
 		level_set_tile(level, x, y, DIRT, 0);
 	}else{
 		level_set_data(level, x, y, damage);

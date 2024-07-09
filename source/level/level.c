@@ -196,7 +196,27 @@ void level_removeEntity(Level* level, int x, int y, Entity* entity){
 //TODO remove(Entity*)
 //TODO removeEntity
 //TODO trySpawn
-//TODO getEntities()
+
+void level_getEntities(Level* level, ArrayList* list, int x0, int y0, int x1, int y1){
+	int xt0 = (x0 >> 4) - 1;
+	int yt0 = (y0 >> 4) - 1;
+	int xt1 = (x1 >> 4) + 1;
+	int yt1 = (y1 >> 4) + 1;
+
+	for(int y = yt0; y <= yt1; ++y){
+		for(int x = xt0; x <= xt1; ++x){
+			if(x < 0 || y < 0 || x >= level->w || y >= level->h) continue;
+
+			ArrayList* entities = &level->entitiesInTiles[x+y*level->w];
+			for(int i = 0; i < entities->size; ++i){
+				Entity* e = entities->elements[i];
+				if(entity_intersects(e, x0, y0, x1, y1)) {
+					arraylist_push(list, e);
+				}
+			}
+		}
+	}
+}
 
 void level_tick(Level* level){
 	//TODO trySpawn(1);

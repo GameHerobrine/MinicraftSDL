@@ -3,6 +3,7 @@
 #include <game.h>
 #include <gfx/font.h>
 #include <item/item.h>
+#include <utils/arraylist.h>
 
 const menu_vt inventorymenu_vt = {
 	&inventorymenu_tick,
@@ -24,20 +25,17 @@ void inventorymenu_tick(){
 	if(inventorymenu_selected >= len) inventorymenu_selected -= len;
 
 	if(attack.clicked && len > 0){
-		//TODO
-		/*
-		 * Item item = player.inventory.items.remove(selected);
-			player.activeItem = item;
-			game.setMenu(null);
-		*/
+		Item* item = arraylist_removeId(&game_player->inventory.items, inventorymenu_selected);
+		game_player->activeItem = item;
+		game_set_menu(0);
 	}
 }
 void inventorymenu_init(){
 	inventorymenu_selected = 0;
-}
-
-static void invmenu_call(void* item, Screen* screen, int x, int y){
-
+	if(game_player->activeItem){
+		arraylist_pushTo(&game_player->inventory.items, 0, game_player->activeItem);
+		game_player->activeItem = 0;
+	}
 }
 
 void inventorymenu_render(Screen* screen){

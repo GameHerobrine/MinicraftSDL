@@ -11,7 +11,7 @@ int powergloveitem_getColor(Item* item){
 	return getColor4(-1, 100, 320, 430);
 }
 int powergloveitem_getSprite(Item* item){
-	return 7*4*32;
+	return 7+4*32;
 }
 void powergloveitem_renderIcon(Item* item, Screen* screen, int x, int y){
 	render_screen(screen, x, y, powergloveitem_getSprite(item), powergloveitem_getColor(item), 0);

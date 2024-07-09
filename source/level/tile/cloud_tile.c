@@ -1,6 +1,5 @@
 #include "tile.h"
 #include <gfx/color.h>
-//TODO override interact
 
 void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 444, 555, 555);
@@ -43,4 +42,22 @@ void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	}else{
 		render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 4 : 5) + (d ? 0 : 1) * 32, transitionColor, 3);
 	}
+}
+
+char cloudtile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.shovel) {
+				if (player.payStamina(5)) {
+					// level.setTile(xt, yt, Tile.infiniteFall, 0);
+					int count = random.nextInt(2) + 1;
+					for (int i = 0; i < count; i++) {
+						level.add(new ItemEntity(new ResourceItem(Resource.cloud), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
+					}
+					return true;
+				}
+			}
+		}
+	}*/
+	return 0;
 }

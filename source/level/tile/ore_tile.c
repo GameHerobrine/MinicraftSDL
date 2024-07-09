@@ -18,7 +18,19 @@ void oretile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	render_screen(screen, x * 16 + 8, y * 16 + 8, 18 + 2 * 32, tiles[id].add.ore.color, 0);
 }
 
+char oretile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.pickaxe) {
+				if (player.payStamina(6 - tool.level)) {
+					hurt(level, xt, yt, 1);
+					return true;
+				}
+			}
+		}*/
+	return 0;
+}
+
 //TODO hurt: Level*, Mob*
-//TODO interact: Level*, PLayer*, Item*
 //TODO custom hurt
 //TODO bumpedInto -> Level*, Entity*

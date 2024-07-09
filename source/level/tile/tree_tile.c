@@ -98,5 +98,16 @@ void treetile_tick(TileID id, Level* level, int xt, int yt){
 	if(damage) level_set_data(level, xt, yt, damage - 1);
 }
 
-//TODO override: hurt, interact + private hurt(Level*, x, y, int dmg);
+char treetile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	/*TODO if (item instanceof ToolItem) {
+			ToolItem tool = (ToolItem) item;
+			if (tool.type == ToolType.axe) {
+				if (player.payStamina(4 - tool.level)) {
+					hurt(level, xt, yt, random.nextInt(10) + (tool.level) * 5 + 10);
+					return true;
+				}
+			}
+		}*/
+	return 0;
+}
 
