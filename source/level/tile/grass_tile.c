@@ -39,7 +39,7 @@ char grasstile_interact(TileID id, Level* level, int xt, int yt, struct _Player*
 }
 
 void grasstile_render(TileID id, Screen* screen, Level* level, int x, int y){
-	int col = getColor4(level->grassColor, level->grassColor, level->grassColor + level->grassColor + 111);
+	int col = getColor4(level->grassColor, level->grassColor, level->grassColor + 111, level->grassColor + 111);
 	int transitionColor = getColor4(level->grassColor - 111, level->grassColor, level->grassColor + 111, level->dirtColor);
 
 	char u = !tiles[level_get_tile(level, x, y - 1)].connectsToGrass;
