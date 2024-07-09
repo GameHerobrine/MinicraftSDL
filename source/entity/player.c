@@ -317,7 +317,7 @@ void player_render(Player* player, Screen* screen){
 	int col = getColor4(-1, 100, 220, 532);
 	if(player->mob.hurtTime > 0) col = getColor4(-1, 555, 555, 555);
 
-	//TODO if(activeItem is Furniture) yt += 2;
+	if(player->activeItem && player->activeItem->id == FURNITURE) yt += 2;
 	render_screen(screen, xo + 8 * flip1, yo + 0, xt + yt*32, col, flip1);
 	render_screen(screen, xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt*32, col, flip1);
 	if(!call_entity_isSwimming(player)){
@@ -342,14 +342,11 @@ void player_render(Player* player, Screen* screen){
 		if(player->attackItem) item_renderIcon(player->attackItem, screen, xo + 4, yo + 8 + 4);
 	}
 
-	/* TODO:
-		if (activeItem instanceof FurnitureItem) {
-			Furniture furniture = ((FurnitureItem) activeItem).furniture;
-			furniture.x = x;
-			furniture.y = yo;
-			furniture.render(screen);
-
-		}*/
+	if(player->activeItem && player->activeItem->id == FURNITURE){
+		player->activeItem->add.furniture.furniture->entity.x = player->mob.entity.x;
+		player->activeItem->add.furniture.furniture->entity.y = yo;
+		call_entity_render(player->activeItem->add.furniture.furniture, screen);
+	}
 }
 
 char player_findStartPos(Player* player, Level* level){

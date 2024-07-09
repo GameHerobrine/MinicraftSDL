@@ -18,7 +18,6 @@ int furnitureitem_getSprite(Item* item){
 	return item->add.furniture.furniture->sprite + 10 * 32;
 }
 void furnitureitem_renderIcon(Item* item, Screen* screen, int x, int y){
-	printf("rend: %p\n", item->add.furniture.furniture);
 	render_screen(screen, x, y, furnitureitem_getSprite(item), furnitureitem_getColor(item), 0);
 }
 void furnitureitem_renderInventory(Item* item, Screen* screen, int x, int y){

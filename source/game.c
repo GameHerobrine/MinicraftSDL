@@ -58,7 +58,10 @@ void game_reset(){
 	level_init(game_levels + 2, 128, 128, -1, game_levels + 3);
 	level_init(game_levels + 1, 128, 128, -2, game_levels + 2);
 	level_init(game_levels + 0, 128, 128, -3, game_levels + 1);
-	if(game_player) free(game_player);
+	if(game_player) {
+		call_entity_free(game_player);
+		free(game_player);
+	}
 	game_level = game_levels + game_currentLevel;
 	game_player = (Player*) malloc(sizeof(Player));
 	player_create(game_player);
@@ -408,7 +411,9 @@ int main(int argc, char** argv){
 		level_free(game_levels + i);
 	}
 
-	if(game_player) free(game_player);
-
+	if(game_player) {
+		call_entity_free(game_player);
+		free(game_player);
+	}
 	return ret;
 }

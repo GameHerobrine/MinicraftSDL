@@ -240,8 +240,10 @@ void level_tick(Level* level){
 		if(e->removed){
 			arraylist_removeId(&level->entities, i--);
 			level_removeEntity(level, xto, yto, e);
-			call_entity_free((Entity*) e);
-			if(e->type != PLAYER) free(e);
+			if(e->type != PLAYER) {
+				call_entity_free((Entity*) e);
+				free(e);
+			}
 		}else{
 			int xt = e->x >> 4;
 			int yt = e->y >> 4;
@@ -266,8 +268,11 @@ void level_free(Level* lvl){
 		for(int i = 0; i < lvl->w*lvl->h; ++i){
 			ArrayList* list = lvl->entitiesInTiles + i;
 			for(int i = 0; i < list->size; ++i){
-				call_entity_free((Entity*) list->elements[i]);
-				if(((Entity*) (list->elements[i]))->type != PLAYER) free(list->elements[i]);
+				Entity* e = list->elements[i];
+				if(e->type != PLAYER) {
+					call_entity_free((Entity*) e);
+					free(e);
+				}
 			}
 			arraylist_remove(list);
 		}
