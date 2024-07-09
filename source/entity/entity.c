@@ -77,13 +77,13 @@ uint8_t entity_move2(Entity* entity, int xa, int ya){
 		call_entity_touchedBy(e, entity);
 	}
 
-	/*TODO: fix for(int i = 0; i < isInside.size; ++i){
-		for(int j = 0; j < wasInside.size; ++j){
+	for(int j = 0; j < wasInside.size; ++j){
+		for(int i = 0; i < isInside.size; ++i){
 			Entity* e = isInside.elements[i];
 			Entity* e1 = wasInside.elements[j];
 			if(e == e1) arraylist_removeId(&isInside, i--);
 		}
-	}*/
+	}
 	arraylist_remove(&wasInside);
 
 	for(int i = 0; i < isInside.size; ++i){

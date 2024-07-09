@@ -4,6 +4,7 @@
 
 extern SpriteSheet icons_spritesheet;
 extern Player* game_player;
+extern int game_gameTime;
 
 void game_reset();
 void game_set_menu(enum menu_id menu);

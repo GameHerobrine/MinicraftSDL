@@ -91,6 +91,36 @@ void call_entity_touchItem(Entity* entity, ItemEntity* item){
 			break;
 	}
 }
+void call_entity_die(Entity* entity){
+	switch(entity->type){
+		case PLAYER:
+			player_die(entity);
+			break;
+		case SLIME: //TODO SLIME
+		case ZOMBIE: //TODO ZOMBIE
+		case AIRWIZARD: //TODO AIRWIZARD
+			mob_die(entity);
+			break;
+		default:
+			printf("Tried dying undyable entity (wat)! %d\n", entity->type);
+			break;
+	}
+}
+void call_entity_doHurt(Entity* entity, int damage, int attackDir){
+	switch(entity->type){
+		case PLAYER:
+			player_doHurt(entity, damage, attackDir);
+			break;
+		case SLIME:
+		case ZOMBIE:
+		case AIRWIZARD:
+			mob_doHurt(entity, damage, attackDir);
+			break;
+		default:
+			printf("Tried hurting unhurtable entity! %d\n", entity->type);
+			break;
+	}
+}
 
 void call_entity_touchedBy(Entity* entity, Entity* e){
 	switch(entity->type){

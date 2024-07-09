@@ -10,7 +10,6 @@ int resourceitem_getSprite(Item* item);
 void resourceitem_renderIcon(Item* item, Screen* screen, int x, int y);
 void resourceitem_renderInventory(Item* item, Screen* screen, int x, int y);
 char* resourceitem_getName(Item* item);
-//TODO: void resourceitem_onTake(Item*, ItemEntity* item);
 char resourceitem_interactOn(Item* item, TileID tile, Level* level, int xt, int yt, Player* player, int attackDir);
 char resourceitem_isDepleted(Item* item);
 

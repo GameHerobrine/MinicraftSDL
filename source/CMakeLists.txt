@@ -33,6 +33,8 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/_player.h
 	screen/inventorymenu.c
 	screen/inventory_menu.h
+	screen/dead_menu.c
+	screen/dead_menu.h
 )
 target_include_directories(minicraft-sdl PUBLIC ".")
 

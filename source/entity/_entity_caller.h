@@ -12,5 +12,6 @@ void call_entity_free(Entity* entity);
 void call_entity_touchedBy(Entity* entity, Entity* e);
 char call_entity_blocks(Entity* entity, Entity* e);
 void call_entity_touchItem(Entity* entity, ItemEntity* item);
+void call_entity_die(Entity* mob);
 
 #endif // _ENTITY_CALLER_H

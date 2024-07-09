@@ -43,8 +43,6 @@ char* resourceitem_getName(Item* item){
 	return item->add.resource.resource->name;
 }
 
-//TODO: void resourceitem_onTake(Item*, ItemEntity* item);
-
 char resourceitem_interactOn(Item* item, TileID tile, Level* level, int xt, int yt, Player* player, int attackDir){
 	char b = resource_interactOn(item->add.resource.resource, tile, level, xt, yt, player, attackDir);
 	if(b){

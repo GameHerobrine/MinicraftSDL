@@ -76,6 +76,11 @@ uint8_t item_isDepleted(Item* item){
 			return 0;
 	}
 }
+
+void item_onTake(Item* item, struct _ItemEntity* itemEntity){
+	//does nothing even in overrides
+}
+
 uint8_t item_canAttack(Item* item){
 	switch(item->id){
 		case TOOL:

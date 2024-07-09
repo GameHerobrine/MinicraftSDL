@@ -20,6 +20,9 @@ void mob_die(Mob* mob);
 uint8_t mob_move(Mob* mob, int xa, int ya);
 uint8_t mob_isSwimming(Mob* mob);
 uint8_t mob_blocks(Mob* mob, Entity* entity);
+
+void mob_doHurt(Mob* mob, int damage, int attackDir);
+
 //TODO hurt, hurt, heal, doHurt, findStartPos
 
 #endif // MOB_H

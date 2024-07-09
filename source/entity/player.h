@@ -36,7 +36,8 @@ char player_findStartPos(Player* player, Level* level);
 //TODO getLightRadius
 //TODO die
 //TODO touchedBy
-//TODO doHurt
+void player_doHurt(Player* player, int damage, int attackDir);
+void player_die(Player* mob);
 //TODO gameWon
 void player_free(Player* player);
 

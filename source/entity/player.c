@@ -7,6 +7,7 @@
 #include "player.h"
 #include <item/powergloveitem.h>
 #include <screen/menu.h>
+#include <entity/particle/textparticle.h>
 
 void player_create(Player* player){
 	mob_create(&player->mob);
@@ -123,6 +124,26 @@ void player_attack(Player* player){
 	}
 }
 
+void player_doHurt(Player* player, int damage, int attackDir){
+	if(player->mob.hurtTime > 0 || player->invulnerableTime > 0) return;
+	//TODO: Sound.playerHurt.play();
+	TextParticle* txt = malloc(sizeof(TextParticle));
+	char* tx_ = malloc(16);
+	sprintf(tx_, "%d\00", damage);
+	textparticle_create(txt, tx_, player->mob.entity.x, player->mob.entity.y, getColor4(-1, 504, 504, 504));
+	level_addEntity(player->mob.entity.level, txt);
+	player->mob.health -= damage;
+	if(attackDir == 0) player->mob.yKnockback = 6;
+	if(attackDir == 1) player->mob.yKnockback = -6;
+	if(attackDir == 2) player->mob.xKnockback = -6;
+	if(attackDir == 3) player->mob.xKnockback = 6;
+	player->mob.hurtTime = 10;
+	player->invulnerableTime = 30;
+}
+void player_die(Player* player){
+	mob_die(player);
+	//TODO Sound.playerDeath.play();
+}
 void player_tick(Player* player){
 	mob_tick(&player->mob);
 	if(player->invulnerableTime > 0) --player->invulnerableTime;
@@ -171,7 +192,7 @@ void player_tick(Player* player){
 
 	if(call_entity_isSwimming(player) && player->mob.tickTime % 60 == 0){
 		if(player->stamina > 0) --player->stamina;
-		//TODO else hurt(this, 1, dir ^ 1);
+		else mob_hurt(&player->mob, 1, player->mob.dir ^ 1);
 	}
 
 	if(player->staminaRechargeDelay % 2 == 0){
@@ -192,14 +213,6 @@ void player_tick(Player* player){
 			game_set_menu(mid_INVENTORY);
 		//TODO:}
 	}
-
-	/*TODO:
-		if (input.menu.clicked) {
-			if (!use()) {
-				game.setMenu(new InventoryMenu(this));
-			}
-		}
-	*/
 
 	if (player->attackTime > 0) --player->attackTime;
 }

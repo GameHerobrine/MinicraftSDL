@@ -20,10 +20,11 @@ typedef struct _Item{
 	} add;
 } Item;
 struct _Player;
+struct _ItemEntity;
 
 int item_getColor(Item* item);
 int item_getSprite(Item* item);
-//TODO void item_onTake(Item* item, ItemEntity* itemEntity);
+void item_onTake(Item* item, struct _ItemEntity* itemEntity);
 void item_renderInventory(Item* item, Screen* screen, int x, int y);
 uint8_t item_interact(Item* item, struct _Player* player, Entity* entity, int attackDir);
 void item_renderIcon(Item* item, Screen* screen, int x, int y);

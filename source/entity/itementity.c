@@ -63,14 +63,9 @@ void itementity_render(ItemEntity* item, Screen* screen){
 	render_screen(screen, x - 4, y - 4 - item->zz, item_getSprite(&item->item), item_getColor(&item->item), 0);
 }
 
-void itementity_touchedBy(ItemEntity* item, Entity* entity){
-	//TODO if(item->time > 30) entity.touchItem(this);
-}
-
 void itementity_take(ItemEntity* item, Player* player){
-	/*TODO
-	Sound.pickup.play();
-	player.score++;
-	item.onTake(this);*/
+	/*TODO Sound.pickup.play();*/
+	++player->score;
+	item_onTake(&item->item, item);
 	entity_remove(item);
 }

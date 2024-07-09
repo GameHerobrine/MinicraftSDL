@@ -72,7 +72,9 @@ void init_resources(){
 	init_resource(&gem, "gem", 13 + 4 * 32, getColor4(-1, 101, 404, 545));
 }
 char resource_interactOn(Resource* resource, TileID tile, Level* level, int xt, int yt, Player* player, int attackDir){
-	if(resource == &cloud || resource == &flower || resource == &acorn || resource == &dirt || resource == &sand, resource == &cactusFlower, resource == &seeds){
+	printf("%p %p %d\n", resource, &acorn, resource == &acorn);
+	if(resource == &cloud || resource == &flower || resource == &acorn || resource == &dirt || resource == &sand || resource == &cactusFlower || resource == &seeds){
+		printf("nyaa\n");
 		for(int i = 0; i < resource->add.plantable.sourceTilesSize; ++i){
 			if(resource->add.plantable.sourceTiles[i] == tile){
 				level_set_tile(level, xt, yt, resource->add.plantable.targetTile, 0);

@@ -58,7 +58,7 @@ void game_reset(){
 	level_init(game_levels + 2, 128, 128, -1, game_levels + 3);
 	level_init(game_levels + 1, 128, 128, -2, game_levels + 2);
 	level_init(game_levels + 0, 128, 128, -3, game_levels + 1);
-	
+	if(game_player) free(game_player);
 	game_level = game_levels + game_currentLevel;
 	game_player = (Player*) malloc(sizeof(Player));
 	player_create(game_player);
@@ -119,13 +119,23 @@ void game_tick(){
 	if(!game_hasfocus){
 		//TODO release all keys
 	}else{
-		//TODO if (!player.removed && !hasWon) gameTime++;
+		if(!game_player->mob.entity.removed && !game_hasWon) ++game_gameTime;
 		input_tick();
 
 		if(current_menu){
 			tick_menu(current_menu);
 		}else{
-			//TODO tick player
+			if(game_player->mob.entity.removed){
+				++game_playerDeadTime;
+				if(game_playerDeadTime > 60){
+					game_set_menu(mid_DEAD);
+				}
+			}else{
+				/*TODO if (pendingLevelChange != 0) {
+					setMenu(new LevelTransitionMenu(pendingLevelChange));
+					pendingLevelChange = 0;
+				}*/
+			}
 
 			level_tick(game_level);
 			++tile_tickCount;
@@ -388,6 +398,7 @@ int main(int argc, char** argv){
 	
 	QUIT:
 	if(prevBuf) free(prevBuf);
+	if(game_player) free(game_player);
 	// Quit SDL
 	SDL_Quit();
 	delete_screen(&game_screen);
