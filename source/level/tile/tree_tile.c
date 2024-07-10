@@ -99,15 +99,14 @@ void treetile_tick(TileID id, Level* level, int xt, int yt){
 }
 
 char treetile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.axe) {
-				if (player.payStamina(4 - tool.level)) {
-					hurt(level, xt, yt, random.nextInt(10) + (tool.level) * 5 + 10);
-					return true;
-				}
+	if(item->id == TOOL){
+		if(item->add.tool.type == AXE){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				treetile_hurt2(id, level, xt, yt, random_next_int(&tiles[id].random, 10) + item->add.tool.level*5 + 10);
+				return 1;
 			}
-		}*/
+		}
+	}
 	return 0;
 }
 

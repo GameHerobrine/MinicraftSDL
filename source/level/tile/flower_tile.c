@@ -1,5 +1,7 @@
 #include "tile.h"
 #include <entity/itementity.h>
+#include <entity/player.h>
+#include <item/item.h>
 
 void flowertile_init(TileID id){
 	tile_init(id);
@@ -20,6 +22,28 @@ void flowertile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	
 }
 
+char flowertile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == SHOVEL){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				Random* random = &tiles[id].random;
+				ItemEntity* entity = malloc(sizeof(ItemEntity));
+				Item item;
+				resourceitem_create(&item, &flower);
+				itementity_create(entity, item, xt*16 + random_next_int(random, 10) + 3, yt*16 + random_next_int(random, 10) + 3);
+				level_addEntity(level, entity);
+
+				entity = malloc(sizeof(ItemEntity));
+				itementity_create(entity, item, xt*16 + random_next_int(random, 10) + 3, yt*16 + random_next_int(random, 10) + 3);
+				level_addEntity(level, entity);
+				level_set_tile(level, xt, yt, GRASS, 0);
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
 void flowertile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
 	Random* random = &tiles[id].random;
 	int count = random_next_int(random, 2) + 1;
@@ -34,6 +58,3 @@ void flowertile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg
 	}
 	level_set_tile(level, x, y, GRASS, 0);
 }
-
-
-//TODO interact

@@ -175,18 +175,18 @@ void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int 
 			cactus_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		case CLOUD_CACTUS:
-			cloudcactus_hurt(id, level, x, y, source, dmg, attackDir);
+			cloudcactustile_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		case FLOWER:
 			flowertile_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		case HARD_ROCK:
-			//TODO
+			hardrocktile_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		case GEM_ORE:
 		case GOLD_ORE:
 		case IRON_ORE:
-			//TODO
+			oretile_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		case ROCK:
 			rocktile_hurt(id, level, x, y, source, dmg, attackDir);
@@ -199,7 +199,7 @@ void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int 
 			treetile_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		case WHEAT:
-			//TODO
+			wheattile_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		default:
 			break;
@@ -253,7 +253,18 @@ void tile_tick(TileID id, Level* level, int xt, int yt){
 	}
 }
 
-//void tile_steppedOn(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
+void tile_steppedOn(TileID id, Level* level, int x, int y, Entity* entity){
+	switch(id){
+		case SAND:
+			if(entity_ismob(entity)) level_set_data(level, x, y, 10);
+			break;
+		case FARMLAND:
+			if(random_next_int(&tiles[id].random, 60) != 0) return;
+			if(level_get_data(level, x, y) < 5) return;
+			level_set_tile(level, x, y, DIRT, 0);
+			break;
+	}
+}
 
 char tile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
 	switch(id){
@@ -281,6 +292,8 @@ char tile_interact(TileID id, Level* level, int xt, int yt, struct _Player* play
 			return treetile_interact(id, level, xt, yt, player, item, attackDir);
 		case WHEAT:
 			return wheattile_interact(id, level, xt, yt, player, item, attackDir);
+		case FLOWER:
+			return flowertile_interact(id, level, xt, yt, player, item, attackDir);
 		default:
 			return 0;
 	}

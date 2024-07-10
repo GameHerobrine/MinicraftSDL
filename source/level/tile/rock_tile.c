@@ -5,20 +5,7 @@
 #include <entity/itementity.h>
 #include <item/resource/resource.h>
 
-char rocktile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.pickaxe) {
-				if (player.payStamina(4 - tool.level)) {
-					hurt(level, xt, yt, random.nextInt(10) + (tool.level) * 5 + 10);
-					return true;
-				}
-			}
-		}*/
-	return 0;
-}
-
-void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+void rocktile_hurt_(TileID id, Level* level, int x, int y, int dmg){
 	int damage = level_get_data(level, x, y) + dmg;
 
 	SmashParticle* smash = malloc(sizeof(SmashParticle));
@@ -30,6 +17,7 @@ void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, 
 	sprintf(tx_, "%d\00", dmg);
 	textparticle_create(txt, tx_, x*16 + 8, y*16 + 8, getColor4(-1, 500, 500, 500));
 	level_addEntity(level, txt);
+
 	Random* random = &tiles[id].random;
 	if(damage >= 50){
 		int count = random_next_int(random, 4) + 1;
@@ -57,6 +45,24 @@ void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, 
 	}else{
 		level_set_data(level, x, y, damage);
 	}
+
+}
+
+char rocktile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == PICKAXE){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				rocktile_hurt_(id, level, xt, yt, random_next_int(&tiles[id].random, 10) + (item->add.tool.level) * 5 + 10);
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+
+void rocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	rocktile_hurt_(id, level, x, y, dmg);
 }
 
 void rocktile_render(TileID id, Screen* screen, Level* level, int x, int y){

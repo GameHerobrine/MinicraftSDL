@@ -30,7 +30,7 @@ int player_getAttackDamage(Player* player, Entity* entity);
 void player_render(Player* player, Screen* screen);
 char player_findStartPos(Player* player, Level* level);
 //TODO findStartPos
-//TODO paySTamina
+char player_payStamina(Player* player, int cost);
 //TODO changeLevel
 //TODO getLightRadius
 //TODO die

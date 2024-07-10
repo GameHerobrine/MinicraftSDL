@@ -1,5 +1,11 @@
 #include "tile.h"
 #include <gfx/color.h>
+#include <item/item.h>
+#include <entity/player.h>
+#include <entity/itementity.h>
+#include <item/resourceitem.h>
+#include <item/resource/resource.h>
+#include <level/level.h>
 
 void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(444, 444, 555, 555);
@@ -44,20 +50,23 @@ void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	}
 }
 
-char cloudtile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.shovel) {
-				if (player.payStamina(5)) {
-					// level.setTile(xt, yt, Tile.infiniteFall, 0);
-					int count = random.nextInt(2) + 1;
-					for (int i = 0; i < count; i++) {
-						level.add(new ItemEntity(new ResourceItem(Resource.cloud), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
-					}
-					return true;
+char cloudtile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == SHOVEL){
+			if(player_payStamina(player, 5)){
+				Random* random = &tiles[id].random;
+				// level.setTile(xt, yt, Tile.infiniteFall, 0);
+				int count = random_next_int(&tiles[id].random, 2) + 1;
+				for(int i = 0; i < count; ++i){
+					ItemEntity* entity = malloc(sizeof(ItemEntity));
+					Item item;
+					resourceitem_create(&item, &cloud);
+					itementity_create(entity, item, xt*16 + random_next_int(random, 10) + 3, yt*16 + random_next_int(random, 10) + 3);
+					level_addEntity(level, entity);
 				}
+				return 1;
 			}
 		}
-	}*/
+	}
 	return 0;
 }

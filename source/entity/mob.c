@@ -4,6 +4,7 @@
 #include <entity/_entity_caller.h>
 #include <game.h>
 #include <entity/particle/textparticle.h>
+#include <gfx/color.h>
 
 void mob_create(Mob* mob){
 	entity_create(&mob->entity);
@@ -66,6 +67,18 @@ uint8_t mob_isSwimming(Mob* mob){
 	TileID tile = level_get_tile(mob->entity.level, mob->entity.x >> 4, mob->entity.y >> 4);
 	return tile == WATER || tile == LAVA;
 }
+
+void mob_heal(Mob* mob, int heal){
+	if(mob->hurtTime > 0) return;
+	char* s = malloc(16);
+	sprintf(s, "%d\00", heal);
+	TextParticle* txt = malloc(sizeof(TextParticle));
+	textparticle_create(txt, s, mob->entity.x, mob->entity.y, getColor4(-1, 50, 50, 50));
+	level_addEntity(mob->entity.level, txt);
+	mob->health += heal;
+	if(mob->health > mob->maxHealth) mob->health = mob->maxHealth;
+}
+
 uint8_t mob_move(Mob* mob, int xa, int ya){
 	if(call_entity_isSwimming(&mob->entity)){
 		if(mob->swimTimer++ % 2 == 0) return 1;

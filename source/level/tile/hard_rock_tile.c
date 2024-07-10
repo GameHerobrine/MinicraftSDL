@@ -1,25 +1,72 @@
 #include "tile.h"
 #include <gfx/color.h>
-//TODO hurt + add a method hurt
+#include <entity/particle/smashparticle.h>
+#include <entity/particle/textparticle.h>
+#include <level/level.h>
+#include <entity/itementity.h>
+#include <item/item.h>
 
 void hardrocktile_tick(TileID id, Level* level, int xt, int yt){
 	int damage = level_get_data(level, xt, yt);
 	if(damage) level_set_data(level, xt, yt, damage - 1);
 }
 
-char hardrocktile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.pickaxe && tool.level == 4) {
-				if (player.payStamina(4 - tool.level)) {
-					hurt(level, xt, yt, random.nextInt(10) + (tool.level) * 5 + 10);
-					return true;
-				}
-			}
-		}*/
-	return 0;
+void hardrocktile_hurt_(TileID id, Level* level, int x, int y, int dmg){
+	int damage = level_get_data(level, x, y) + dmg;
+
+	SmashParticle* smash = malloc(sizeof(SmashParticle));
+	smashparticle_create(smash, x*16 + 8, y*16+8);
+	level_addEntity(level, smash);
+
+	TextParticle* txt = malloc(sizeof(TextParticle));
+	char* tx_ = malloc(16);
+	sprintf(tx_, "%d\00", dmg);
+	textparticle_create(txt, tx_, x*16 + 8, y*16 + 8, getColor4(-1, 500, 500, 500));
+	level_addEntity(level, txt);
+
+	if(damage >= 200){
+		Random* rand = &tiles[id].random;
+		int count = random_next_int(rand, 4) + 1;
+		for(int i = 0; i < count; ++i){
+			ItemEntity* ent = malloc(sizeof(ItemEntity));
+			Item res;
+			resourceitem_create(&res, &stone);
+			int xx = x * 16 + random_next_int(rand, 10) + 3;
+			int yy = y * 16 + random_next_int(rand, 10) + 3;
+			itementity_create(ent, res, xx, yy);
+			level_addEntity(level, ent);
+		}
+
+		count = random_next_int(rand, 2);
+		for(int i = 0; i < count; ++i){
+			ItemEntity* ent = malloc(sizeof(ItemEntity));
+			Item res;
+			resourceitem_create(&res, &coal);
+			int xx = x * 16 + random_next_int(rand, 10) + 3;
+			int yy = y * 16 + random_next_int(rand, 10) + 3;
+			itementity_create(ent, res, xx, yy);
+			level_addEntity(level, ent);
+		}
+		level_set_tile(level, x, y, DIRT, 0);
+	}else{
+		level_set_data(level, x, y, damage);
+	}
 }
 
+char hardrocktile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == PICKAXE && item->add.tool.level == 4){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				hardrocktile_hurt_(id, level, xt, yt, random_next_int(&tiles[id].random, 10) + item->add.tool.level*5 + 10);
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+void hardrocktile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	hardrocktile_hurt_(id, level, x, y, 0);
+}
 void hardrocktile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	
 	int col = getColor4(334, 334, 223, 223);

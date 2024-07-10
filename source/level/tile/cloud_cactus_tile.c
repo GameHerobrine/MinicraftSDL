@@ -5,32 +5,11 @@
 #include <item/item.h>
 #include <entity/player.h>
 
-//TODO bumpedInto + add hurt
+//TODO bumpedInto
 
-char cloudcactustile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.pickaxe) {
-				if (player.payStamina(6 - tool.level)) {
-					hurt(level, xt, yt, 1);
-					return true;
-				}
-			}
-	}*/
-	return 0;
-}
-
-void cloudcactustile_render(TileID id, Screen* screen, Level* level, int x, int y){
-	int col = getColor4(444, 111, 333, 555);
-	
-	render_screen(screen, x*16 + 0, y * 16 + 0, 17 + 1 * 32, col, 0);
-	render_screen(screen, x*16 + 8, y * 16 + 0, 18 + 1 * 32, col, 0);
-	render_screen(screen, x*16 + 0, y * 16 + 8, 17 + 2 * 32, col, 0);
-	render_screen(screen, x*16 + 8, y * 16 + 8, 18 + 2 * 32, col, 0);
-}
-
-void cloudcactus_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+void cloudcactustile_hurt_(TileID id, Level* level, int x, int y, int dmg){
 	int damage = level_get_data(level, x, y) + 1;
+
 	SmashParticle* smash = malloc(sizeof(SmashParticle));
 	smashparticle_create(smash, x * 16 + 8, y*16+8);
 	level_addEntity(level, smash);
@@ -42,10 +21,33 @@ void cloudcactus_hurt(TileID id, Level* level, int x, int y, Mob* source, int dm
 	level_addEntity(level, txt);
 
 	if(dmg > 0){
-		if(damage >= 10){
-			level_set_tile(level, x, y, CLOUD, 0);
-		}else{
-			level_set_data(level, x, y, damage);
+		if(damage >= 10) level_set_tile(level, x, y, CLOUD, 0);
+		else level_set_data(level, x, y, damage);
+	}
+
+}
+
+char cloudcactustile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == PICKAXE){
+			if(player_payStamina(player, 6 - item->add.tool.level)){
+				cloudcactustile_hurt_(id, level, xt, yt, 1);
+				return 1;
+			}
 		}
 	}
+	return 0;
+}
+
+void cloudcactustile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	cloudcactustile_hurt_(id, level, x, y, 0);
+}
+
+void cloudcactustile_render(TileID id, Screen* screen, Level* level, int x, int y){
+	int col = getColor4(444, 111, 333, 555);
+	
+	render_screen(screen, x*16 + 0, y * 16 + 0, 17 + 1 * 32, col, 0);
+	render_screen(screen, x*16 + 8, y * 16 + 0, 18 + 1 * 32, col, 0);
+	render_screen(screen, x*16 + 0, y * 16 + 8, 17 + 2 * 32, col, 0);
+	render_screen(screen, x*16 + 8, y * 16 + 8, 18 + 2 * 32, col, 0);
 }

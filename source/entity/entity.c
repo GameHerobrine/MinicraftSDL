@@ -38,7 +38,7 @@ uint8_t entity_intersects(Entity* entity, int x0, int y0, int x1, int y1){
 }
 uint8_t entity_move2(Entity* entity, int xa, int ya){
 	if(xa && ya){
-		printf("Entity(%d) called move2 with xa and ya != 0!\n");
+		printf("Entity(%d) called move2 with xa and ya != 0!\n", entity->type);
 	}
 
 	int xto0 = (entity->x - entity->xr) >> 4;
@@ -120,7 +120,7 @@ uint8_t entity_move(Entity* entity, int xa, int ya){
 			int yt = entity->y >> 4;
 
 			uint8_t tile = level_get_tile(entity->level, xt, yt);
-			//TODO tile_steppedOn()
+			tile_steppedOn(tile, entity->level, xt, yt, entity);
 		}
 		return !stopped;
 	}

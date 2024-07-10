@@ -1,6 +1,6 @@
 #include "tooltype.h"
 
-char* getName(ToolType type){
+char* type_getName(ToolType type){
 	switch(type){
 		case SHOVEL: return "Shvl";
 		case HOE: return "Hoe";

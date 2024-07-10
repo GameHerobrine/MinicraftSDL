@@ -1,26 +1,35 @@
 #include "tile.h"
 #include <gfx/color.h>
+#include <entity/player.h>
+#include <item/item.h>
+#include <level/level.h>
+#include <item/resourceitem.h>
+#include <entity/itementity.h>
 
-char dirttile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.shovel) {
-				if (player.payStamina(4 - tool.level)) {
-					level.setTile(xt, yt, Tile.hole, 0);
-					level.add(new ItemEntity(new ResourceItem(Resource.dirt), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
-					Sound.monsterHurt.play();
-					return true;
-				}
-			}
-			if (tool.type == ToolType.hoe) {
-				if (player.payStamina(4 - tool.level)) {
-					level.setTile(xt, yt, Tile.farmland, 0);
-					Sound.monsterHurt.play();
-					return true;
-				}
+char dirttile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == SHOVEL){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				level_set_tile(level, xt, yt, HOLE, 0);
+				Random* random = &tiles[id].random;
+				ItemEntity* entity = malloc(sizeof(ItemEntity));
+				Item item;
+				resourceitem_create(&item, &dirt);
+				itementity_create(entity, item, xt*16 + random_next_int(random, 10) + 3, yt*16 + random_next_int(random, 10) + 3);
+				level_addEntity(level, entity);
+				//TODO sounds Sound.monsterHurt.play();
+				return 1;
 			}
 		}
-	}*/
+
+		if(item->add.tool.type == HOE){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				level_set_tile(level, xt, yt, FARMLAND, 0);
+				//TODO: sounds Sound.monsterHurt.play();
+				return 1;
+			}
+		}
+	}
 	return 0;
 }
 

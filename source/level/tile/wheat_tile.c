@@ -1,4 +1,7 @@
 #include "tile.h"
+#include <entity/player.h>
+#include <item/item.h>
+
 static Random trandom;
 void wheat_tile_init(TileID id){
 	tile_init(id);
@@ -6,19 +9,24 @@ void wheat_tile_init(TileID id){
 }
 
 char wheattile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.shovel) {
-				if (player.payStamina(4 - tool.level)) {
-					level.setTile(xt, yt, Tile.dirt, 0);
-					return true;
-				}
+
+	if(item->id == TOOL){
+		if(item->add.tool.type == SHOVEL){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				level_set_tile(level, xt, yt, DIRT, 0);
+				return 1;
 			}
-		}*/
+		}
+	}
+
 	return 0;
 }
 
-//TODO tick, steppedOn, hurt + add private harvest(Level* level, int x, int y);
+void wheattile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	//TODO harvest
+}
+
+//TODO steppedOn, add private harvest(Level* level, int x, int y);
 void wheattile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int age = level_get_data(level, x, y);
 	int col = getColor4(level->dirtColor - 121, level->dirtColor - 11, level->dirtColor, 50);

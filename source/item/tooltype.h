@@ -1,7 +1,7 @@
 #ifndef TOOLTYPE_H
 #define TOOLTYPE_H
 
-typedef enum{
+typedef enum _ToolType{
 	SHOVEL = 0,
 	HOE = 1,
 	SWORD = 2,
@@ -9,6 +9,6 @@ typedef enum{
 	AXE = 4
 } ToolType;
 
-char* getName(ToolType type);
+char* type_getName(ToolType type);
 
 #endif // TOOLTYPE_H

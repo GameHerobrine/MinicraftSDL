@@ -55,9 +55,8 @@ uint8_t call_entity_isBlockableBy(Entity* entity, Mob* mob){
 		case ITEMENTITY:
 		case SPARK:
 			return 0;
-		default:
-			printf("failed isBlockableBy\n");
 		case PLAYER:
+		default:
 			return 1;
 	}
 }
@@ -201,6 +200,17 @@ char call_entity_blocks(Entity* entity, Entity* e){
 		case PLAYER:
 			//TODO MOB
 			return call_entity_isBlockableBy(e, entity);
+		default:
+			return 0;
+	}
+}
+char entity_ismob(Entity* entity){
+	switch(entity->type){
+		case SLIME:
+		case ZOMBIE:
+		case AIRWIZARD:
+		case PLAYER:
+			return 1;
 		default:
 			return 0;
 	}

@@ -2,6 +2,7 @@
 #include "powergloveitem.h"
 #include "resourceitem.h"
 #include "furniture_item.h"
+#include "tool_item.h"
 int item_getColor(Item* item){
 	switch(item->id){
 		case POWERGLOVE:
@@ -36,7 +37,9 @@ void item_renderIcon(Item* item, Screen* screen, int x, int y){
 		case RESOURCE:
 			resourceitem_renderIcon(item, screen, x, y);
 			break;
-		//TODO case TOOLITEM:
+		case TOOL:
+			toolitem_renderIcon(item, screen, x, y);
+			break;
 		case FURNITURE:
 			furnitureitem_renderIcon(item, screen, x, y);
 			break;
@@ -73,7 +76,9 @@ void item_renderInventory(Item* item, Screen* screen, int x, int y){
 		case RESOURCE:
 			resourceitem_renderInventory(item, screen, x, y);
 			break;
-		//TODO case TOOLITEM:
+		case TOOL:
+			toolitem_renderInventory(item, screen, x, y);
+			break;
 		case FURNITURE:
 			furnitureitem_renderInventory(item, screen, x, y);
 			break;
@@ -109,10 +114,11 @@ uint8_t item_canAttack(Item* item){
 }
 
 int item_getAttackDamageBonus(Item* item, Entity* entity);
-char* item_getName(Item* item);
+void item_getName(Item* item, char* buf);
 uint8_t matches(Item* item, Item* item2);
 
 uint8_t item_matches(Item* item, Item* item2){
+	if(item->id == TOOL) return toolitem_matches(item, item2);
 	return item->id == item2->id;
 }
 

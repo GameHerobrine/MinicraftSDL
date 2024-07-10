@@ -10,6 +10,8 @@
 #include <entity/particle/textparticle.h>
 #include <entity/workbench.h>
 #include <item/furniture_item.h>
+#include <item/tooltype.h>
+
 
 void player_create(Player* player){
 	mob_create(&player->mob);
@@ -34,10 +36,39 @@ void player_create(Player* player){
 	powergloveitem_create(&glove);
 	inventory_addItem(&player->inventory, &glove);
 
+#ifdef TEST_INVENTORY
+	Item tool;
+	toolitem_create(&tool, PICKAXE, 1);
+	inventory_addItem(&player->inventory, &tool);
+
+	toolitem_create(&tool, PICKAXE, 2);
+	inventory_addItem(&player->inventory, &tool);
+
+	toolitem_create(&tool, PICKAXE, 3);
+	inventory_addItem(&player->inventory, &tool);
+
+	toolitem_create(&tool, PICKAXE, 4);
+	inventory_addItem(&player->inventory, &tool);
+
+
+	toolitem_create(&tool, SWORD, 1);
+	inventory_addItem(&player->inventory, &tool);
+
+	toolitem_create(&tool, AXE, 1);
+	inventory_addItem(&player->inventory, &tool);
+
+	toolitem_create(&tool, SHOVEL, 1);
+	inventory_addItem(&player->inventory, &tool);
+
+	toolitem_create(&tool, HOE, 1);
+	inventory_addItem(&player->inventory, &tool);
+#endif
+
 	player->activeItem = 0;
 	player->attackItem = 0;
 }
 void player_hurt(Player* player, int x0, int y0, int x1, int y1){
+
 	/*TODO: List<Entity> entities = level.getEntities(x0, y0, x1, y1);
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
@@ -276,6 +307,13 @@ void player_tick(Player* player){
 
 	if (player->attackTime > 0) --player->attackTime;
 }
+
+char player_payStamina(Player* player, int cost){
+	if(cost > player->stamina) return 0;
+	player->stamina -= cost;
+	return 1;
+}
+
 void player_render(Player* player, Screen* screen){
 	int xt = 0;
 	int yt = 14;

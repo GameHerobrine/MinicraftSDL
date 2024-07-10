@@ -1,21 +1,28 @@
 #include "tile.h"
+#include <item/item.h>
+#include <entity/itementity.h>
 
 void sandtile_init(TileID id){
 	tile_init(id);
 	tiles[id].connectsToSand = 1;
 }
 
-char sandtile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.shovel) {
-				if (player.payStamina(4 - tool.level)) {
-					level.setTile(xt, yt, Tile.dirt, 0);
-					level.add(new ItemEntity(new ResourceItem(Resource.sand), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
-					return true;
-				}
+char sandtile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
+
+	if(item->id == TOOL){
+		if(item->add.tool.type == SHOVEL){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				level_set_tile(level, xt, yt, DIRT, 0);
+				Random* random = &tiles[id].random;
+				ItemEntity* entity = malloc(sizeof(ItemEntity));
+				Item item;
+				resourceitem_create(&item, &sand);
+				itementity_create(entity, item, xt*16 + random_next_int(random, 10) + 3, yt*16 + random_next_int(random, 10) + 3);
+				level_addEntity(level, entity);
+				return 1;
 			}
-		}*/
+		}
+	}
 	return 0;
 }
 

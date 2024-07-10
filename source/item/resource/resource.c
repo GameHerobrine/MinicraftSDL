@@ -82,8 +82,8 @@ char resource_interactOn(Resource* resource, TileID tile, Level* level, int xt, 
 		}
 		return 0;
 	}else if(resource == &bread || resource == &apple){
-		if(player->mob.health < player->mob.maxHealth /*&& TODO: player.payStamina(staminaCost)*/){
-			//TODO player.heal(heal);
+		if(player->mob.health < player->mob.maxHealth && player_payStamina(player, resource->add.food.staminaCost)){
+			mob_heal(player, resource->add.food.heal);
 			return 1;
 		}
 		return 0;

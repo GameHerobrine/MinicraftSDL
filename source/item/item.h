@@ -9,6 +9,8 @@
 #include "itemids.h"
 #include <item/resource/resource.h>
 #include <entity/player.h>
+#include <utils/javarandom.h>
+#include <item/tooltype.h>
 
 typedef struct _Item{
 	ItemID id;
@@ -21,6 +23,11 @@ typedef struct _Item{
 			struct _Furniture* furniture;
 			uint8_t placed;
 		} furniture;
+		struct{
+			Random random;
+			ToolType type;
+			int level;
+		} tool;
 	} add;
 } Item;
 struct _Player;
@@ -36,7 +43,7 @@ uint8_t item_interactOn(Item* item, TileID tile, Level* level, int xt, int yt, s
 uint8_t item_isDepleted(Item* item);
 uint8_t item_canAttack(Item* item);
 int item_getAttackDamageBonus(Item* item, Entity* entity);
-char* item_getName(Item* item);
+void item_getName(Item* item, char* buf);
 uint8_t matches(Item* item, Item* item2);
 
 

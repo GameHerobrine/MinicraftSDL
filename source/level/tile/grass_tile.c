@@ -1,4 +1,8 @@
 #include "tile.h"
+#include <entity/player.h>
+#include <item/item.h>
+#include <entity/itementity.h>
+#include <level/level.h>
 
 static Random trandom;
 
@@ -10,31 +14,42 @@ void grasstile_init(TileID id){
 	t->connectsToGrass = 1;
 }
 
-char grasstile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.shovel) {
-				if (player.payStamina(4 - tool.level)) {
-					level.setTile(xt, yt, Tile.dirt, 0);
-					Sound.monsterHurt.play();
-					if (random.nextInt(5) == 0) {
-						level.add(new ItemEntity(new ResourceItem(Resource.seeds), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
-						return true;
-					}
+char grasstile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == SHOVEL){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				level_set_tile(level, xt, yt, DIRT, 0);
+				//TODO sounds Sound.monsterHurt.play();
+				Random* random = &tiles[id].random;
+				if(random_next_int(random, 5) == 0){
+					ItemEntity* entity = malloc(sizeof(ItemEntity));
+					Item item;
+					resourceitem_create(&item, &seeds);
+					itementity_create(entity, item, xt*16 + random_next_int(random, 10) + 3, yt*16 + random_next_int(random, 10) + 3);
+					level_addEntity(level, entity);
+					return 1;
 				}
 			}
-			if (tool.type == ToolType.hoe) {
-				if (player.payStamina(4 - tool.level)) {
-					Sound.monsterHurt.play();
-					if (random.nextInt(5) == 0) {
-						level.add(new ItemEntity(new ResourceItem(Resource.seeds), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
-						return true;
-					}
-					level.setTile(xt, yt, Tile.farmland, 0);
-					return true;
+		}
+
+		if(item->add.tool.type == HOE){
+			if(player_payStamina(player, 4 - item->add.tool.level)){
+				//TODO sounds Sound.monsterHurt.play();
+				Random* random = &tiles[id].random;
+				if(random_next_int(random, 5) == 0){
+					ItemEntity* entity = malloc(sizeof(ItemEntity));
+					Item item;
+					resourceitem_create(&item, &seeds);
+					itementity_create(entity, item, xt*16 + random_next_int(random, 10) + 3, yt*16 + random_next_int(random, 10) + 3);
+					level_addEntity(level, entity);
+					return 1;
 				}
+
+				level_set_tile(level, xt, yt, FARMLAND, 0);
+				return 1;
 			}
-		}*/
+		}
+	}
 	return 0;
 }
 

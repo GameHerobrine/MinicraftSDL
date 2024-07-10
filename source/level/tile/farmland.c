@@ -1,5 +1,8 @@
 #include "tile.h"
 #include <gfx/color.h>
+#include <entity/player.h>
+#include <item/item.h>
+
 //TODO steppedOn
 
 void farmlandtile_render(TileID id, Screen* screen, Level* level, int x, int y){
@@ -11,16 +14,15 @@ void farmlandtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	render_screen(screen, x*16 + 8, y * 16 + 8, 2 + 32, col, 1);
 }
 
-char farmtile_interact(TileID id, Level* level, int xt, int yt, struct _Player* player, struct _Item* item, int attackDir){
-	/*TODO if (item instanceof ToolItem) {
-			ToolItem tool = (ToolItem) item;
-			if (tool.type == ToolType.shovel) {
-				if (player.payStamina(4 - tool.level)) {
-					level.setTile(xt, yt, Tile.dirt, 0);
-					return true;
-				}
+char farmtile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){
+	if(item->id == TOOL){
+		if(item->add.tool.type == SHOVEL){
+			if(player_payStamina(player, 4- item->add.tool.level)){
+				level_set_tile(level, xt, yt, DIRT, 0);
+				return 1;
 			}
-		}*/
+		}
+	}
 	return 0;
 }
 
