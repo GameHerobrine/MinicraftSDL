@@ -6,6 +6,7 @@
 #include <entity/inventory.h>
 #include <entity/furniture.h>
 #include <entity/workbench.h>
+#include <entity/lantern.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -229,17 +230,36 @@ char entity_isfurniture(Entity* entity){
 			return 0;
 	}
 }
-
+int call_entity_getLightRadius(Entity* entity){
+	int r, rr;
+	Player* p;
+	switch(entity->type){
+		case LANTERN:
+			return 8;
+		case PLAYER:
+			r = 2;
+			p = (Player*) entity;
+			if(p->activeItem && p->activeItem->id == FURNITURE){
+				rr = call_entity_getLightRadius(p->activeItem->add.furniture.furniture);
+				if(rr > r) return rr;
+			}
+			return r;
+		default:
+			return 0;
+	}
+}
 Furniture* furniture_create_copy(Furniture* old){
 	size_t size;
 	switch(old->entity.type){
 		case WORKBENCH:
 			size = sizeof(Workbench);
 			break;
+		case LANTERN:
+			size = sizeof(Lantern);
+			break;
 		case ANVIL:
 		case CHEST:
 		case FURNACE:
-		case LANTERN:
 		case OVEN:
 			printf("WIP\n");
 		default:

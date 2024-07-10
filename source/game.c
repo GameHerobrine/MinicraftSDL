@@ -24,7 +24,7 @@ int game_colors[256];
 
 enum menu_id current_menu;
 char game_hasfocus = 0;
-
+char game_pendingLevelChange = 0;
 
 void game_set_menu(enum menu_id menu){
 	current_menu = menu;
@@ -39,6 +39,15 @@ int game_currentLevel;
 Level* game_level;
 
 Player* game_player = 0;
+
+void game_changeLevel(int dir){
+	level_removeEntity1(game_level, game_player);
+	game_currentLevel += dir;
+	game_level = game_levels + game_currentLevel;
+	game_player->mob.entity.x = (game_player->mob.entity.x >> 4) * 16 + 8;
+	game_player->mob.entity.y = (game_player->mob.entity.y >> 4) * 16 + 8;
+	level_addEntity(game_level, game_player);
+}
 
 void game_reset(){
 	game_playerDeadTime = 0;
@@ -134,10 +143,10 @@ void game_tick(){
 					game_set_menu(mid_DEAD);
 				}
 			}else{
-				/*TODO if (pendingLevelChange != 0) {
-					setMenu(new LevelTransitionMenu(pendingLevelChange));
-					pendingLevelChange = 0;
-				}*/
+				if(game_pendingLevelChange != 0){
+					game_set_menu(mid_LEVEL_TRANSITION);
+					game_pendingLevelChange = 0;
+				}
 			}
 
 			level_tick(game_level);
@@ -147,12 +156,38 @@ void game_tick(){
 }
 
 void game_renderGui(){
+
+#ifdef TEST_SHOWPORTALPOS
+	char hax[64];
+	int x = game_player->mob.entity.x >> 4;
+	int y = game_player->mob.entity.y >> 4;
+	sprintf(hax, "P %d %d\00", x, y);
+	font_draw(hax, strlen(hax), &game_screen, 2, 2, getColor4(000, 200, 500, 533));
+	int Scnt = 10;
+
+	for(x = 0; x < game_player->mob.entity.level->w; ++x){
+		for(y = 0; y < game_player->mob.entity.level->h; ++y){
+			if(level_get_tile(game_player->mob.entity.level, x, y) == STAIRS_UP){
+				sprintf(hax, "U %d %d\00", x, y);
+				font_draw(hax, strlen(hax), &game_screen, 2, Scnt, getColor4(000, 200, 500, 533));
+				Scnt += 8;
+			}
+
+			if(level_get_tile(game_player->mob.entity.level, x, y) == STAIRS_DOWN){
+				sprintf(hax, "D %d %d\00", x, y);
+				font_draw(hax, strlen(hax), &game_screen, 2, Scnt, getColor4(000, 200, 500, 533));
+				Scnt += 8;
+			}
+		}
+	}
+#endif
+
 	for(int y = 0; y < 2; ++y){
 		for(int x = 0; x < 20; ++x){
 			render_screen(&game_screen, x*8, game_screen.h - 16 + y*8, 0 + 12 * 32, getColor4(0, 0, 0, 0), 0);
 		}
 	}
-	
+
 	for(int i = 0; i < 10; ++i){
 		if(i < game_player->mob.health){
 			render_screen(&game_screen, i * 8, game_screen.h - 16, 0 + 12 * 32, getColor4(000, 200, 500, 533), 0);
@@ -234,7 +269,7 @@ void game_render(){
 			}
 		}
 	}
-		
+
 	level_renderBackground(game_level, &game_screen, xScroll, yScroll);
 	level_renderSprites(game_level, &game_screen, xScroll, yScroll);
 

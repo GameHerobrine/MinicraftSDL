@@ -193,7 +193,7 @@ void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int 
 			break;
 		case CACTUS_SAPLING:
 		case TREE_SAPLING:
-			//TODO
+			saplingtile_hurt(id, level, x, y, source, dmg, attackDir);
 			break;
 		case TREE:
 			treetile_hurt(id, level, x, y, source, dmg, attackDir);

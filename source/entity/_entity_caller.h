@@ -15,5 +15,6 @@ void call_entity_touchItem(Entity* entity, ItemEntity* item);
 void call_entity_die(Entity* mob);
 char call_entity_use(Entity* entity, Player* player, int attackDir);
 struct _Furniture* furniture_create_copy(struct _Furniture* old);
+int call_entity_getLightRadius(Entity* entity);
 
 #endif // _ENTITY_CALLER_H

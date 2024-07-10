@@ -11,5 +11,6 @@ typedef struct{
 void saplingtile_init(TileID id, TileID onType, TileID growsTo);
 void saplingtile_render(TileID id, Screen* screen, Level* level, int x, int y); 
 void saplingtile_tick(TileID id, Level* level, int xt, int yt);
+void saplingtile_hurt(TileID id, Level* level, int x, int y, struct _Mob* source, int dmg, int attackDir);
 
 #endif /* LEVEL_TILE_SAPLING_TILE_H_ */

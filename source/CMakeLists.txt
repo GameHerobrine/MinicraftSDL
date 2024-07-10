@@ -4,7 +4,7 @@ project(minicraft-sdl LANGUAGES C)
 add_compile_options(-Wno-implicit-function-declaration) #TODO delete this
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDLmain -lSDL -lm")
 
-add_definitions(-DTEST_INVENTORY)
+add_definitions(-DTEST_INVENTORY -DTEST_SHOWPORTALPOS)
 
 file(GLOB_RECURSE SOURCES *.c)
 file(GLOB_RECURSE HEADERS *.h)
@@ -45,6 +45,10 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/workbench.c
 	item/tool_item.h
 	item/tool_item.c
+	screen/level_transition_menu.h
+	screen/level_transition_menu.c
+	entity/lantern.h
+	entity/lantern.c
 
 )
 target_include_directories(minicraft-sdl PUBLIC ".")

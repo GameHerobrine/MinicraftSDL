@@ -11,6 +11,8 @@
 #include <entity/workbench.h>
 #include <item/furniture_item.h>
 #include <item/tooltype.h>
+#include <game.h>
+#include <entity/lantern.h>
 
 
 void player_create(Player* player){
@@ -62,6 +64,12 @@ void player_create(Player* player){
 
 	toolitem_create(&tool, HOE, 1);
 	inventory_addItem(&player->inventory, &tool);
+
+	Lantern* lantern = malloc(sizeof(Lantern));
+	lantern_create(lantern);
+	furnitureitem_create(&tool, lantern);
+	inventory_addItem(&player->inventory, &tool);
+
 #endif
 
 	player->activeItem = 0;
@@ -245,7 +253,7 @@ void player_tick(Player* player){
 	unsigned char tile = level_get_tile(player->mob.entity.level, x >> 4, y >> 4);
 	if(tile == STAIRS_DOWN || tile == STAIRS_UP){
 		if(player->onStairDelay == 0){
-			//TODO changeLevel
+			game_pendingLevelChange = tile == STAIRS_UP ? 1 : -1;
 			player->onStairDelay = 10;
 			return;
 		}

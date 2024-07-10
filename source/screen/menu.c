@@ -10,6 +10,7 @@
 #include "instructions_menu.h"
 #include <screen/inventory_menu.h>
 #include <screen/dead_menu.h>
+#include <screen/level_transition_menu.h>
 
 #define MENUS_SIZE 16
 char _next[] = ">";
@@ -29,6 +30,7 @@ void init_menus(){
 	menus[mid_INSTRUCTIONS] = &instructionsmenu_vt;
 	menus[mid_INVENTORY] = &inventorymenu_vt;
 	menus[mid_DEAD] = &deadmenu_vt;
+	menus[mid_LEVEL_TRANSITION] = &leveltransitionmenu_vt;
 }
 
 void tick_menu(enum menu_id menu){

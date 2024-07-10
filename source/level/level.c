@@ -142,9 +142,16 @@ void renderLight(Level* level, Screen* screen, int xScroll, int yScroll){
 	for(int y = yo - r; y <= h + yo + r; ++y){
 		for(int x = xo - r; x <= w + xo + r; ++x){
 			if(x < 0 || y < 0 || x >= level->w || y >= level->h) continue;
-			//TODO light from entity
+			ArrayList* entities = &level->entitiesInTiles[x+y*level->w];
+			for(int i = 0; i < entities->size; ++i){
+				Entity* e = entities->elements[i];
+				int lr = call_entity_getLightRadius(e);
+				if(lr > 0) screen_render_light(screen, e->x - 1, e->y - 4, lr*8);
+			}
 			
-			//TODO light from blocks
+			TileID tile = level_get_tile(level, x, y);
+			int lr = tile_getLightRadius(tile, level, x, y);
+			if(lr > 0) screen_render_light(screen, x*16 + 8, y*16 + 8, lr*8);
 		}
 	}
 	
@@ -187,14 +194,17 @@ void level_addEntity(Level* level, Entity* entity){
 
 	level_insertEntity(level, entity->x >> 4, entity->y >> 4, entity);
 }
-
+void level_removeEntity1(Level* level, Entity* e){
+	arraylist_removeElement(&level->entities, e);
+	int xto = e->x >> 4;
+	int yto = e->y >> 4;
+	level_removeEntity(level, xto, yto, e);
+}
 void level_removeEntity(Level* level, int x, int y, Entity* entity){
 	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return;
 	arraylist_removeElement(&level->entitiesInTiles[x+y*level->w], entity);
 }
 
-//TODO remove(Entity*)
-//TODO removeEntity
 //TODO trySpawn
 
 void level_getEntities(Level* level, ArrayList* list, int x0, int y0, int x1, int y1){

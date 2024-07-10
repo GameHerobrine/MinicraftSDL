@@ -29,7 +29,7 @@ void cloudtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	}
 	
 	if(!u && !r){
-		if(!ur) render_screen(screen, x * 16 + 0, y * 16 + 0, 18, col, 0);
+		if(!ur) render_screen(screen, x * 16 + 8, y * 16 + 0, 18, col, 0);
 		else render_screen(screen, x * 16 + 8, y * 16 + 0, 8 + 0 * 32, transitionColor, 3);
 	}else{
 		render_screen(screen, x * 16 + 8, y * 16 + 0, (r ? 4 : 5) + (u ? 2 : 1) * 32, transitionColor, 3);

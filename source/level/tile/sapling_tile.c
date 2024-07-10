@@ -27,4 +27,6 @@ void saplingtile_tick(TileID id, Level* level, int xt, int yt){
 	else level_set_data(level, xt, yt, age);
 }
 
-//TODO override render, hurt
+void saplingtile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	level_set_tile(level, x, y, tiles[id].add.sapling.onType, 0);
+}

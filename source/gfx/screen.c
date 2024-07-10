@@ -53,12 +53,12 @@ void screen_set_offset(Screen* screen, int x, int y){
 
 void screen_overlay(Screen* screen, Screen* screen2, int xa, int ya){
 	int i = 0;
-	int* oPixels = screen2->pixels;
+	unsigned char* oPixels = screen2->pixels;
 
 	for(int y = 0; y < screen->h; ++y){
 		for(int x = 0; x < screen->w; ++x){
 			if(oPixels[i] / 10 <= dither[((x + xa) & 3) + ((y + ya) & 3) * 4]){
-				screen->pixels[x] = 0;
+				screen->pixels[i] = 0;
 			}
 			++i;
 		}

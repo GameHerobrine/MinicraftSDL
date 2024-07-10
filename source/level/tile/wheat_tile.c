@@ -1,6 +1,7 @@
 #include "tile.h"
 #include <entity/player.h>
 #include <item/item.h>
+#include <entity/itementity.h>
 
 static Random trandom;
 void wheat_tile_init(TileID id){
@@ -22,11 +23,45 @@ char wheattile_interact(TileID id, Level* level, int xt, int yt, struct _Player*
 	return 0;
 }
 
-void wheattile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
-	//TODO harvest
+void wheattile_harvest(TileID id, Level* level, int x, int y){
+	int age = level_get_data(level, x, y);
+	Random* random = &tiles[id].random;
+	int count = random_next_int(random, 2);
+
+	for(int i = 0; i < count; ++i){
+		ItemEntity* ent = malloc(sizeof(ItemEntity));
+		Item res;
+		resourceitem_create(&res, &seeds);
+		int xx = x * 16 + random_next_int(random, 10) + 3;
+		int yy = y * 16 + random_next_int(random, 10) + 3;
+		itementity_create(ent, res, xx, yy);
+		level_addEntity(level, ent);
+	}
+
+	count = 0;
+	if(age == 50){
+		count = random_next_int(random, 3) + 2;
+	}else if(age >= 40){
+		count = random_next_int(random, 2) + 1;
+	}
+
+	for(int i = 0; i < count; ++i){
+		ItemEntity* ent = malloc(sizeof(ItemEntity));
+		Item res;
+		resourceitem_create(&res, &wheat);
+		int xx = x * 16 + random_next_int(random, 10) + 3;
+		int yy = y * 16 + random_next_int(random, 10) + 3;
+		itementity_create(ent, res, xx, yy);
+		level_addEntity(level, ent);
+	}
+	level_set_tile(level, x, y, DIRT, 0);
 }
 
-//TODO steppedOn, add private harvest(Level* level, int x, int y);
+void wheattile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
+	wheattile_harvest(id, level, x, y);
+}
+
+//TODO steppedOn
 void wheattile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int age = level_get_data(level, x, y);
 	int col = getColor4(level->dirtColor - 121, level->dirtColor - 11, level->dirtColor, 50);
