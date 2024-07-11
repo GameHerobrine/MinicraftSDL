@@ -5,7 +5,7 @@
 #include <utils/javarandom.h>
 #include <entity/entity.h>
 
-typedef struct level_{
+typedef struct _Level{
 	Random random;
 	int w, h;
 	unsigned char* tiles;
@@ -19,6 +19,7 @@ typedef struct level_{
 	ArrayList entities;
 } Level;
 
+void level_trySpawn(Level* level, int count);
 void level_init(Level* lvl, int w, int h, int level, Level* parent);
 unsigned char level_get_tile(Level* level, int x, int y);
 unsigned char level_get_data(Level* level, int x, int y);

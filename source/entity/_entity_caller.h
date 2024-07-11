@@ -16,5 +16,6 @@ void call_entity_die(Entity* mob);
 char call_entity_use(Entity* entity, Player* player, int attackDir);
 struct _Furniture* furniture_create_copy(struct _Furniture* old);
 int call_entity_getLightRadius(Entity* entity);
-
+void call_entity_hurtTile(Entity* entity, TileID tile, int x, int y, int damage);
+void call_entity_hurt(Entity* entity, Mob* mob, int damage, int attackDir);
 #endif // _ENTITY_CALLER_H

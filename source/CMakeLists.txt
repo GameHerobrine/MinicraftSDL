@@ -49,6 +49,10 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	screen/level_transition_menu.c
 	entity/lantern.h
 	entity/lantern.c
+	entity/slime.h
+	entity/slime.c
+	entity/zombie.h
+	entity/zombie.c
 
 )
 target_include_directories(minicraft-sdl PUBLIC ".")

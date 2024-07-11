@@ -79,6 +79,7 @@ void game_reset(){
 	level_addEntity(game_level, game_player);
 
 	//TODO 5 times: levels.trySpawn(5000);
+	for(int i = 0; i < 5; ++i) level_trySpawn(game_levels + i, 5000);
 }
 
 void game_init(){

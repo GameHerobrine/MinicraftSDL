@@ -2,6 +2,8 @@
 #define MOB_H
 #include <entity/entity.h>
 
+struct _Level;
+
 typedef struct _Mob{
 	Entity entity;
 	int walkDist;
@@ -22,7 +24,6 @@ uint8_t mob_isSwimming(Mob* mob);
 uint8_t mob_blocks(Mob* mob, Entity* entity);
 void mob_heal(Mob* mob, int heal);
 void mob_doHurt(Mob* mob, int damage, int attackDir);
-
-//TODO hurt, hurt, doHurt, findStartPos
+char mob_findStartPos(Mob* mob, struct _Level* level);
 
 #endif // MOB_H

@@ -6,26 +6,25 @@
 #include <entity/entityid.h>
 #include <gfx/screen.h>
 
-struct level_;
+struct _Mob;
+struct _Player;
+struct _Item;
+struct _Level;
 
 typedef struct _Entity{
 	EntityId type;
 	Random random;
 	int x, y;
 	int xr, yr;
-	struct level_* level;
+	struct _Level* level;
 	uint8_t removed;
 } Entity;
-
-struct _Mob;
-struct _Player;
-struct _Item;
 
 void entity_create(Entity* entity);
 void entity_tick(Entity* entity);
 void entity_render(Entity* entity, Screen* screen);
 void entity_remove(Entity* entity);
-void entity_init(Entity* entity, struct level_* level);
+void entity_init(Entity* entity, struct _Level* level);
 uint8_t entity_intersects(Entity* entity, int x0, int y0, int x1, int y1);
 uint8_t entity_blocks(Entity* entity, Entity* other);
 //TODO hurt

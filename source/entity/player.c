@@ -75,13 +75,25 @@ void player_create(Player* player){
 	player->activeItem = 0;
 	player->attackItem = 0;
 }
-void player_hurt(Player* player, int x0, int y0, int x1, int y1){
 
-	/*TODO: List<Entity> entities = level.getEntities(x0, y0, x1, y1);
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			if (e != this) e.hurt(this, getAttackDamage(e), attackDir);
-		}*/
+int player_getAttackDamage(Player* player, Entity* e){
+	int dmg = random_next_int(&player->mob.entity.random, 3) + 1;
+	if(player->attackItem){
+		dmg += item_getAttackDamageBonus(player->attackItem, e);
+	}
+	return dmg;
+}
+
+void player_hurt(Player* player, int x0, int y0, int x1, int y1){
+	ArrayList entities;
+	create_arraylist(&entities);
+	level_getEntities(player->mob.entity.level, &entities, x0, y0, x1, y1);
+
+	for(int i = 0; i < entities.size; ++i){
+		Entity* e = entities.elements[i];
+		if(e != player) call_entity_hurt(e, player, player_getAttackDamage(player, e), player->attackDir);
+	}
+	arraylist_remove(&entities);
 }
 
 char player_interact(Player* player, int x0, int y0, int x1, int y1){

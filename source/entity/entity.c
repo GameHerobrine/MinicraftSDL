@@ -8,6 +8,7 @@ void entity_create(Entity* entity){
 	entity->x = entity->y = 0;
 	entity->xr = entity->yr = 6;
 	entity->removed = 0;
+	entity->level = 0;
 	random_set_seed(&entity->random, getTimeMS());
 }
 

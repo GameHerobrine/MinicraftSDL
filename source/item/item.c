@@ -97,7 +97,12 @@ uint8_t item_isDepleted(Item* item){
 			return 0;
 	}
 }
-
+int item_getAttackDamageBonus(Item* item, Entity* entity){
+	if(item->id == TOOL){
+		return toolitem_getAttackDamageBonus(item, entity);
+	}
+	return 0;
+}
 void item_onTake(Item* item, struct _ItemEntity* itemEntity){
 	//does nothing even in overrides
 }
@@ -113,7 +118,6 @@ uint8_t item_canAttack(Item* item){
 	}
 }
 
-int item_getAttackDamageBonus(Item* item, Entity* entity);
 void item_getName(Item* item, char* buf);
 uint8_t matches(Item* item, Item* item2);
 

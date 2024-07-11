@@ -6,7 +6,8 @@
 #include "level.h"
 #include "levelgen/levelgen.h"
 #include <entity/_entity_caller.h>
-
+#include <entity/slime.h>
+#include <entity/zombie.h>
 
 void level_init(Level* lvl, int w, int h, int level, Level* parent){
 	random_set_seed(&lvl->random, getTimeMS());
@@ -103,6 +104,35 @@ void level_sortAndRender(Level* level, Screen* screen, ArrayList* list){
 		call_entity_render((Entity*) list->elements[i], screen);
 	}
 }
+
+void level_trySpawn(Level* level, int count){
+	Random* random = &level->random;
+	for(int i = 0; i < count; ++i){
+		Mob* mob = 0;
+
+		int minLevel = 1;
+		int maxLevel = 1;
+		if(level->depth < 0) maxLevel = (-level->depth) + 1;
+		if(level->depth > 0) minLevel = maxLevel = 4;
+
+		int lvl = random_next_int(random, maxLevel - minLevel + 1) + minLevel;
+		if(random_next_int(random, 2) == 0){
+			mob = malloc(sizeof(Slime));
+			slime_create(mob, lvl);
+		}else{
+			mob = malloc(sizeof(Zombie));
+			zombie_create(mob, lvl);
+		}
+		if(!mob) continue; //XXX
+		if(mob_findStartPos(mob, level)){
+			level_addEntity(level, mob);
+		}else{
+			call_entity_free(mob);
+			free(mob);
+		}
+	}
+}
+
 void level_renderSprites(Level* level, Screen* screen, int xScroll, int yScroll){
 	ArrayList rowSprites;
 	create_arraylist(&rowSprites);
@@ -205,8 +235,6 @@ void level_removeEntity(Level* level, int x, int y, Entity* entity){
 	arraylist_removeElement(&level->entitiesInTiles[x+y*level->w], entity);
 }
 
-//TODO trySpawn
-
 void level_getEntities(Level* level, ArrayList* list, int x0, int y0, int x1, int y1){
 	int xt0 = (x0 >> 4) - 1;
 	int yt0 = (y0 >> 4) - 1;
@@ -229,8 +257,7 @@ void level_getEntities(Level* level, ArrayList* list, int x0, int y0, int x1, in
 }
 
 void level_tick(Level* level){
-	//TODO trySpawn(1);
-	
+	level_trySpawn(level, 1);
 	for(int i = 0; i < level->w*level->h / 50; ++i){
 		int xt = random_next_int(&level->random, level->w);
 		int yt = random_next_int(&level->random, level->w);

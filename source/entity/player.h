@@ -29,11 +29,8 @@ void player_hurt(Player* player, int x0, int y0, int x1, int y1);
 int player_getAttackDamage(Player* player, Entity* entity);
 void player_render(Player* player, Screen* screen);
 char player_findStartPos(Player* player, Level* level);
-//TODO findStartPos
 char player_payStamina(Player* player, int cost);
-//TODO changeLevel
-//TODO getLightRadius
-//TODO die
+void player_die(Player *player);
 //TODO touchedBy
 void player_doHurt(Player* player, int damage, int attackDir);
 void player_die(Player* mob);

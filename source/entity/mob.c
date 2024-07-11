@@ -43,8 +43,49 @@ void mob_doHurt(Mob* mob, int damage, int attackDir){
 	if(attackDir == 3) mob->xKnockback = 6;
 	mob->hurtTime = 10;
 }
-void mob_hurt(Mob* mob, int damage, int attackDir){
+
+void mob_hurt(Mob* mob, Mob* by, int damage, int attackDir){
 	call_entity_doHurt(mob, damage, attackDir);
+}
+void mob_hurtTile(Mob* mob, TileID tile, int x, int y, int damage){
+	int attackDir = mob->dir ^ 1;
+	call_entity_doHurt(mob, damage, attackDir);
+}
+
+char mob_findStartPos(Mob* mob, Level* level){
+	Random* random = &mob->entity.random;
+	int x = random_next_int(random, level->w);
+	int y = random_next_int(random, level->h);
+
+	int xx = x*16 + 8;
+	int yy = y*16 + 8;
+
+	if(game_player->mob.entity.level == mob->entity.level){
+		int xd = game_player->mob.entity.x - xx;
+		int yd = game_player->mob.entity.y - yy;
+
+		if(xd*xd + yd*yd < 80*80) return 0;
+	}
+
+	int r = level->monsterDensity * 16;
+
+	ArrayList ents;
+	create_arraylist(&ents);
+
+	level_getEntities(level, &ents, xx - r, yy - r, xx + r, yy + r);
+	int sz = ents.size;
+	arraylist_remove(&ents);
+	if(sz > 0) return 0;
+
+
+
+	TileID id = level_get_tile(level, x, y);
+	if(tile_mayPass(id, level, x, y, mob)){
+		mob->entity.x = xx;
+		mob->entity.y = yy;
+		return 1;
+	}
+	return 0;
 }
 
 void mob_die(Mob* mob){
@@ -54,7 +95,7 @@ void mob_die(Mob* mob){
 void mob_tick(Mob* mob){
 	++mob->tickTime;
 	if(level_get_tile(mob->entity.level, mob->entity.x >> 4, mob->entity.y >> 4) == LAVA){
-		mob_hurt(mob, 4, mob->dir ^ 1);
+		mob_hurt(mob, mob, 4, mob->dir ^ 1);
 	}
 	if(mob->health <= 0){
 		call_entity_die(mob);

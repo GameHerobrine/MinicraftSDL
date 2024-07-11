@@ -54,12 +54,12 @@ int toolitem_getAttackDamageBonus(Item* item, Entity* e){
 
 	int lvl = item->add.tool.level;
 	Random* rand = &item->add.tool.random;
-
-	switch(lvl){
+	printf("%d %d\n", item->add.tool.type, lvl);
+	switch(item->add.tool.type){
 		case AXE:
 			return (lvl + 1) * 2 + random_next_int(rand, 4);
 		case SWORD:
-			return (lvl + 1) * 2 + random_next_int(rand, 2+lvl*lvl*2);
+			return (lvl + 1) * 3 + random_next_int(rand, 2+lvl*lvl*2);
 		default:
 			return 1;
 	}

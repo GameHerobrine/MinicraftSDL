@@ -7,6 +7,8 @@
 #include <entity/furniture.h>
 #include <entity/workbench.h>
 #include <entity/lantern.h>
+#include <entity/slime.h>
+#include <entity/zombie.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -30,10 +32,13 @@ void call_entity_tick(Entity* entity){
 		case WORKBENCH:
 			furniture_tick((Furniture*)entity);
 			break;
-		case SPARK:
-
 		case SLIME:
+			slime_tick(entity);
+			break;
 		case ZOMBIE:
+			zombie_tick(entity);
+			break;
+		case SPARK:
 		case AIRWIZARD:
 			//TODO MOB
 		default:
@@ -76,7 +81,12 @@ void call_entity_render(Entity* entity, Screen* screen){
 		case TEXTPARTICLE:
 			textparticle_render((TextParticle*) entity, screen);
 			break;
-		//TODO more cases
+		case SLIME:
+			slime_render(entity, screen);
+			break;
+		case ZOMBIE:
+			zombie_render(entity, screen);
+			break;
 		case ANVIL:
 		case CHEST:
 		case FURNACE:
@@ -85,6 +95,8 @@ void call_entity_render(Entity* entity, Screen* screen){
 		case WORKBENCH:
 			furniture_render(entity, screen);
 			break;
+		case AIRWIZARD: //TODO airwizard
+		case SPARK: //TODO spark
 		default:
 			printf("Calling entity render on unknown entity type! %d\n", entity->type);
 			break;
@@ -108,8 +120,12 @@ void call_entity_die(Entity* entity){
 		case PLAYER:
 			player_die(entity);
 			break;
-		case SLIME: //TODO SLIME
-		case ZOMBIE: //TODO ZOMBIE
+		case SLIME:
+			slime_die(entity);
+			break;
+		case ZOMBIE:
+			zombie_die(entity);
+			break;
 		case AIRWIZARD: //TODO AIRWIZARD
 			mob_die(entity);
 			break;
@@ -130,6 +146,28 @@ void call_entity_doHurt(Entity* entity, int damage, int attackDir){
 			break;
 		default:
 			printf("Tried hurting unhurtable entity! %d\n", entity->type);
+			break;
+	}
+}
+
+void call_entity_hurtTile(Entity* entity, TileID tile, int x, int y, int damage){
+	switch(entity->type){
+		case SLIME:
+		case ZOMBIE:
+		case AIRWIZARD:
+		case PLAYER:
+			mob_hurtTile(entity, tile, x, y, damage);
+			break;
+	}
+}
+
+void call_entity_hurt(Entity* entity, Mob* mob, int damage, int attackDir){
+	switch(entity->type){
+		case SLIME:
+		case ZOMBIE:
+		case AIRWIZARD:
+		case PLAYER:
+			mob_hurt(entity, mob, damage, attackDir);
 			break;
 	}
 }
@@ -155,10 +193,10 @@ void call_entity_touchedBy(Entity* entity, Entity* e){
 			if(e->type != PLAYER) call_entity_touchedBy(e, entity);
 			break;
 		case SLIME:
-			//TODO Slime
+			slime_touchedBy(entity, e);
 			break;
 		case ZOMBIE:
-			//TODO Zombie
+			zombie_touchedBy(entity, e);
 			break;
 		default:
 			break;
@@ -293,6 +331,9 @@ void call_entity_free(Entity* entity){
 char call_entity_isSwimming(Entity* entity){
 	switch(entity->type){
 		case PLAYER:
+		case SLIME:
+		case ZOMBIE:
+		case AIRWIZARD:
 			return mob_isSwimming((Mob*) entity);
 		default:
 			printf("Calling entity isSwimming on unknown entity type! %d\n", entity->type);
