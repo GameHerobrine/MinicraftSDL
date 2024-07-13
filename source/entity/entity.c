@@ -58,7 +58,7 @@ uint8_t entity_move2(Entity* entity, int xa, int ya){
 			if(xt >= xto0 && xt <= xto1 && yt >= yto0 && yt <= yto1) continue;
 
 			TileID tile = level_get_tile(entity->level, xt, yt);
-			//TODO tile_bumpedInto
+			tile_bumpedInto(tile, entity->level, xt, yt, entity);
 			tile = level_get_tile(entity->level, xt, yt); //reget tile in case bumpedInto changed it?
 			if(!tile_mayPass(tile, entity->level, xt, yt, entity)){
 				blocked = 1; //not needed?

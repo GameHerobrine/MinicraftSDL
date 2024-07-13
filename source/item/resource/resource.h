@@ -6,7 +6,7 @@
 
 struct _Player;
 
-typedef struct _resource{
+typedef struct _Resource{
 	char name[7]; //max name len = 6 + 1 \x00
 	int sprite;
 	int color;

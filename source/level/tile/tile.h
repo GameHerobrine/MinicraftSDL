@@ -41,4 +41,6 @@ char tile_interact(TileID id, Level* level, int xt, int yt, struct _Player* play
 char tile_use(TileID id, Level* level, int xt, int yt, struct _Player* player, int attackDir);
 void tile_steppedOn(TileID id, Level* level, int x, int y, struct _Entity* entity);
 int tile_getLightRadius(TileID id, Level* level, int x, int y);
+void tile_bumpedInto(TileID id, Level* level, int x, int y, Entity* entity);
+
 #endif /* LEVEL_TILE_TILE_H_ */

@@ -53,6 +53,13 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/slime.c
 	entity/zombie.h
 	entity/zombie.c
+	crafting/recipe.h
+	crafting/crafting.h
+	crafting/crafting.c
+	crafting/recipeids.h
+	crafting/recipe.c
+	screen/crafting_menu.h
+	screen/crafting_menu.c
 
 )
 target_include_directories(minicraft-sdl PUBLIC ".")

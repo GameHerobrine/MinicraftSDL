@@ -1,4 +1,8 @@
 #include <entity/workbench.h>
+#include <game.h>
+#include <screen/crafting_menu.h>
+#include <crafting/crafting.h>
+
 void workbench_create(Workbench* workbench){
 	char* name = malloc(strlen("Workbench")+1); //XXX ew
 	strcpy(name, "Workbench");
@@ -11,6 +15,8 @@ void workbench_create(Workbench* workbench){
 }
 
 char workbench_use(Workbench* workbench, struct _Player* player, int attackDir){
+	crmenu_recipes = &workbenchRecipes;
+	game_set_menu(mid_CRAFTING);
 	//TODO: player.game.setMenu(new CraftingMenu(Crafting.workbenchRecipes, player));
 	return 1;
 }

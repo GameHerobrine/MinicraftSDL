@@ -255,6 +255,30 @@ char entity_ismob(Entity* entity){
 	}
 }
 
+Furniture* entity_createFurniture(EntityId id){
+	Furniture* furn = 0;
+	switch(id){
+		case ANVIL:
+		case CHEST:
+		case FURNACE:
+			//TODO furnace, chest, anvil;
+			break;
+		case LANTERN:
+			furn = malloc(sizeof(Lantern));
+			lantern_create(furn);
+			break;
+		case OVEN:
+			//TODO oven
+			break;
+		case WORKBENCH:
+			furn = malloc(sizeof(Workbench));
+			workbench_create(furn);
+			break;
+	}
+
+	return furn;
+}
+
 char entity_isfurniture(Entity* entity){
 	switch(entity->type){
 		case ANVIL:

@@ -2,6 +2,7 @@
 #include "powergloveitem.h"
 #include "resourceitem.h"
 #include "furniture_item.h"
+#include <entity/furniture.h>
 #include "tool_item.h"
 int item_getColor(Item* item){
 	switch(item->id){
@@ -118,10 +119,29 @@ uint8_t item_canAttack(Item* item){
 	}
 }
 
-void item_getName(Item* item, char* buf);
+void item_getName(Item* item, char* buf){
+	char* name;
+	switch(item->id){
+		case FURNITURE:
+			name = item->add.furniture.furniture->name;
+			strcpy(buf, name);
+			break;
+		case POWERGLOVE:
+			strcpy(buf, powergloveitem_getName(item));
+			break;
+		case RESOURCE:
+			name = item->add.resource.resource->name;
+			strcpy(buf, name);
+			break;
+		case TOOL:
+			toolitem_getName(item, buf);
+			break;
+	}
+}
 uint8_t matches(Item* item, Item* item2);
 
 uint8_t item_matches(Item* item, Item* item2){
+	//XXX vanilla bug: comparing ids is not enough
 	if(item->id == TOOL) return toolitem_matches(item, item2);
 	return item->id == item2->id;
 }

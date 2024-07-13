@@ -76,7 +76,7 @@ int inventory_count(Inventory* inv, Item* item){
 		Item* ri = inventory_findResource(inv, item->add.resource.resource);
 		if(ri) return ri->add.resource.count;
 	}else{
-		int count;
+		int count = 0;
 		for(int i = 0; i < inv->items.size; ++i){
 			if(item_matches(inv->items.elements[i], item)) ++count;
 		}

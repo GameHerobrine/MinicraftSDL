@@ -3,7 +3,7 @@
 
 #include "../../level/tile/tile.h"
 
-struct _resource;
+struct _Resource;
 
 typedef struct{
 	int sourceTilesSize;
@@ -13,6 +13,6 @@ typedef struct{
 
 
 
-void init_plantable_resource(struct _resource* resource, char* name, int sprite, int color, TileID target, TileID* source, int size);
+void init_plantable_resource(struct _Resource* resource, char* name, int sprite, int color, TileID target, TileID* source, int size);
 
 #endif /* ITEM_RESOURCE_PLANTABLE_RESOURCE_H_ */

@@ -1,3 +1,4 @@
+#include <crafting/crafting.h>
 #include <gfx/spritesheet.h>
 #include <gfx/font.h>
 #include <SDL/SDL.h>
@@ -88,7 +89,8 @@ void game_init(){
 	init_resources();
 	init_tiles();
 	init_menus();
-	
+	crafting_init();
+
 	int pp = 0;
 	for(int r = 0; r < 6; ++r){
 		for(int g = 0; g < 6; ++g){
@@ -439,6 +441,7 @@ int main(int argc, char** argv){
 	if(prevBuf) free(prevBuf);
 	// Quit SDL
 	SDL_Quit();
+	crafting_free();
 	delete_screen(&game_screen);
 	delete_screen(&game_lightScreen);
 

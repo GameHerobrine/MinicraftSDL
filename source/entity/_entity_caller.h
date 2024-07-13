@@ -3,6 +3,7 @@
 #include <entity/entity.h>
 #include <entity/itementity.h>
 #include <gfx/screen.h>
+struct _Furniture;
 
 void call_entity_tick(Entity* entity);
 void call_entity_render(Entity* entity, Screen* screen);
@@ -18,4 +19,5 @@ struct _Furniture* furniture_create_copy(struct _Furniture* old);
 int call_entity_getLightRadius(Entity* entity);
 void call_entity_hurtTile(Entity* entity, TileID tile, int x, int y, int damage);
 void call_entity_hurt(Entity* entity, Mob* mob, int damage, int attackDir);
+struct _Furniture* entity_createFurniture(EntityId id);
 #endif // _ENTITY_CALLER_H

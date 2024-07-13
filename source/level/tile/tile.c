@@ -136,7 +136,7 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
 }
 
 char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e){
-	switch(id){ //TODO WIP
+	switch(id){
 		case CACTUS:
 		case HARD_ROCK:
 		case GEM_ORE:
@@ -208,7 +208,22 @@ void tile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int 
 	//TODO
 }
 
-//void tile_bumpedInto(TileID id, Level* level, int x, int y, Entity* entity){} //TODO Level*, Entity*
+void tile_bumpedInto(TileID id, Level* level, int x, int y, Entity* entity){
+	switch(id){
+		case CACTUS:
+			call_entity_hurtTile(entity, id, x, y, 1);
+			break;
+		case CLOUD_CACTUS:
+			if(entity->type == AIRWIZARD) break;
+			call_entity_hurtTile(entity, id, x, y, 3);
+			break;
+		case GEM_ORE:
+		case GOLD_ORE:
+		case IRON_ORE:
+			call_entity_hurtTile(entity, id, x, y, 3);
+			break;
+	}
+}
 
 void tile_tick(TileID id, Level* level, int xt, int yt){
 	switch(id){
