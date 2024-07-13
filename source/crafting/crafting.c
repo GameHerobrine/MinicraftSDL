@@ -19,57 +19,196 @@ void crafting_init(){
 	recipe_addCost(recipe, &slime, 10);
 	recipe_addCost(recipe, &glass, 4);
 	arraylist_push(&workbenchRecipes, recipe);
-	//TODO oven, furnace
+
+	recipe = malloc(sizeof(Recipe));
+	furniturerecipe_create(recipe, OVEN);
+	recipe_addCost(recipe, &stone, 15);
+	arraylist_push(&workbenchRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	furniturerecipe_create(recipe, FURNACE);
+	recipe_addCost(recipe, &stone, 20);
+	arraylist_push(&workbenchRecipes, recipe);
+
 	recipe = malloc(sizeof(Recipe));
 	furniturerecipe_create(recipe, WORKBENCH);
 	recipe_addCost(recipe, &wood, 20);
 	arraylist_push(&workbenchRecipes, recipe);
-	//TODO chest, anvil
+	//TODO workbenchRecipes.add(new FurnitureRecipe(Chest.class).addCost(Resource.wood, 20));
+	//TODO workbenchRecipes.add(new FurnitureRecipe(Anvil.class).addCost(Resource.ironIngot, 5));
 
-	/* TODO:
-	 * workbenchRecipes.add(new FurnitureRecipe(Lantern.class).addCost(Resource.wood, 5).addCost(Resource.slime, 10).addCost(Resource.glass, 4));
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SWORD, 0);
+	recipe_addCost(recipe, &wood, 5);
+	arraylist_push(&workbenchRecipes, recipe);
 
-			workbenchRecipes.add(new FurnitureRecipe(Oven.class).addCost(Resource.stone, 15));
-			workbenchRecipes.add(new FurnitureRecipe(Furnace.class).addCost(Resource.stone, 20));
-			workbenchRecipes.add(new FurnitureRecipe(Workbench.class).addCost(Resource.wood, 20));
-			workbenchRecipes.add(new FurnitureRecipe(Chest.class).addCost(Resource.wood, 20));
-			workbenchRecipes.add(new FurnitureRecipe(Anvil.class).addCost(Resource.ironIngot, 5));
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, AXE, 0);
+	recipe_addCost(recipe, &wood, 5);
+	arraylist_push(&workbenchRecipes, recipe);
 
-			workbenchRecipes.add(new ToolRecipe(ToolType.sword, 0).addCost(Resource.wood, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.axe, 0).addCost(Resource.wood, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.hoe, 0).addCost(Resource.wood, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.pickaxe, 0).addCost(Resource.wood, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.shovel, 0).addCost(Resource.wood, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.sword, 1).addCost(Resource.wood, 5).addCost(Resource.stone, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.axe, 1).addCost(Resource.wood, 5).addCost(Resource.stone, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.hoe, 1).addCost(Resource.wood, 5).addCost(Resource.stone, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.pickaxe, 1).addCost(Resource.wood, 5).addCost(Resource.stone, 5));
-			workbenchRecipes.add(new ToolRecipe(ToolType.shovel, 1).addCost(Resource.wood, 5).addCost(Resource.stone, 5));
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, HOE, 0);
+	recipe_addCost(recipe, &wood, 5);
+	arraylist_push(&workbenchRecipes, recipe);
 
-			anvilRecipes.add(new ToolRecipe(ToolType.sword, 2).addCost(Resource.wood, 5).addCost(Resource.ironIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.axe, 2).addCost(Resource.wood, 5).addCost(Resource.ironIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.hoe, 2).addCost(Resource.wood, 5).addCost(Resource.ironIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.pickaxe, 2).addCost(Resource.wood, 5).addCost(Resource.ironIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.shovel, 2).addCost(Resource.wood, 5).addCost(Resource.ironIngot, 5));
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, PICKAXE, 0);
+	recipe_addCost(recipe, &wood, 5);
+	arraylist_push(&workbenchRecipes, recipe);
 
-			anvilRecipes.add(new ToolRecipe(ToolType.sword, 3).addCost(Resource.wood, 5).addCost(Resource.goldIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.axe, 3).addCost(Resource.wood, 5).addCost(Resource.goldIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.hoe, 3).addCost(Resource.wood, 5).addCost(Resource.goldIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.pickaxe, 3).addCost(Resource.wood, 5).addCost(Resource.goldIngot, 5));
-			anvilRecipes.add(new ToolRecipe(ToolType.shovel, 3).addCost(Resource.wood, 5).addCost(Resource.goldIngot, 5));
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SHOVEL, 0);
+	recipe_addCost(recipe, &wood, 5);
+	arraylist_push(&workbenchRecipes, recipe);
 
-			anvilRecipes.add(new ToolRecipe(ToolType.sword, 4).addCost(Resource.wood, 5).addCost(Resource.gem, 50));
-			anvilRecipes.add(new ToolRecipe(ToolType.axe, 4).addCost(Resource.wood, 5).addCost(Resource.gem, 50));
-			anvilRecipes.add(new ToolRecipe(ToolType.hoe, 4).addCost(Resource.wood, 5).addCost(Resource.gem, 50));
-			anvilRecipes.add(new ToolRecipe(ToolType.pickaxe, 4).addCost(Resource.wood, 5).addCost(Resource.gem, 50));
-			anvilRecipes.add(new ToolRecipe(ToolType.shovel, 4).addCost(Resource.wood, 5).addCost(Resource.gem, 50));
 
-			furnaceRecipes.add(new ResourceRecipe(Resource.ironIngot).addCost(Resource.ironOre, 4).addCost(Resource.coal, 1));
-			furnaceRecipes.add(new ResourceRecipe(Resource.goldIngot).addCost(Resource.goldOre, 4).addCost(Resource.coal, 1));
-			furnaceRecipes.add(new ResourceRecipe(Resource.glass).addCost(Resource.sand, 4).addCost(Resource.coal, 1));
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SWORD, 1);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &stone, 5);
+	arraylist_push(&workbenchRecipes, recipe);
 
-			ovenRecipes.add(new ResourceRecipe(Resource.bread).addCost(Resource.wheat, 4));
-			*/
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, AXE, 1);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &stone, 5);
+	arraylist_push(&workbenchRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, HOE, 1);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &stone, 5);
+	arraylist_push(&workbenchRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, PICKAXE, 1);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &stone, 5);
+	arraylist_push(&workbenchRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SHOVEL, 1);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &stone, 5);
+	arraylist_push(&workbenchRecipes, recipe);
+
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SWORD, 2);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &ironIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, AXE, 2);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &ironIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, HOE, 2);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &ironIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, PICKAXE, 2);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &ironIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SHOVEL, 2);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &ironIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SWORD, 3);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &goldIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, AXE, 3);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &goldIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, HOE, 3);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &goldIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, PICKAXE, 3);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &goldIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SHOVEL, 3);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &goldIngot, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SWORD, 4);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &gem, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, AXE, 4);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &gem, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, HOE, 4);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &gem, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, PICKAXE, 4);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &gem, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	toolrecipe_create(recipe, SHOVEL, 4);
+	recipe_addCost(recipe, &wood, 5);
+	recipe_addCost(recipe, &gem, 5);
+	arraylist_push(&anvilRecipes, recipe);
+
+
+	recipe = malloc(sizeof(Recipe));
+	resourcerecipe_create(recipe, &ironIngot);
+	recipe_addCost(recipe, &ironOre, 4);
+	recipe_addCost(recipe, &coal, 1);
+	arraylist_push(&furnaceRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	resourcerecipe_create(recipe, &goldIngot);
+	recipe_addCost(recipe, &goldOre, 4);
+	recipe_addCost(recipe, &coal, 1);
+	arraylist_push(&furnaceRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	resourcerecipe_create(recipe, &glass);
+	recipe_addCost(recipe, &sand, 4);
+	recipe_addCost(recipe, &coal, 1);
+	arraylist_push(&furnaceRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	resourcerecipe_create(recipe, &bread);
+	recipe_addCost(recipe, &wheat, 4);
+	arraylist_push(&ovenRecipes, recipe);
 }
 void crafting_free(){
 	for(int i = 0; i < anvilRecipes.size; ++i){
@@ -95,7 +234,4 @@ void crafting_free(){
 		free(workbenchRecipes.elements[i]);
 	}
 	arraylist_remove(&workbenchRecipes);
-
-
-
 }

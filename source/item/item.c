@@ -10,7 +10,8 @@ int item_getColor(Item* item){
 			return powergloveitem_getColor(item);
 		case RESOURCE:
 			return resourceitem_getColor(item);
-		//TODO case TOOLITEM:
+		case TOOL:
+			return toolitem_getColor(item);
 		case FURNITURE:
 			return furnitureitem_getColor(item);
 		default:
@@ -23,7 +24,8 @@ int item_getSprite(Item* item){
 			return powergloveitem_getSprite(item);
 		case RESOURCE:
 			return resourceitem_getSprite(item);
-		//TODO case TOOLITEM:
+		case TOOL:
+			return toolitem_getSprite(item);
 		case FURNITURE:
 			return furnitureitem_getSprite(item);
 		default:

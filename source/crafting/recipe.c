@@ -8,7 +8,8 @@
 #include <entity/inventory.h>
 #include <gfx/font.h>
 #include <entity/_entity_caller.h>
-
+#include <item/tool_item.h>
+#include <item/resourceitem.h>
 void recipe_create(Recipe* recipe, Item* result){
 	recipe->resultTemplate = *result;
 	create_arraylist(&recipe->costs);
@@ -27,10 +28,19 @@ void furniturerecipe_create(Recipe* recipe, EntityId furniture){
 	recipe->add.furniture.type = furniture;
 }
 void resourcerecipe_create(Recipe* recipe, Resource* resource){
-
+	Item it;
+	resourceitem_create_cnt(&it, resource, 1);
+	recipe_create(recipe, &it);
+	recipe->add.resource.resource = resource;
+	recipe->id = rip_RESOURCE;
 }
 void toolrecipe_create(Recipe* recipe, ToolType type, int level){
-
+	Item it;
+	toolitem_create(&it, type, level);
+	recipe_create(recipe, &it);
+	recipe->add.tool.type = type;
+	recipe->add.tool.level = level;
+	recipe->id = rip_TOOL;
 }
 
 void recipe_addCost(Recipe* recipe, Resource* resource, int count){
@@ -72,6 +82,12 @@ void recipe_craft(Recipe* recipe, Player* player){
 			}
 			furnitureitem_create(&it, furn);
 			inventory_addItemIntoSlot(&player->inventory, 0, &it);
+			return;
+		case rip_TOOL:
+			inventory_addItemIntoSlot(&player->inventory, 0, &recipe->resultTemplate);
+			return;
+		case rip_RESOURCE:
+			inventory_addItemIntoSlot(&player->inventory, 0, &recipe->resultTemplate);
 			return;
 	}
 

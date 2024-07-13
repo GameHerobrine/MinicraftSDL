@@ -9,6 +9,8 @@
 #include <entity/lantern.h>
 #include <entity/slime.h>
 #include <entity/zombie.h>
+#include <entity/oven.h>
+#include <entity/furnace.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -212,11 +214,9 @@ char call_entity_use(Entity* entity, Player* player, int attackDir){
 			//TODO chest
 			return 0;
 		case FURNACE:
-			//TODO furnace
-			return 0;
+			return furnace_use(entity, player, attackDir);
 		case OVEN:
-			//TODO oven
-			return 0;
+			return oven_use(entity, player, attackDir);
 		case WORKBENCH:
 			return workbench_use(entity, player, attackDir);
 		default:
@@ -260,15 +260,19 @@ Furniture* entity_createFurniture(EntityId id){
 	switch(id){
 		case ANVIL:
 		case CHEST:
+			//TODO chest, anvil;
+			break;
 		case FURNACE:
-			//TODO furnace, chest, anvil;
+			furn = malloc(sizeof(Furnace));
+			furnace_create(furn);
 			break;
 		case LANTERN:
 			furn = malloc(sizeof(Lantern));
 			lantern_create(furn);
 			break;
 		case OVEN:
-			//TODO oven
+			furn = malloc(sizeof(Oven));
+			oven_create(furn);
 			break;
 		case WORKBENCH:
 			furn = malloc(sizeof(Workbench));
@@ -319,10 +323,15 @@ Furniture* furniture_create_copy(Furniture* old){
 		case LANTERN:
 			size = sizeof(Lantern);
 			break;
+		case OVEN:
+			size = sizeof(Oven);
+			break;
+		case FURNACE:
+			size = sizeof(Furnace);
+			break;
 		case ANVIL:
 		case CHEST:
-		case FURNACE:
-		case OVEN:
+			//TODO anvil, chest
 			printf("WIP\n");
 		default:
 			return 0;

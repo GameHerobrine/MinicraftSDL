@@ -60,6 +60,10 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	crafting/recipe.c
 	screen/crafting_menu.h
 	screen/crafting_menu.c
+	entity/oven.h
+	entity/oven.c
+	entity/furnace.c
+	entity/furnace.h
 
 )
 target_include_directories(minicraft-sdl PUBLIC ".")
