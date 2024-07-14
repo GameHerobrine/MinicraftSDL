@@ -34,8 +34,16 @@ void crafting_init(){
 	furniturerecipe_create(recipe, WORKBENCH);
 	recipe_addCost(recipe, &wood, 20);
 	arraylist_push(&workbenchRecipes, recipe);
-	//TODO workbenchRecipes.add(new FurnitureRecipe(Chest.class).addCost(Resource.wood, 20));
-	//TODO workbenchRecipes.add(new FurnitureRecipe(Anvil.class).addCost(Resource.ironIngot, 5));
+
+	recipe = malloc(sizeof(Recipe));
+	furniturerecipe_create(recipe, CHEST);
+	recipe_addCost(recipe, &wood, 20);
+	arraylist_push(&workbenchRecipes, recipe);
+
+	recipe = malloc(sizeof(Recipe));
+	furniturerecipe_create(recipe, ANVIL);
+	recipe_addCost(recipe, &ironIngot, 5);
+	arraylist_push(&workbenchRecipes, recipe);
 
 	recipe = malloc(sizeof(Recipe));
 	toolrecipe_create(recipe, SWORD, 0);

@@ -11,6 +11,8 @@
 #include <entity/zombie.h>
 #include <entity/oven.h>
 #include <entity/furnace.h>
+#include <entity/anvil.h>
+#include <entity/chest.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -40,9 +42,8 @@ void call_entity_tick(Entity* entity){
 		case ZOMBIE:
 			zombie_tick(entity);
 			break;
-		case SPARK:
-		case AIRWIZARD:
-			//TODO MOB
+		case SPARK: //TODO spark
+		case AIRWIZARD: //TODO airwizard
 		default:
 			printf("Calling entity tick on unknown entity type! %d\n", entity->type);
 			break;
@@ -208,11 +209,9 @@ void call_entity_touchedBy(Entity* entity, Entity* e){
 char call_entity_use(Entity* entity, Player* player, int attackDir){
 	switch(entity->type){
 		case ANVIL:
-			//TODO ANVIL
-			return 0;
+			return anvil_use(entity, player, attackDir);
 		case CHEST:
-			//TODO chest
-			return 0;
+			return chest_use(entity, player, attackDir);
 		case FURNACE:
 			return furnace_use(entity, player, attackDir);
 		case OVEN:
@@ -259,8 +258,12 @@ Furniture* entity_createFurniture(EntityId id){
 	Furniture* furn = 0;
 	switch(id){
 		case ANVIL:
+			furn = malloc(sizeof(Anvil));
+			anvil_create(furn);
+			break;
 		case CHEST:
-			//TODO chest, anvil;
+			furn = malloc(sizeof(Chest));
+			chest_create(furn);
 			break;
 		case FURNACE:
 			furn = malloc(sizeof(Furnace));
@@ -330,9 +333,11 @@ Furniture* furniture_create_copy(Furniture* old){
 			size = sizeof(Furnace);
 			break;
 		case ANVIL:
+			size = sizeof(Anvil);
+			break;
 		case CHEST:
-			//TODO anvil, chest
-			printf("WIP\n");
+			size = sizeof(Chest);
+			break;
 		default:
 			return 0;
 	}
@@ -348,8 +353,10 @@ void call_entity_free(Entity* entity){
 		case TEXTPARTICLE:
 			textparticle_free((TextParticle*) entity);
 			break;
-		case ANVIL:
 		case CHEST:
+			chest_free(entity);
+			break;
+		case ANVIL:
 		case FURNACE:
 		case LANTERN:
 		case OVEN:

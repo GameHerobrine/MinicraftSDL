@@ -9,8 +9,6 @@ void cactustile_init(TileID id){
 	tiles[id].connectsToSand = 1;
 }
 
-//TODO bumpedInto
-
 void cactustile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(20, 40, 50, level->sandColor);
 	

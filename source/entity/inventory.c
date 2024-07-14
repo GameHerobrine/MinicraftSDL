@@ -67,6 +67,8 @@ uint8_t inventory_removeResource(Inventory* inv, Resource* resource, int count){
 	ri->add.resource.count -= count;
 	if(ri->add.resource.count <= 0){
 		arraylist_removeElement(&inv->items, ri);
+		item_free(ri);
+		free(ri);
 	}
 	return 1;
 }

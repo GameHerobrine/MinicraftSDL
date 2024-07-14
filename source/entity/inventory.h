@@ -18,5 +18,6 @@ struct _Item* inventory_findResource(Inventory* inv, Resource* resource);
 uint8_t inventory_hasResources(Inventory* inv, Resource* resource, int count);
 uint8_t inventory_removeResource(Inventory* inv, Resource* resource, int count);
 int inventory_count(Inventory* inv, struct _Item* item);
+void inventory_free(Inventory* inv);
 
 #endif // INVENTORY_H

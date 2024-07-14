@@ -13,6 +13,8 @@
 #include <item/tooltype.h>
 #include <game.h>
 #include <entity/lantern.h>
+#include <entity/anvil.h>
+#include <entity/furnace.h>
 
 
 void player_create(Player* player){
@@ -40,6 +42,23 @@ void player_create(Player* player){
 
 #ifdef TEST_INVENTORY
 	Item tool;
+
+	Anvil* anvil = malloc(sizeof(Anvil));
+	anvil_create(anvil);
+	furnitureitem_create(&tool, anvil);
+	inventory_addItem(&player->inventory, &tool);
+
+	Furnace* furnace = malloc(sizeof(Furnace));
+	furnace_create(furnace);
+	furnitureitem_create(&tool, furnace);
+	inventory_addItem(&player->inventory, &tool);
+
+	resourceitem_create_cnt(&tool, &ironOre, 99);
+	inventory_addItem(&player->inventory, &tool);
+
+	resourceitem_create_cnt(&tool, &coal, 99);
+	inventory_addItem(&player->inventory, &tool);
+
 	toolitem_create(&tool, PICKAXE, 1);
 	inventory_addItem(&player->inventory, &tool);
 

@@ -3,8 +3,6 @@
 #include <entity/player.h>
 #include <item/item.h>
 
-//TODO steppedOn
-
 void farmlandtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(level->dirtColor - 121, level->dirtColor - 11, level->dirtColor, level->dirtColor + 111);
 	

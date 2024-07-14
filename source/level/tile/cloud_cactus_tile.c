@@ -5,8 +5,6 @@
 #include <item/item.h>
 #include <entity/player.h>
 
-//TODO bumpedInto
-
 void cloudcactustile_hurt_(TileID id, Level* level, int x, int y, int dmg){
 	int damage = level_get_data(level, x, y) + 1;
 

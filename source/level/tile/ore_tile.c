@@ -69,4 +69,3 @@ char oretile_interact(TileID id, Level* level, int xt, int yt, Player* player, I
 void oretile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg, int attackDir){
 	oretile_hurt_(id, level, x, y, 0);
 }
-//TODO bumpedInto -> Level*, Entity*
