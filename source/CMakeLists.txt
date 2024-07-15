@@ -68,6 +68,8 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/anvil.c
 	entity/chest.h
 	entity/chest.c
+	screen/container_menu.c
+	screen/container_menu.h
 
 )
 target_include_directories(minicraft-sdl PUBLIC ".")

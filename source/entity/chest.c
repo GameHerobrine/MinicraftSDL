@@ -1,7 +1,8 @@
 #include <entity/chest.h>
 #include <entity/player.h>
 #include <entity/inventory.h>
-
+#include <screen/container_menu.h>
+#include <game.h>
 void chest_create(Chest* chest){
 	char* name = malloc(strlen("Chest")+1); //XXX ew
 	strcpy(name, "Chest");
@@ -14,6 +15,9 @@ void chest_create(Chest* chest){
 }
 
 char chest_use(Chest* chest, struct _Player* player, int attackDir){
+	strcpy(contmenu_title, "Chest");
+	contmenu_container = &chest->inventory;
+	game_set_menu(mid_CONTAINER);
 	//player.game.setMenu(new ContainerMenu(player, "Chest", inventory));
 	//TODO container menu
 	return 1;

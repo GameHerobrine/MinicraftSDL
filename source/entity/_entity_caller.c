@@ -13,6 +13,7 @@
 #include <entity/furnace.h>
 #include <entity/anvil.h>
 #include <entity/chest.h>
+#include <utils/arraylist.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -345,6 +346,21 @@ Furniture* furniture_create_copy(Furniture* old){
 	Furniture* new = malloc(size);
 	memcpy(new, old, size);
 	old->name = 0;
+
+	if(old->entity.type == CHEST){
+		Chest* chest = (Chest*) new;
+		Chest* oldc = (Chest*) old;
+
+		inventory_create(&chest->inventory);
+		for(int e = 0; e < oldc->inventory.items.size; ++e){
+			Item* itm = oldc->inventory.items.elements[e];
+			inventory_addItem(&chest->inventory, itm);
+			if(itm->id == FURNITURE){
+				itm->add.furniture.furniture = 0;
+			}
+		}
+	}
+
 	return new;
 }
 

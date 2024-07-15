@@ -5,7 +5,7 @@
 #include <utils/arraylist.h>
 #include <item/resource/resource.h>
 
-typedef struct{
+typedef struct _Inventory{
 	ArrayList items;
 } Inventory;
 

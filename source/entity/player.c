@@ -15,7 +15,7 @@
 #include <entity/lantern.h>
 #include <entity/anvil.h>
 #include <entity/furnace.h>
-
+#include <entity/chest.h>
 
 void player_create(Player* player){
 	mob_create(&player->mob);
@@ -42,6 +42,11 @@ void player_create(Player* player){
 
 #ifdef TEST_INVENTORY
 	Item tool;
+
+	Chest* chest = malloc(sizeof(Chest));
+	chest_create(chest);
+	furnitureitem_create(&tool, chest);
+	inventory_addItem(&player->inventory, &tool);
 
 	Anvil* anvil = malloc(sizeof(Anvil));
 	anvil_create(anvil);
