@@ -221,7 +221,8 @@ void player_doHurt(Player* player, int damage, int attackDir){
 	sprintf(tx_, "%d\00", damage);
 	textparticle_create(txt, tx_, player->mob.entity.x, player->mob.entity.y, getColor4(-1, 504, 504, 504));
 	level_addEntity(player->mob.entity.level, txt);
-	player->mob.health -= damage;
+	player->mob.health -= damage; //TODO knockback is broken again
+	printf("%d\n", attackDir);
 	if(attackDir == 0) player->mob.yKnockback = 6;
 	if(attackDir == 1) player->mob.yKnockback = -6;
 	if(attackDir == 2) player->mob.xKnockback = -6;

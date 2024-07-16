@@ -61,7 +61,6 @@ void wheattile_hurt(TileID id, Level* level, int x, int y, Mob* source, int dmg,
 	wheattile_harvest(id, level, x, y);
 }
 
-//TODO steppedOn
 void wheattile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int age = level_get_data(level, x, y);
 	int col = getColor4(level->dirtColor - 121, level->dirtColor - 11, level->dirtColor, 50);

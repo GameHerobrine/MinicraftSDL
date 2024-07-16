@@ -278,6 +278,11 @@ void tile_steppedOn(TileID id, Level* level, int x, int y, Entity* entity){
 			if(level_get_data(level, x, y) < 5) return;
 			level_set_tile(level, x, y, DIRT, 0);
 			break;
+		case WHEAT:
+			if(random_next_int(&tiles[id].random, 60) != 0) return;
+			if(level_get_data(level, x, y) < 2) return;
+			wheattile_harvest(id, level, x, y);
+			break;
 	}
 }
 

@@ -14,6 +14,7 @@
 #include <entity/anvil.h>
 #include <entity/chest.h>
 #include <utils/arraylist.h>
+#include <entity/airwizard.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -43,8 +44,11 @@ void call_entity_tick(Entity* entity){
 		case ZOMBIE:
 			zombie_tick(entity);
 			break;
+		case AIRWIZARD:
+			airwizard_tick(entity);
+			break;
 		case SPARK: //TODO spark
-		case AIRWIZARD: //TODO airwizard
+
 		default:
 			printf("Calling entity tick on unknown entity type! %d\n", entity->type);
 			break;
@@ -99,7 +103,9 @@ void call_entity_render(Entity* entity, Screen* screen){
 		case WORKBENCH:
 			furniture_render(entity, screen);
 			break;
-		case AIRWIZARD: //TODO airwizard
+		case AIRWIZARD:
+			airwizard_render(entity, screen);
+			break;
 		case SPARK: //TODO spark
 		default:
 			printf("Calling entity render on unknown entity type! %d\n", entity->type);
@@ -130,8 +136,8 @@ void call_entity_die(Entity* entity){
 		case ZOMBIE:
 			zombie_die(entity);
 			break;
-		case AIRWIZARD: //TODO AIRWIZARD
-			mob_die(entity);
+		case AIRWIZARD:
+			airwizard_die(entity);
 			break;
 		default:
 			printf("Tried dying undyable entity (wat)! %d\n", entity->type);
@@ -143,9 +149,11 @@ void call_entity_doHurt(Entity* entity, int damage, int attackDir){
 		case PLAYER:
 			player_doHurt(entity, damage, attackDir);
 			break;
+		case AIRWIZARD:
+			airwizard_doHurt(entity, damage, attackDir);
+			break;
 		case SLIME:
 		case ZOMBIE:
-		case AIRWIZARD:
 			mob_doHurt(entity, damage, attackDir);
 			break;
 		default:
@@ -179,9 +187,8 @@ void call_entity_hurt(Entity* entity, Mob* mob, int damage, int attackDir){
 void call_entity_touchedBy(Entity* entity, Entity* e){
 	switch(entity->type){
 		case AIRWIZARD:
-			//TODO airwizard
+			airwizard_touchedBy(entity, e);
 			break;
-
 		case ANVIL:
 		case CHEST:
 		case FURNACE:
@@ -237,7 +244,6 @@ char call_entity_blocks(Entity* entity, Entity* e){
 		case ZOMBIE:
 		case AIRWIZARD:
 		case PLAYER:
-			//TODO MOB
 			return call_entity_isBlockableBy(e, entity);
 		default:
 			return 0;

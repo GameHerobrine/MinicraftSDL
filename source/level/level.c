@@ -8,6 +8,7 @@
 #include <entity/_entity_caller.h>
 #include <entity/slime.h>
 #include <entity/zombie.h>
+#include <entity/airwizard.h>
 
 void level_init(Level* lvl, int w, int h, int level, Level* parent){
 	random_set_seed(&lvl->random, getTimeMS());
@@ -68,6 +69,11 @@ void level_init(Level* lvl, int w, int h, int level, Level* parent){
 
 	if(level == 1){
 		//TODO spawn AirWizard
+		AirWizard* wizard = malloc(sizeof(AirWizard));
+		airwizard_create(wizard);
+		wizard->mob.entity.x = w * 8;
+		wizard->mob.entity.y = h * 8;
+		level_addEntity(lvl, wizard);
 	}
 }
 
@@ -266,7 +272,6 @@ void level_tick(Level* level){
 		
 	}
 	
-	//TODO entities
 	for(int i = 0; i < level->entities.size; ++i){
 		Entity* e = (Entity*) arraylist_get(&level->entities, i);
 		int xto = e->x >> 4;
