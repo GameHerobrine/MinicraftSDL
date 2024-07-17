@@ -221,7 +221,7 @@ void player_doHurt(Player* player, int damage, int attackDir){
 	sprintf(tx_, "%d\00", damage);
 	textparticle_create(txt, tx_, player->mob.entity.x, player->mob.entity.y, getColor4(-1, 504, 504, 504));
 	level_addEntity(player->mob.entity.level, txt);
-	player->mob.health -= damage; //TODO knockback is broken again
+	player->mob.health -= damage;
 	printf("%d\n", attackDir);
 	if(attackDir == 0) player->mob.yKnockback = 6;
 	if(attackDir == 1) player->mob.yKnockback = -6;
@@ -328,7 +328,7 @@ void player_tick(Player* player){
 
 	if(call_entity_isSwimming(player) && player->mob.tickTime % 60 == 0){
 		if(player->stamina > 0) --player->stamina;
-		else mob_hurt(&player->mob, 1, player->mob.dir ^ 1);
+		else mob_hurt(&player->mob, player, 1, player->mob.dir ^ 1);
 	}
 
 	if(player->staminaRechargeDelay % 2 == 0){
