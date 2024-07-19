@@ -7,5 +7,3 @@ void init_plantable_resource(Resource* resource, char* name, int sprite, int col
 	resource->add.plantable.sourceTiles = sources;
 	resource->add.plantable.targetTile = target;
 }
-
-//TODO interactOn: Level*, Player*

@@ -74,6 +74,8 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/airwizard.h
 	screen/won_menu.h
 	screen/won_menu.c
+	entity/spark.h
+	entity/spark.c
 
 )
 target_include_directories(minicraft-sdl PUBLIC ".")

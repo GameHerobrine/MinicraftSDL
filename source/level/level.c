@@ -68,7 +68,6 @@ void level_init(Level* lvl, int w, int h, int level, Level* parent){
 	}
 
 	if(level == 1){
-		//TODO spawn AirWizard
 		AirWizard* wizard = malloc(sizeof(AirWizard));
 		airwizard_create(wizard);
 		wizard->mob.entity.x = w * 8;
@@ -193,9 +192,6 @@ void renderLight(Level* level, Screen* screen, int xScroll, int yScroll){
 	
 	screen_set_offset(screen, 0, 0);
 }
-
-
-//TODO sortAndRender(Screen*, List<Entity>)
 
 unsigned char level_get_tile(Level* level, int x, int y){
 	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return ROCK;

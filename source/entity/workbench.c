@@ -17,6 +17,5 @@ void workbench_create(Workbench* workbench){
 char workbench_use(Workbench* workbench, struct _Player* player, int attackDir){
 	crmenu_recipes = &workbenchRecipes;
 	game_set_menu(mid_CRAFTING);
-	//TODO: player.game.setMenu(new CraftingMenu(Crafting.workbenchRecipes, player));
 	return 1;
 }

@@ -3,6 +3,8 @@
 #include <gfx/screen.h>
 #include <gfx/color.h>
 #include <entity/_entity_caller.h>
+#include <entity/spark.h>
+#include <level/level.h>
 
 void airwizard_create(AirWizard* wizard){
 	mob_create(wizard);
@@ -37,12 +39,13 @@ void airwizard_tick(AirWizard* wizard){
 
 	if(wizard->attackTime > 0){
 		--wizard->attackTime;
-		/*
-		 * double dir = attackTime * 0.25 * (attackTime % 2 * 2 - 1);
-			double speed = (0.7) + attackType * 0.2;
-			level.add(new Spark(this, Math.cos(dir) * speed, Math.sin(dir) * speed));
-		*/
-		//TODO: spark
+
+		double dir = wizard->attackTime * 0.25 * (wizard->attackTime % 2 * 2 - 1);
+		double speed = 0.7 + wizard->attackType * 0.2;
+
+		Spark* spark = malloc(sizeof(Spark));
+		spark_create(spark, wizard, cos(dir)*speed, sin(dir)*speed);
+		level_addEntity(wizard->mob.entity.level, spark);
 		return;
 	}
 

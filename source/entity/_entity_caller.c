@@ -15,6 +15,7 @@
 #include <entity/chest.h>
 #include <utils/arraylist.h>
 #include <entity/airwizard.h>
+#include <entity/spark.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){
@@ -47,8 +48,9 @@ void call_entity_tick(Entity* entity){
 		case AIRWIZARD:
 			airwizard_tick(entity);
 			break;
-		case SPARK: //TODO spark
-
+		case SPARK:
+			spark_tick(entity);
+			break;
 		default:
 			printf("Calling entity tick on unknown entity type! %d\n", entity->type);
 			break;
@@ -106,7 +108,9 @@ void call_entity_render(Entity* entity, Screen* screen){
 		case AIRWIZARD:
 			airwizard_render(entity, screen);
 			break;
-		case SPARK: //TODO spark
+		case SPARK:
+			spark_render(entity, screen);
+			break;
 		default:
 			printf("Calling entity render on unknown entity type! %d\n", entity->type);
 			break;

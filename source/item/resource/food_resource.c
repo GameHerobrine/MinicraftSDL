@@ -5,5 +5,3 @@ void init_food_resource(Resource* resource, char* name, int sprite, int color, i
 	resource->add.food.heal = heal;
 	resource->add.food.staminaCost = staminaCost;
 }
-
-//TODO interactOn: Level*, Player*

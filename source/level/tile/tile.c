@@ -136,6 +136,9 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
 }
 
 char tile_mayPass(TileID id, Level* level, int x, int y, Entity* e){
+#ifdef GODMODE
+	if(e->type == PLAYER) return 1;
+#endif
 	switch(id){
 		case CACTUS:
 		case HARD_ROCK:

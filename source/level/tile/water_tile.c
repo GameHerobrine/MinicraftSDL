@@ -49,5 +49,3 @@ void watertile_tick(TileID id, Level* level, int xt, int yt){
 	
 	if(level_get_tile(level, xn, yn) == HOLE) level_set_tile(level, xn, yn, id, 0);
 }
-
-//TODO override: mayPass, tick.

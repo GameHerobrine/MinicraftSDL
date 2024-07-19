@@ -20,4 +20,6 @@ int call_entity_getLightRadius(Entity* entity);
 void call_entity_hurtTile(Entity* entity, TileID tile, int x, int y, int damage);
 void call_entity_hurt(Entity* entity, Mob* mob, int damage, int attackDir);
 struct _Furniture* entity_createFurniture(EntityId id);
+char entity_ismob(Entity* entity);
+
 #endif // _ENTITY_CALLER_H
