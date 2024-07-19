@@ -5,7 +5,7 @@
 extern const menu_vt titlemenu_vt;
 
 void titlemenu_init();
-void titlemenu_render();
+void titlemenu_render(Screen*);
 void titlemenu_tick();
 
 

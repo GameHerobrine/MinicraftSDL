@@ -13,6 +13,7 @@
 #include <screen/level_transition_menu.h>
 #include <screen/crafting_menu.h>
 #include <screen/container_menu.h>
+#include <screen/won_menu.h>
 
 #define MENUS_SIZE 16
 char _next[] = ">";
@@ -35,6 +36,7 @@ void init_menus(){
 	menus[mid_LEVEL_TRANSITION] = &leveltransitionmenu_vt;
 	menus[mid_CRAFTING] = &craftingmenu_vt;
 	menus[mid_CONTAINER] = &containermenu_vt;
+	menus[mid_WON] = &wonmenu_vt;
 }
 
 void tick_menu(enum menu_id menu){

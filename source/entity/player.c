@@ -77,7 +77,7 @@ void player_create(Player* player){
 	inventory_addItem(&player->inventory, &tool);
 
 
-	toolitem_create(&tool, SWORD, 1);
+	toolitem_create(&tool, SWORD, 4);
 	inventory_addItem(&player->inventory, &tool);
 
 	toolitem_create(&tool, AXE, 1);
@@ -279,9 +279,18 @@ char player_use_(Player* player){
 	}
 	return 0;
 }
-
+void player_gameWon(Player* player){
+	player->invulnerableTime = 60*5;
+	game_won();
+}
 void player_tick(Player* player){
 	mob_tick(&player->mob);
+
+#ifdef GODMODE
+	player->mob.health = player->mob.maxHealth;
+	player->stamina = player->maxStamina;
+#endif
+
 	if(player->invulnerableTime > 0) --player->invulnerableTime;
 
 	int x = player->mob.entity.x;

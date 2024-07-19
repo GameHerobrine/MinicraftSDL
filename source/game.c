@@ -49,7 +49,10 @@ void game_changeLevel(int dir){
 	game_player->mob.entity.y = (game_player->mob.entity.y >> 4) * 16 + 8;
 	level_addEntity(game_level, game_player);
 }
-
+void game_won(){
+	game_wonTimer = 60*3;
+	game_hasWon = 1;
+}
 void game_reset(){
 	game_playerDeadTime = 0;
 	game_wonTimer = 0;
@@ -151,6 +154,12 @@ void game_tick(){
 				}
 			}
 
+			if(game_wonTimer > 0){
+				if(--game_wonTimer == 0){
+					game_set_menu(mid_WON);
+				}
+			}
+
 			level_tick(game_level);
 			++tile_tickCount;
 		}
@@ -179,6 +188,18 @@ void game_renderGui(){
 				sprintf(hax, "D %d %d\00", x, y);
 				font_draw(hax, strlen(hax), &game_screen, 2, Scnt, getColor4(000, 200, 500, 533));
 				Scnt += 8;
+			}
+		}
+	}
+
+	if(game_player->mob.entity.level->depth == 1){
+		for(int i = 0; i < game_player->mob.entity.level->entities.size; ++i){
+			Entity* e = game_player->mob.entity.level->entities.elements[i];
+			if(e->type == AIRWIZARD){
+				sprintf(hax, "W %d %d\00", e->x>> 4, e->y>> 4);
+				font_draw(hax, strlen(hax), &game_screen, 2, Scnt, getColor4(000, 200, 500, 533));
+				Scnt += 8;
+				break;
 			}
 		}
 	}

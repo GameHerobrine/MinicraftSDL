@@ -9,6 +9,7 @@ extern char game_pendingLevelChange;
 
 void game_reset();
 void game_set_menu(enum menu_id menu);
+void game_won();
 
 #define HEIGHT 120
 #define WIDTH 160

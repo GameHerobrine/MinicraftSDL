@@ -3,7 +3,6 @@
 #include <entity/inventory.h>
 #include "mob.h"
 #include <level/level.h>
-#include <entity/_player.h>
 
 struct _Item;
 
@@ -31,10 +30,10 @@ void player_render(Player* player, Screen* screen);
 char player_findStartPos(Player* player, Level* level);
 char player_payStamina(Player* player, int cost);
 void player_die(Player *player);
-//TODO touchedBy
+
 void player_doHurt(Player* player, int damage, int attackDir);
 void player_die(Player* mob);
-//TODO gameWon
+void player_gameWon(Player* player);
 void player_free(Player* player);
 
 #endif // PLAYER_H

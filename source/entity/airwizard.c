@@ -127,9 +127,9 @@ void airwizard_touchedBy(AirWizard* wizard, Entity* entity){
 }
 void airwizard_die(AirWizard* wizard){
 	mob_die(wizard);
-	//TODO won if (level.player != null) {
-	//	level.player.score += 1000;
-	//	level.player.gameWon();
-	//}
+	if(game_player->mob.entity.level == wizard->mob.entity.level){
+		game_player->score += 1000;
+		player_gameWon(game_player);
+	}
 	//TODO sounds Sound.bossdeath.play();
 }

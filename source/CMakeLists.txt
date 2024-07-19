@@ -4,7 +4,7 @@ project(minicraft-sdl LANGUAGES C)
 add_compile_options(-Wno-implicit-function-declaration) #TODO delete this
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDLmain -lSDL -lm")
 
-add_definitions(-DTEST_INVENTORY -DTEST_SHOWPORTALPOS)
+add_definitions(-DTEST_INVENTORY -DTEST_SHOWPORTALPOS -DGODMODE)
 
 file(GLOB_RECURSE SOURCES *.c)
 file(GLOB_RECURSE HEADERS *.h)
@@ -32,7 +32,7 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	entity/particle/textparticle.h
 	entity/inventory.h
 	entity/inventory.c
-	entity/_player.h
+
 	screen/inventorymenu.c
 	screen/inventory_menu.h
 	screen/dead_menu.c
@@ -72,6 +72,8 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	screen/container_menu.h
 	entity/airwizard.c
 	entity/airwizard.h
+	screen/won_menu.h
+	screen/won_menu.c
 
 )
 target_include_directories(minicraft-sdl PUBLIC ".")
