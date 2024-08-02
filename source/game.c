@@ -11,22 +11,30 @@
 #include <item/resource/resource.h>
 #include <level/level.h>
 #include <gfx/color.h>
+#ifndef NSPIRE
 #include <linux/limits.h>
+#endif
 #include <entity/player.h>
 #include <item/item.h>
-
+#ifdef NSPIRE
+#include <os.h>
+#endif
 SpriteSheet icons_spritesheet;
 Screen game_screen;
 Screen game_lightScreen;
 
+int g_ticks = 0; //perf measure
+int g_frames = 0; //perf measure
+
 unsigned long tickCount = 0;
 
-int game_colors[256];
+SDL_Color sdl_colors[256];
 
 enum menu_id current_menu;
 char game_hasfocus = 0;
 char game_pendingLevelChange = 0;
-
+char updatePerfctr = 0;
+char running = 1;
 void game_set_menu(enum menu_id menu){
 	current_menu = menu;
 	init_menu(menu);
@@ -105,15 +113,26 @@ void game_init(){
 				int r1 = ((rr + mid * 1) / 2) * 230 / 255 + 10;
 				int g1 = ((gg + mid * 1) / 2) * 230 / 255 + 10;
 				int b1 = ((bb + mid * 1) / 2) * 230 / 255 + 10;
-				game_colors[pp++] = r1 << 16 | g1 << 8 | b1;
+
+				sdl_colors[pp].r = r1;
+				sdl_colors[pp].g = g1;
+				sdl_colors[pp].b = b1;
+				++pp;
 			}
 		}
 	}
 	
-	
+#ifdef NSPIRE
+	FILE* f = fopen("ndless/icons.rimg.tns", "rb");
+#else
 	FILE* f = fopen("icons.rimg", "rb");
+#endif
 	if(!f){
-		printf("Failed to open icons!\n");
+		printf("Failed to open icons.rimg!\n");
+#ifdef NSPIRE
+		wait_key_pressed();
+#endif
+		running = 0;
 		return;
 	}
 	create_spritesheet(&icons_spritesheet, f, 256, 256);
@@ -203,6 +222,13 @@ void game_renderGui(){
 			}
 		}
 	}
+#endif
+
+#ifdef FPS_AND_TICKS
+	char fpsticks[64];
+
+	sprintf(fpsticks, "%dfps %dticks\00", g_frames, g_ticks);
+	font_draw(fpsticks, strlen(fpsticks), &game_screen, 2, 2, getColor4(000, 200, 500, 533));
 #endif
 
 	for(int y = 0; y < 2; ++y){
@@ -313,16 +339,22 @@ int main(int argc, char** argv){
 	unsigned long long int lastTime = getTimeUS();
 	unsigned long long int lastPrinted = lastTime;
 	double unprocessed = 0;
+#ifdef NSPIRE
+	const double usPerTick = (32000.0 / 60); //1ms = 32
+#else
 	const double usPerTick = 1000000.0 / 60;
+#endif
 	unsigned long long int now  = 0;
-	unsigned long long int ticks = 0; //perf measure
-	unsigned long long int frames = 0; //perf measure
+	int ticks = 0, frames = 0;
+
 	unsigned char* prevBuf = 0;
 	int ret = 0;
 	int winHeight = HEIGHT*SCALE;
 	int winWidth = WIDTH*SCALE;
-	char running = 1;
+
 	
+	printf("Starting...\n");
+
 	SDL_Surface* surface;
 	SDL_Event event;
 	SDL_KeyboardEvent* keyEvent = &event; 
@@ -334,8 +366,10 @@ int main(int argc, char** argv){
 	game_init();
 	
 	SDL_Init(SDL_INIT_VIDEO);
+#ifndef NSPIRE
 	SDL_WM_SetCaption("Minicraft", 0);
-	surface = SDL_SetVideoMode(winWidth, winHeight, 32, SDL_HWPALETTE|SDL_DOUBLEBUF);
+#endif
+	surface = SDL_SetVideoMode(winWidth, winHeight, 8, SDL_SWSURFACE); //SDL_HWPALETTE|SDL_DOUBLEBUF);
 	
 	if(surface == 0){
 		printf("Failed to set videomode\n");
@@ -343,6 +377,7 @@ int main(int argc, char** argv){
 		goto QUIT;
 	}
 
+	SDL_SetPalette(surface, SDL_LOGPAL|SDL_PHYSPAL, sdl_colors, 0, 256);
 #ifdef LEVELGENTEST
 #define set_px(x, y, color) {\
 	pixel.x = x*SCALE;\
@@ -394,13 +429,49 @@ int main(int argc, char** argv){
 
 	prevBuf = malloc(game_screen.h*game_screen.w);
 	for(int i = 0; i < game_screen.h*game_screen.w; ++i) prevBuf[i] = 0;
+	game_hasfocus = 1;
+
+#ifdef NSPIRE
+	const unsigned timer_load_value = 0xffffffff;
+	//no classic support =<
+	volatile unsigned *load = (unsigned*)0x900D0020;
+	volatile unsigned *read = (unsigned*)0x900D0024;
+	volatile unsigned *control = (unsigned*)0x900D0028;
+	volatile unsigned *int_clear = (unsigned*)0x900D002C;
+	volatile unsigned *int_status = (unsigned*)0x900D0030;
+
+	unsigned orig_control = *control;
+	unsigned orig_load = *load;
+
+
+	*control = 0;
+	*int_clear = 1;
+	*load = timer_load_value;
+	*control = 0b11100011;
+
+	unprocessed = 0;
+	now = 0;
+#endif
+
 
 	while(running)
 	{
+#ifndef NSPIRE
 		now = getTimeUS();
+
 		unprocessed += (now - lastTime) / usPerTick;
-		//lastTime = now;
-		
+#else
+		unsigned passed = timer_load_value - *read;
+		now += passed;
+
+		*control = 0;
+		*int_clear = 1;
+		*load = timer_load_value;
+		*control = 0b11100011;
+
+		unprocessed += (float)passed / usPerTick;
+#endif
+
 		while(unprocessed >= 1){
 			++ticks;
 			game_tick();
@@ -422,7 +493,12 @@ int main(int argc, char** argv){
 					running = 0;
 					break;
 				case SDL_ACTIVEEVENT:
+#ifndef NSPIRE
 					game_hasfocus = event.active.state != 2; //TODO better focus detection
+#else
+					game_hasfocus = 1;
+#endif
+					break;
 			}
 		}
 		
@@ -437,27 +513,45 @@ int main(int argc, char** argv){
 				int screen_px = game_screen.pixels[index];
 				if(screen_px != prevBuf[index]){
 					prevBuf[index] = screen_px;
-					SDL_FillRect(surface, &pixel, game_colors[screen_px]);
+					SDL_FillRect(surface, &pixel, screen_px);
 				}
 
 			}
 		}
-
-
-
+#ifdef NSPIRE
+		if(nsp_exit.down){// && current_menu == mid_TITLE){
+			running = 0;
+			continue;
+		}
+#endif
 		SDL_Flip(surface);
-		
-		if(now - lastPrinted > 1000000){
+
+#ifdef NSPIRE
+	#define PRNT_DELAY 32*1000
+#else
+	#define PRNT_DELAY 1000000
+#endif
+		if(now - lastPrinted > PRNT_DELAY){
 			printf("%d ticks, %d fps\n", ticks, frames);
+			g_ticks = ticks;
+			g_frames = frames;
 			ticks = 0;
 			frames = 0;
+			updatePerfctr = 1;
 			lastPrinted = now;
 		}
-		
 		lastTime = now; //not like in java
 	}
-	
 	QUIT:
+
+#ifdef NSPIRE
+	*control = 0; // disable timer
+	*int_clear = 1; // clear interrupt status
+	*control = orig_control & 0b01111111; // timer still disabled
+	*load = orig_load;
+	*control = orig_control;
+#endif
+
 	if(prevBuf) free(prevBuf);
 	// Quit SDL
 	SDL_Quit();

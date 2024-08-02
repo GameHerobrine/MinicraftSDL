@@ -13,4 +13,9 @@ void game_won();
 
 #define HEIGHT 120
 #define WIDTH 160
+
+#ifndef NSPIRE
 #define SCALE 3
+#else
+#define SCALE 2
+#endif

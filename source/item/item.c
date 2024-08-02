@@ -4,6 +4,8 @@
 #include "furniture_item.h"
 #include <entity/furniture.h>
 #include "tool_item.h"
+#include <string.h>
+
 int item_getColor(Item* item){
 	switch(item->id){
 		case POWERGLOVE:
@@ -155,6 +157,10 @@ void item_free(Item* item){
 				call_entity_free(item->add.furniture.furniture);
 				free(item->add.furniture.furniture);
 			}
+			break;
+		case ITEM:
+		case RESOURCE:
+		case TOOL:
 			break;
 	}
 }

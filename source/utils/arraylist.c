@@ -1,5 +1,8 @@
 #include "arraylist.h"
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 void create_arraylist(ArrayList* list){
 	list->capacity = 0;
 	list->size = 0;
@@ -9,7 +12,7 @@ void create_arraylist(ArrayList* list){
 void arraylist_pushTo(ArrayList* list, int index, void* element){
 
 	if(index > list->size){
-		printf("Tried pushing element too far!");
+		printf("Tried pushing element too far!\n");
 		return;
 	}else if(index == list->size){
 		arraylist_push(list, element);
@@ -18,8 +21,11 @@ void arraylist_pushTo(ArrayList* list, int index, void* element){
 		if(size > list->capacity){
 			list->elements = realloc(list->elements, sizeof(void*) * size);
 		}
-		printf("%d\n", list->size, list->size - index);
-		memcpy(list->elements + index + 1, list->elements + index, sizeof(*list->elements)* (list->size - index));
+
+		for(int i = list->size; i > index; --i){
+			list->elements[i] = list->elements[i-1];
+		}
+
 		list->elements[index] = element;
 		list->size = size;
 	}
@@ -58,7 +64,9 @@ void* arraylist_removeElement(ArrayList* list, void* element){
 void* arraylist_removeId(ArrayList* list, int index){
 	void* element = list->elements[index];
 	if(index < list->size-1){
-		memcpy(list->elements + index, list->elements + index + 1, sizeof(*list->elements)*(list->size-1 - index));
+		for(int i = index + 1; i < list->size; ++i){
+			list->elements[i-1] = list->elements[i];
+		}
 	}
 	--list->size;
 	return element;

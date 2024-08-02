@@ -9,6 +9,9 @@ typedef struct{
 } Key;
 
 extern Key up, down, left, right, attack, menu;
+#ifdef NSPIRE
+extern Key nsp_exit;
+#endif
 
 void key_toggle(Key* key, char pressed);
 void key_tick(Key* key);

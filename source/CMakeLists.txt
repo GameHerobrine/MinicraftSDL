@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.5)
 project(minicraft-sdl LANGUAGES C)
 
 add_compile_options(-Wno-implicit-function-declaration) #TODO delete this
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDLmain -lSDL -lm")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDLmain -lSDL -lm -O3")
 
-add_definitions(-DTEST_INVENTORY -DTEST_SHOWPORTALPOS -DGODMODE)
+add_definitions(-DFPS_AND_TICKS)
 
 file(GLOB_RECURSE SOURCES *.c)
 file(GLOB_RECURSE HEADERS *.h)

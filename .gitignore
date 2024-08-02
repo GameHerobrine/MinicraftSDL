@@ -5,3 +5,7 @@ CMakeLists.txt.user
 .settings/*
 .project
 .cproject
+
+*.o
+*.tns
+.*elf
