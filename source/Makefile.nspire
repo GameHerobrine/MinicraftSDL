@@ -7,7 +7,7 @@ LD  = nspire-ld
 GENZEHN = genzehn
 
 GCCFLAGS = -Wall -W -marm -I. -DNSPIRE -DFPS_AND_TICKS
-LDFLAGS =
+LDFLAGS = 
 ZEHNFLAGS = --name "minicraft-sdl"
 
 ifeq ($(DEBUG),FALSE)

@@ -71,6 +71,7 @@ void titlemenu_tick(){
 	if(attack.clicked || menu.clicked){
 		if(titlemenu_selected == 0){
 			//TODO Sound.test.play();
+			isingame = 1;
 			game_reset();
 			game_set_menu(0);
 		}

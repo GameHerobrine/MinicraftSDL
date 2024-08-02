@@ -5,8 +5,8 @@
 extern SpriteSheet icons_spritesheet;
 extern Player* game_player;
 extern int game_gameTime;
-extern char game_pendingLevelChange;
-
+extern int game_pendingLevelChange;
+extern char isingame;
 void game_reset();
 void game_set_menu(enum menu_id menu);
 void game_won();

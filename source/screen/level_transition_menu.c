@@ -19,8 +19,8 @@ void leveltransitionmenu_render(Screen* screen){
 	for(int x = 0; x < 20; ++x){
 		for(int y = 0; y < 15; ++y){
 			int dd = (y + x % 2 * 2 + x/3) - lt_time;
-			if(dd < 0 && dd > -30) render_screen(screen, x*8, y*8, 0, 0, 0);
-			else render_screen(screen, x*8, screen->h - y*8 - 9, 0, 0, 0);
+			//if(dd < 0 && dd > -30) render_screen(screen, x*8, y*8, 0, 0, 0);
+			//else render_screen(screen, x*8, screen->h - y*8 - 9, 0, 0, 0);
 		}
 	}
 }

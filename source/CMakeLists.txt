@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.5)
 project(minicraft-sdl LANGUAGES C)
 
 add_compile_options(-Wno-implicit-function-declaration) #TODO delete this
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDLmain -lSDL -lm -O3")
-
-add_definitions(-DFPS_AND_TICKS)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDLmain -lSDL -lm")
+#TEST_SHOWPORTALPOS - show portal positions
+#GODMODE - godmode(almost) + noclip
+#TEST_INVENTORY - adds more items into inv
+add_definitions(-DTEST_SHOWPORTALPOS -DGODMODE)
 
 file(GLOB_RECURSE SOURCES *.c)
 file(GLOB_RECURSE HEADERS *.h)
