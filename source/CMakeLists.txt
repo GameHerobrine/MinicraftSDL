@@ -78,7 +78,8 @@ add_executable(minicraft-sdl ${SOURCES} ${HEADERS}
 	screen/won_menu.c
 	entity/spark.h
 	entity/spark.c
-
+	icons.c
+	icons.h
 )
 target_include_directories(minicraft-sdl PUBLIC ".")
 

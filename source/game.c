@@ -16,10 +16,12 @@
 #endif
 #include <entity/player.h>
 #include <item/item.h>
+#include <icons.h>
+
 #ifdef NSPIRE
 #include <os.h>
 #endif
-SpriteSheet icons_spritesheet;
+
 Screen game_screen;
 Screen game_lightScreen;
 
@@ -123,22 +125,6 @@ void game_init(){
 			}
 		}
 	}
-	
-#ifdef NSPIRE
-	FILE* f = fopen("ndless/icons.rimg.tns", "rb");
-#else
-	FILE* f = fopen("icons.rimg", "rb");
-#endif
-	if(!f){
-		printf("Failed to open icons.rimg!\n");
-#ifdef NSPIRE
-		wait_key_pressed();
-#endif
-		running = 0;
-		return;
-	}
-	create_spritesheet(&icons_spritesheet, f, 256, 256);
-	fclose(f);
 	
 	create_screen(&game_screen, WIDTH, HEIGHT, &icons_spritesheet);
 	create_screen(&game_lightScreen, WIDTH, HEIGHT, &icons_spritesheet);
@@ -518,7 +504,17 @@ int main(int argc, char** argv){
 				int screen_px = game_screen.pixels[index];
 				if(screen_px != prevBuf[index]){
 					prevBuf[index] = screen_px;
+
+#if SCALE == 1
+					*(unsigned char*)(surface->pixels + y * surface->pitch + x * surface->format->BytesPerPixel) = screen_px;
+#elif SCALE == 2
+					*(unsigned char*)(surface->pixels + (y*SCALE) * surface->pitch + (x*SCALE) * surface->format->BytesPerPixel) = screen_px;
+					*(unsigned char*)(surface->pixels + (y*SCALE) * surface->pitch + (x*SCALE+1) * surface->format->BytesPerPixel) = screen_px;
+					*(unsigned char*)(surface->pixels + (y*SCALE+1) * surface->pitch + (x*SCALE) * surface->format->BytesPerPixel) = screen_px;
+					*(unsigned char*)(surface->pixels + (y*SCALE+1) * surface->pitch + (x*SCALE+1) * surface->format->BytesPerPixel) = screen_px;
+#else
 					SDL_FillRect(surface, &pixel, screen_px);
+#endif
 				}
 
 			}

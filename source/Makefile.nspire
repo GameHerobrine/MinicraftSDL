@@ -11,7 +11,7 @@ LDFLAGS =
 ZEHNFLAGS = --name "minicraft-sdl"
 
 ifeq ($(DEBUG),FALSE)
-	GCCFLAGS += -O3
+	GCCFLAGS += -Ofast
 else
 	GCCFLAGS += -O0 -g
 endif

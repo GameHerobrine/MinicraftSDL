@@ -2,7 +2,6 @@
 #include <entity/player.h>
 #include <screen/menu.h>
 
-extern SpriteSheet icons_spritesheet;
 extern Player* game_player;
 extern int game_gameTime;
 extern int game_pendingLevelChange;
