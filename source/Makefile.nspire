@@ -43,8 +43,8 @@ $(EXE).tns: $(EXE).elf
 	$(GENZEHN) --input $(DISTDIR)/$^ --output $(DISTDIR)/$@.zehn $(ZEHNFLAGS)
 	make-prg $(DISTDIR)/$@.zehn $(DISTDIR)/$@
 	rm $(DISTDIR)/$@.zehn
-	cp icons.rimg icons.rimg.tns
+	#cp icons.rimg icons.rimg.tns
 
 clean:
-	rm -f $(DISTDIR)/$(EXE).tns $(DISTDIR)/$(EXE).elf $(DISTDIR)/$(EXE).zehn icons.rimg.tns
+	rm -f $(DISTDIR)/$(EXE).tns $(DISTDIR)/$(EXE).elf $(DISTDIR)/$(EXE).zehn
 	find . -name "*.o" -type f -delete
