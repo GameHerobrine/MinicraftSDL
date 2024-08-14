@@ -1,5 +1,6 @@
 #include "tile.h"
 #include "../../utils/javarandom.h"
+#include <gfx/color.h>
 static Random wRandom;
 static Random trandom;
 

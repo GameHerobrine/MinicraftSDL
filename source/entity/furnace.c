@@ -2,6 +2,7 @@
 #include <crafting/crafting.h>
 #include <game.h>
 #include <screen/crafting_menu.h>
+#include <gfx/color.h>
 
 void furnace_create(Furnace* furnace){
 	char* name = malloc(strlen("Furnace")+1); //XXX ew

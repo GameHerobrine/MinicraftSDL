@@ -10,6 +10,8 @@
 #include <entity/_entity_caller.h>
 #include <item/tool_item.h>
 #include <item/resourceitem.h>
+#include <gfx/color.h>
+
 void recipe_create(Recipe* recipe, Item* result){
 	recipe->resultTemplate = *result;
 	create_arraylist(&recipe->costs);

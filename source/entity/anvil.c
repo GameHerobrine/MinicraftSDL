@@ -3,6 +3,7 @@
 #include <game.h>
 #include <crafting/crafting.h>
 #include <screen/crafting_menu.h>
+#include <gfx/color.h>
 
 void anvil_create(Anvil* anvil){
 	char* name = malloc(strlen("Anvil")+1); //XXX ew

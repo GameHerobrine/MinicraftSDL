@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <gfx/font.h>
 #include <string.h>
-
+#include <gfx/color.h>
 void resourceitem_create(Item* item, Resource* resource){
 	item->id = RESOURCE;
 	item->add.resource.resource = resource;

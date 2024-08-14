@@ -3,7 +3,7 @@
 #include <item/item.h>
 #include <entity/itementity.h>
 #include <level/level.h>
-
+#include <gfx/color.h>
 static Random trandom;
 
 void grasstile_init(TileID id){

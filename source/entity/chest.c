@@ -3,6 +3,8 @@
 #include <entity/inventory.h>
 #include <screen/container_menu.h>
 #include <game.h>
+#include <gfx/color.h>
+
 void chest_create(Chest* chest){
 	char* name = malloc(strlen("Chest")+1); //XXX ew
 	strcpy(name, "Chest");

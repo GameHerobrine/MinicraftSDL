@@ -43,6 +43,7 @@ void game_set_menu(enum menu_id menu){
 	current_menu = menu;
 	init_menu(menu);
 }
+
 int game_playerDeadTime = 0;
 int game_wonTimer = 0;
 int game_gameTime = 0;
@@ -335,6 +336,10 @@ int main(int argc, char** argv){
 #else
 	const double usPerTick = 1000000.0 / 60;
 #endif
+
+#ifdef LIMITFPS
+	unsigned long long int nextExceptedFrameRenderTime = 0;
+#endif
 	unsigned long long int now  = 0;
 	int ticks = 0, frames = 0;
 
@@ -342,8 +347,8 @@ int main(int argc, char** argv){
 	int ret = 0;
 	int winHeight = HEIGHT*SCALE;
 	int winWidth = WIDTH*SCALE;
-
-	
+	char needsFlip = 0;
+	int flipXMin = 0, flipXMax = 0, flipYMin = 0, flipYMax = 0;
 	printf("Starting...\n");
 
 	SDL_Surface* surface;
@@ -492,18 +497,44 @@ int main(int argc, char** argv){
 					break;
 			}
 		}
-		
+		needsFlip = 0;
+		flipXMin = winWidth;
+		flipXMax = 0;
+		flipYMin = winHeight;
+		flipYMax = 0;
+#ifdef LIMITFPS
+
+		if(now < nextExceptedFrameRenderTime){
+			goto SKIP_RENDER;
+		}else{
+#ifdef NSPIRE
+			nextExceptedFrameRenderTime = now + 32000/LIMITFPS;
+#else
+			nextExceptedFrameRenderTime = now + 1000000/LIMITFPS;
+#endif
+		}
+#endif
+
 		++frames;
 		game_render();
 
 		for(int y = 0; y < game_screen.h; ++y){
+			pixel.y = y*SCALE;
 			for(int x = 0; x < game_screen.w; ++x){
 				pixel.x = x*SCALE;
-				pixel.y = y*SCALE;
 				int index = y * game_screen.w + x;
 				int screen_px = game_screen.pixels[index];
 				if(screen_px != prevBuf[index]){
 					prevBuf[index] = screen_px;
+					needsFlip = 1;
+					int xmin = pixel.x;
+					int xmax = xmin + SCALE;
+					int ymin = pixel.y;
+					int ymax = ymin + SCALE;
+					if(xmin < flipXMin) flipXMin = xmin;
+					if(xmax > flipXMax) flipXMax = xmax;
+					if(ymin < flipYMin) flipYMin = ymin;
+					if(ymax > flipYMax) flipYMax = ymax;
 
 #if SCALE == 1
 					*(unsigned char*)(surface->pixels + y * surface->pitch + x * surface->format->BytesPerPixel) = screen_px;
@@ -519,13 +550,18 @@ int main(int argc, char** argv){
 
 			}
 		}
+
+		SKIP_RENDER:
 #ifdef NSPIRE
 		if(nsp_exit.down && current_menu == mid_TITLE){
 			running = 0;
 			continue;
 		}
 #endif
-		SDL_Flip(surface);
+		if(needsFlip) {
+			printf("RENDERING %d %d %d %d\n", flipXMin, flipXMax, flipYMin, flipYMax);
+			SDL_UpdateRect(surface, flipXMin, flipYMin, flipXMax-flipXMin, flipYMax-flipYMin);
+		}
 
 #ifdef NSPIRE
 	#define PRNT_DELAY 32*1000

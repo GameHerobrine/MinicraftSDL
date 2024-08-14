@@ -1,7 +1,7 @@
 #include "tile.h"
 #include <item/item.h>
 #include <entity/itementity.h>
-
+#include <gfx/color.h>
 void sandtile_init(TileID id){
 	tile_init(id);
 	tiles[id].connectsToSand = 1;

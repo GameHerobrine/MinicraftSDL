@@ -310,7 +310,7 @@ char entity_isfurniture(Entity* entity){
 			return 0;
 	}
 }
-int call_entity_getLightRadius(Entity* entity){
+extern inline int call_entity_getLightRadius(Entity* entity){
 	int r, rr;
 	Player* p;
 	switch(entity->type){

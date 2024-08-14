@@ -1,4 +1,5 @@
 #include "tile.h"
+#include <gfx/color.h>
 static Random wRandom;
 static Random trandom;
 

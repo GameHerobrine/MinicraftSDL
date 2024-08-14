@@ -4,12 +4,12 @@ static const long long int multiplier = 0x5DEECE66D;
 static const long long int mask = ((long long int)1 << 48) - 1;
 static const long long int addend = 0xB;
 
-void random_set_seed(Random* random, int seed){
+extern inline void random_set_seed(Random* random, int seed){
 	random->seed = (seed ^ multiplier) & mask;
 	random->haveNextNextGaussian = 0;
 }
 
-int random_next(Random* random, int bits){
+extern inline int random_next(Random* random, int bits){
 	long long int oldseed = 0, nextseed = 0;
 	long long int seed = random->seed;
 	
@@ -20,10 +20,10 @@ int random_next(Random* random, int bits){
 	
 	return (int)((unsigned long long int)nextseed >> (48 - bits));
 }
-char random_next_boolean(Random* random){
+extern inline char random_next_boolean(Random* random){
 	return random_next(random, 1) != 0;
 }
-int random_next_int(Random* random, int bound){
+extern inline int random_next_int(Random* random, int bound){
 	
 	int r = random_next(random, 31);
 	int m = bound - 1;
@@ -35,11 +35,11 @@ int random_next_int(Random* random, int bound){
 
 	return r;
 }
-float random_next_float(Random* random){
+extern inline float random_next_float(Random* random){
 	return random_next(random, 24) / (float)(1 << 24);
 }
 
-double random_next_double(Random* random){
+extern inline double random_next_double(Random* random){
 	return (((long long int)(random_next(random, 26)) << 27) + random_next(random, 27)) * (1.0 / ((long long int)1 << 53));
 }
 

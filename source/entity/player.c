@@ -16,6 +16,7 @@
 #include <entity/anvil.h>
 #include <entity/furnace.h>
 #include <entity/chest.h>
+#include <gfx/color.h>
 
 void player_create(Player* player){
 	mob_create(&player->mob);

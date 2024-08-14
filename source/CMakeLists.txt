@@ -6,7 +6,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDLmain -lSDL -lm")
 #TEST_SHOWPORTALPOS - show portal positions
 #GODMODE - godmode(almost) + noclip
 #TEST_INVENTORY - adds more items into inv
-add_definitions(-DTEST_SHOWPORTALPOS -DGODMODE)
+add_definitions(-DTEST_SHOWPORTALPOS -DGODMODE -DLIMITFPS=60)
 
 file(GLOB_RECURSE SOURCES *.c)
 file(GLOB_RECURSE HEADERS *.h)

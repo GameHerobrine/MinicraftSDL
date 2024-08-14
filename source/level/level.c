@@ -193,7 +193,7 @@ void renderLight(Level* level, Screen* screen, int xScroll, int yScroll){
 	screen_set_offset(screen, 0, 0);
 }
 
-unsigned char level_get_tile(Level* level, int x, int y){
+extern inline unsigned char level_get_tile(Level* level, int x, int y){
 	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return ROCK;
 	return level->tiles[x + y*level->w];
 }
@@ -204,7 +204,7 @@ void level_set_tile(Level* level, int x, int y, int id, int data){
 	level->data[x + y*level->w] = data;
 }
 
-unsigned char level_get_data(Level* level, int x, int y){
+extern inline unsigned char level_get_data(Level* level, int x, int y){
 	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return 0;
 	return level->data[x + y*level->w];
 }

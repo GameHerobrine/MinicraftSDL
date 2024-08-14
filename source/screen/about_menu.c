@@ -1,7 +1,7 @@
 #include "about_menu.h"
 #include "menu.h"
 #include "../inputhandler.h"
-
+#include <gfx/color.h>
 static char s1[] = "About Minicraft"; //i made the worst str2upper func
 static char s2[] = "Minicraft was made";
 static char s3[] = "by Markus Persson";

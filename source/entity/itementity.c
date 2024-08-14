@@ -1,5 +1,7 @@
 #include "itementity.h"
 #include "_entity_caller.h"
+#include <gfx/color.h>
+
 void itementity_create(ItemEntity* entity, Item item, int x, int y){
 	entity_create(&entity->entity);
 	entity->entity.type = ITEMENTITY;

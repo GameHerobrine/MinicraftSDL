@@ -2,7 +2,7 @@
 #include <entity/player.h>
 #include <item/item.h>
 #include <entity/itementity.h>
-
+#include <gfx/color.h>
 static Random trandom;
 void wheat_tile_init(TileID id){
 	tile_init(id);

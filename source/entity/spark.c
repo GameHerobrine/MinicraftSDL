@@ -4,7 +4,7 @@
 #include <utils/arraylist.h>
 #include <level/level.h>
 #include <entity/_entity_caller.h>
-
+#include <gfx/color.h>
 void spark_create(Spark* spark, AirWizard* owner, double xa, double ya){
 	entity_create(spark);
 	spark->entity.type = SPARK;

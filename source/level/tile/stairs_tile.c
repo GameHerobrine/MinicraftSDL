@@ -1,5 +1,5 @@
 #include "tile.h";
-
+#include <gfx/color.h>
 void stairstile_init(TileID id, char leadsUp){
 	tile_init(id);
 	tiles[id].add.stairs.leadsUp = leadsUp;

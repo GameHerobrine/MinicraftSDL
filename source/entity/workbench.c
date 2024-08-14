@@ -2,7 +2,7 @@
 #include <game.h>
 #include <screen/crafting_menu.h>
 #include <crafting/crafting.h>
-
+#include <gfx/color.h>
 void workbench_create(Workbench* workbench){
 	char* name = malloc(strlen("Workbench")+1); //XXX ew
 	strcpy(name, "Workbench");

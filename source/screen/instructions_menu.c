@@ -1,7 +1,7 @@
 #include "instructions_menu.h"
 #include "menu.h"
 #include "../inputhandler.h"
-
+#include <gfx/color.h>
 static char s1[] = "HOW TO PLAY";
 static char s2[] = "Move your character";
 static char s3[] = "with the arrow keys";

@@ -1,5 +1,5 @@
 #include "tile.h"
-
+#include <gfx/color.h>
 void holetile_init(TileID id){
 	tile_init(id);
 	

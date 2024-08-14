@@ -1,5 +1,6 @@
 #include "tile.h"
 #include <level/level.h>
+#include <gfx/color.h>
 void saplingtile_init(TileID id, TileID onType, TileID growsTo){
 	tile_init(id);
 	
