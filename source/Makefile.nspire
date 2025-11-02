@@ -8,10 +8,11 @@ GENZEHN = genzehn
 
 GCCFLAGS = -Wall -W -marm -I. -DNSPIRE -DFPS_AND_TICKS
 LDFLAGS = 
-ZEHNFLAGS = --name "minicraft-sdl"
+ZEHNFLAGS = --name "minicraft-sdl" --uses-lcd-blit true
 
 ifeq ($(DEBUG),FALSE)
 	GCCFLAGS += -Ofast
+	LDFLAGS += -Wl,--gc-sections
 else
 	GCCFLAGS += -O0 -g
 endif

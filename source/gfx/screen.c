@@ -41,7 +41,9 @@ void render_screen(Screen* screen, int xp, int yp, int tile, int colors, int bit
 			int xs = x;
 			if(mirrorX) xs = 7 - x;
 			unsigned char col = (colors >> (screen->sheet->pixels[xs + ys * screen->sheet->width + toffs] * 8)) & 255;
-			if(col < 255) screen->pixels[(x + xp) + (y + yp) * screen->w] = col;
+			if(col < 255) {
+				screen->pixels[(x + xp) + (y + yp) * screen->w] = col;
+			}
 		}
 	}
 }

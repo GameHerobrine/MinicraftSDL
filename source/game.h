@@ -6,6 +6,9 @@ extern Player* game_player;
 extern int game_gameTime;
 extern int game_pendingLevelChange;
 extern char isingame;
+#ifdef NSPIRE
+extern uint16_t* _nsp_screenbuf;
+#endif
 void game_reset();
 void game_set_menu(enum menu_id menu);
 void game_won();
