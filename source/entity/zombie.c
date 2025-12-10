@@ -4,6 +4,8 @@
 #include <item/resource/resource.h>
 #include <game.h>
 #include <gfx/color.h>
+#include <entity/_entity_caller.h>
+#include <item/resourceitem.h>
 
 void zombie_create(Zombie* zombie, int lvl){
 	mob_create(zombie);

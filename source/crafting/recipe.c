@@ -11,6 +11,7 @@
 #include <item/tool_item.h>
 #include <item/resourceitem.h>
 #include <gfx/color.h>
+#include <string.h>
 
 void recipe_create(Recipe* recipe, Item* result){
 	recipe->resultTemplate = *result;

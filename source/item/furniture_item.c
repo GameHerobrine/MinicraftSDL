@@ -4,6 +4,7 @@
 #include <gfx/screen.h>
 #include <gfx/font.h>
 #include <gfx/color.h>
+#include <string.h>
 
 void furnitureitem_create(Item* item, Furniture* furniture){
 	item->id = FURNITURE;

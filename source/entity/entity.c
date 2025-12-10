@@ -3,6 +3,7 @@
 #include <level/tile/tile.h>
 #include <entity/player.h>
 #include <item/item.h>
+#include <entity/_entity_caller.h>
 
 void entity_create(Entity* entity){
 	entity->x = entity->y = 0;

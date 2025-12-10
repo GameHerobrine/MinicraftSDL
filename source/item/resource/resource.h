@@ -23,5 +23,5 @@ extern Resource slime, glass, cloth, cloud, gem;
 
 void init_resources();
 char resource_interactOn(Resource* resource, TileID tile, Level* level, int xt, int yt, struct _Player* player, int attackDir);
-
+void init_resource(Resource* resource, char* name, int sprite, int color);
 #endif /* ITEM_RESOURCE_RESOURCE_H_ */

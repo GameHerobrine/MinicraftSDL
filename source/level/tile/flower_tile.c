@@ -3,6 +3,7 @@
 #include <entity/player.h>
 #include <item/item.h>
 #include <gfx/color.h>
+#include <item/resourceitem.h>
 void flowertile_init(TileID id){
 	tile_init(id);
 	tiles[id].connectsToGrass = 1;

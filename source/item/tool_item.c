@@ -4,6 +4,8 @@
 #include <item/item.h>
 #include <item/tooltype.h>
 #include <entity/entity.h>
+#include <gfx/font.h>
+#include <string.h>
 
 const int LEVEL_COLORS[] = {
 	GETCOLOR4(-1, 100, 321, 431),

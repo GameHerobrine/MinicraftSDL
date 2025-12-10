@@ -12,8 +12,6 @@
 
 #include "lava_tile.h"
 #include "stairs_tile.h"
-
-
 #include "hard_rock_tile.h"
 #include "ore_tile.h"
 #include "cloud_cactus_tile.h"

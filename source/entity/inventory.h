@@ -19,5 +19,6 @@ uint8_t inventory_hasResources(Inventory* inv, Resource* resource, int count);
 uint8_t inventory_removeResource(Inventory* inv, Resource* resource, int count);
 int inventory_count(Inventory* inv, struct _Item* item);
 void inventory_free(Inventory* inv);
+void inventory_addItemIntoSlot_nalloc(Inventory* inv, int slot, struct _Item* item);
 
 #endif // INVENTORY_H

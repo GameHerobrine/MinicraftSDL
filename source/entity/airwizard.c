@@ -5,6 +5,8 @@
 #include <entity/_entity_caller.h>
 #include <entity/spark.h>
 #include <level/level.h>
+#include <math.h>
+#include <sound/sound.h>
 
 void airwizard_create(AirWizard* wizard){
 	mob_create(wizard);
@@ -134,5 +136,5 @@ void airwizard_die(AirWizard* wizard){
 		game_player->score += 1000;
 		player_gameWon(game_player);
 	}
-	//TODO sounds Sound.bossdeath.play();
+	sound_play(sound_bossDeath);
 }

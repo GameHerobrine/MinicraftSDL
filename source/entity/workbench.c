@@ -3,6 +3,8 @@
 #include <screen/crafting_menu.h>
 #include <crafting/crafting.h>
 #include <gfx/color.h>
+#include <string.h>
+
 void workbench_create(Workbench* workbench){
 	char* name = malloc(strlen("Workbench")+1); //XXX ew
 	strcpy(name, "Workbench");

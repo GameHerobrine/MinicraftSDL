@@ -16,6 +16,7 @@
 #include <utils/arraylist.h>
 #include <entity/airwizard.h>
 #include <entity/spark.h>
+#include <string.h>
 
 void call_entity_tick(Entity* entity){
 	switch(entity->type){

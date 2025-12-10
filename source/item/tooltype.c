@@ -1,4 +1,5 @@
 #include "tooltype.h"
+#include <stdio.h>
 
 char* type_getName(ToolType type){
 	switch(type){

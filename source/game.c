@@ -13,50 +13,49 @@
 #ifndef NSPIRE
 #include <linux/limits.h>
 #include <SDL/SDL.h>
+#ifdef SOUNDS
+#include <sound/sound.h>
+#endif
+#else
+#include <os.h>
+#include <libndls.h>
 #endif
 #include <entity/player.h>
 #include <item/item.h>
 #include <icons.h>
-
-#ifdef NSPIRE
-#include <os.h>
-#include <libndls.h>
-#endif
+#include <entity/_entity_caller.h>
 
 Screen game_screen;
 Screen game_lightScreen;
-
+Level game_levels[5] = {0};
+char click_to_focus[] = "Click to focus!";
+Level* game_level;
+Player* game_player = 0;
 int g_ticks = 0; //perf measure
 int g_frames = 0; //perf measure
-
 unsigned long tickCount = 0;
+enum menu_id current_menu;
+int game_pendingLevelChange = 0;
+int game_playerDeadTime = 0;
+int game_wonTimer = 0;
+int game_gameTime = 0;
+int game_currentLevel;
+char game_hasWon = 0;
+char updatePerfctr = 0;
+char running = 1;
+char isingame = 0;
+char game_hasfocus = 0;
 
 #ifdef NSPIRE
 uint16_t sdl_colors[256]; //rgb565
 #else
 SDL_Color sdl_colors[256];
 #endif
-enum menu_id current_menu;
-char game_hasfocus = 0;
-int game_pendingLevelChange = 0;
-char updatePerfctr = 0;
-char running = 1;
-char isingame = 0;
 
 void game_set_menu(enum menu_id menu) {
 	current_menu = menu;
 	init_menu(menu);
 }
-
-int game_playerDeadTime = 0;
-int game_wonTimer = 0;
-int game_gameTime = 0;
-char game_hasWon = 0;
-Level game_levels[5] = {0};
-int game_currentLevel;
-Level* game_level;
-
-Player* game_player = 0;
 
 void game_changeLevel(int dir) {
 	level_removeEntity1(game_level, game_player);
@@ -184,20 +183,20 @@ void game_renderGui() {
 		char hax[64];
 		int x = game_player->mob.entity.x >> 4;
 		int y = game_player->mob.entity.y >> 4;
-		sprintf(hax, "P %d %d\00", x, y);
+		sprintf(hax, "P %d %d", x, y);
 		font_draw(hax, strlen(hax), &game_screen, 2, 2, getColor4(000, 200, 500, 533));
 		int Scnt = 10;
 
 		for(x = 0; x < game_player->mob.entity.level->w; ++x) {
 			for(y = 0; y < game_player->mob.entity.level->h; ++y) {
 				if(level_get_tile(game_player->mob.entity.level, x, y) == STAIRS_UP) {
-					sprintf(hax, "U %d %d\00", x, y);
+					sprintf(hax, "U %d %d", x, y);
 					font_draw(hax, strlen(hax), &game_screen, 2, Scnt, getColor4(000, 200, 500, 533));
 					Scnt += 8;
 				}
 
 				if(level_get_tile(game_player->mob.entity.level, x, y) == STAIRS_DOWN) {
-					sprintf(hax, "D %d %d\00", x, y);
+					sprintf(hax, "D %d %d", x, y);
 					font_draw(hax, strlen(hax), &game_screen, 2, Scnt, getColor4(000, 200, 500, 533));
 					Scnt += 8;
 				}
@@ -208,7 +207,7 @@ void game_renderGui() {
 			for(int i = 0; i < game_player->mob.entity.level->entities.size; ++i) {
 				Entity* e = game_player->mob.entity.level->entities.elements[i];
 				if(e->type == AIRWIZARD) {
-					sprintf(hax, "W %d %d\00", e->x >> 4, e->y >> 4);
+					sprintf(hax, "W %d %d", e->x >> 4, e->y >> 4);
 					font_draw(hax, strlen(hax), &game_screen, 2, Scnt, getColor4(000, 200, 500, 533));
 					Scnt += 8;
 					break;
@@ -262,7 +261,7 @@ void game_renderGui() {
 #endif
 }
 
-char click_to_focus[] = "Click to focus!";
+
 void game_renderFocusNagger() {
 	//click_to_focus
 	int c2fLen = strlen(click_to_focus);
@@ -373,7 +372,9 @@ int main(int argc, char** argv) {
 		printf("Current working dir: %s\n", cwd);
 	}
 	game_init();
-
+#ifdef SOUNDS
+	init_sounds();
+#endif
 #ifndef NSPIRE
 	SDL_Init(SDL_INIT_VIDEO);
 	SDL_WM_SetCaption("Minicraft", 0);
@@ -646,6 +647,9 @@ int main(int argc, char** argv) {
 #ifndef NSPIRE
 	// Quit SDL
 	SDL_Quit();
+#endif
+#ifdef SOUNDS
+	free_sounds();
 #endif
 	crafting_free();
 	delete_screen(&game_screen);

@@ -1,5 +1,7 @@
 #include <entity/lantern.h>
 #include <gfx/color.h>
+#include <string.h>
+
 
 void lantern_create(Lantern* lantern){
 	char* name = malloc(strlen("Lantern")+1); //XXX ew

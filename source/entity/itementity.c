@@ -1,6 +1,6 @@
 #include "itementity.h"
-#include "_entity_caller.h"
 #include <gfx/color.h>
+#include <sound/sound.h>
 
 void itementity_create(ItemEntity* entity, Item item, int x, int y){
 	entity_create(&entity->entity);
@@ -66,7 +66,7 @@ void itementity_render(ItemEntity* item, Screen* screen){
 }
 
 void itementity_take(ItemEntity* item, Player* player){
-	/*TODO Sound.pickup.play();*/
+	sound_play(sound_Pickup);
 	++player->score;
 	item_onTake(&item->item, item);
 	entity_remove(item);

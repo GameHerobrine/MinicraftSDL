@@ -4,6 +4,7 @@
 #include <screen/container_menu.h>
 #include <game.h>
 #include <gfx/color.h>
+#include <string.h>
 
 void chest_create(Chest* chest){
 	char* name = malloc(strlen("Chest")+1); //XXX ew

@@ -2,6 +2,8 @@
 #include <gfx/font.h>
 #include <stdlib.h>
 #include <gfx/color.h>
+#include <string.h>
+
 void textparticle_create(TextParticle* entity, char* message, int x, int y, int col){
 	entity_create(&entity->entity);
 	entity->entity.type = TEXTPARTICLE;

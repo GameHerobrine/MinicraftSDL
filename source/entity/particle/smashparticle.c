@@ -1,6 +1,6 @@
 #include <entity/particle/smashparticle.h>
 #include <entity/_entity_caller.h>
-
+#include <sound/sound.h>
 #include <gfx/color.h>
 void smashparticle_create(SmashParticle* particle, int x, int y){
 	entity_create(&particle->entity);
@@ -8,7 +8,7 @@ void smashparticle_create(SmashParticle* particle, int x, int y){
 	particle->time = 0;
 	particle->entity.x = x;
 	particle->entity.y = y;
-	//TODO Sound.mosterHurt.play();
+	sound_play(sound_monsterHurt);
 }
 void smashparticle_tick(SmashParticle* particle){
 	++particle->time;

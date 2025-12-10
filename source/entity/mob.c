@@ -5,6 +5,7 @@
 #include <game.h>
 #include <entity/particle/textparticle.h>
 #include <gfx/color.h>
+#include <sound/sound.h>
 
 void mob_create(Mob* mob){
 	entity_create(&mob->entity);
@@ -22,13 +23,9 @@ void mob_doHurt(Mob* mob, int damage, int attackDir){
 	if(mob->hurtTime > 0) return;
 
 	if(game_player->mob.entity.level == mob->entity.level){
-		/*TODO: Sounds
-		 * int xd = level.player.x - x;
-			int yd = level.player.y - y;
-			if (xd * xd + yd * yd < 80 * 80) {
-				Sound.monsterHurt.play();
-			}
-		*/
+		int xd = game_player->mob.entity.x - mob->entity.x;
+		int yd = game_player->mob.entity.y - mob->entity.y;
+		if(xd * xd + yd * yd < 80 * 80) sound_play(sound_monsterHurt);
 	}
 
 	TextParticle* txt = malloc(sizeof(TextParticle));

@@ -4,6 +4,7 @@
 #include <crafting/crafting.h>
 #include <screen/crafting_menu.h>
 #include <gfx/color.h>
+#include <string.h>
 
 void oven_create(Oven* oven){
 	char* name = malloc(strlen("Oven")+1); //XXX ew

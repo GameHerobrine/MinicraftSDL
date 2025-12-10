@@ -5,6 +5,7 @@
 #include <entity/furniture.h>
 #include "tool_item.h"
 #include <string.h>
+#include <entity/_entity_caller.h>
 
 int item_getColor(Item* item){
 	switch(item->id){

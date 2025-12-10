@@ -5,6 +5,7 @@
 #include <level/level.h>
 #include <entity/itementity.h>
 #include <item/item.h>
+#include <item/resourceitem.h>
 
 void hardrocktile_tick(TileID id, Level* level, int xt, int yt){
 	int damage = level_get_data(level, xt, yt);

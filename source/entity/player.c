@@ -17,6 +17,8 @@
 #include <entity/furnace.h>
 #include <entity/chest.h>
 #include <gfx/color.h>
+#include <item/item.h>
+#include <sound/sound.h>
 
 void player_create(Player* player){
 	mob_create(&player->mob);
@@ -216,7 +218,7 @@ void player_attack(Player* player){
 
 void player_doHurt(Player* player, int damage, int attackDir){
 	if(player->mob.hurtTime > 0 || player->invulnerableTime > 0) return;
-	//TODO: Sound.playerHurt.play();
+	sound_play(sound_playerHurt);
 	TextParticle* txt = malloc(sizeof(TextParticle));
 	char* tx_ = malloc(16);
 	sprintf(tx_, "%d\00", damage);
@@ -233,7 +235,7 @@ void player_doHurt(Player* player, int damage, int attackDir){
 }
 void player_die(Player* player){
 	mob_die(player);
-	//TODO Sound.playerDeath.play();
+	sound_play(sound_playerDeath);
 }
 char player_usexy(Player* player, int x0, int y0, int x1, int y1){
 	ArrayList entities;

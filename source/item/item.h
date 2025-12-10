@@ -35,6 +35,7 @@ struct _ItemEntity;
 
 int item_getColor(Item* item);
 int item_getSprite(Item* item);
+uint8_t item_matches(Item* item, Item* item2);
 void item_onTake(Item* item, struct _ItemEntity* itemEntity);
 void item_renderInventory(Item* item, Screen* screen, int x, int y);
 uint8_t item_interact(Item* item, struct _Player* player, Entity* entity, int attackDir);
@@ -45,6 +46,6 @@ uint8_t item_canAttack(Item* item);
 int item_getAttackDamageBonus(Item* item, Entity* entity);
 void item_getName(Item* item, char* buf);
 uint8_t matches(Item* item, Item* item2);
-
+void item_free(Item* item);
 
 #endif // ITEM_H

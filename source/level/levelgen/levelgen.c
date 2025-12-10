@@ -1,9 +1,9 @@
 #include <stdlib.h>
-#include "../../utils/javarandom.h"
 #include "levelgen.h"
-#include "../../utils/utils.h"
-#include "../tile/tileids.h"
-
+#include <utils/utils.h>
+#include <utils/javarandom.h>
+#include <level/tile/tileids.h>
+#include <string.h>
 static Random lg_random;
 
 static inline void setSample(LevelGen* gen, int x, int y, double value){
