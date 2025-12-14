@@ -44,15 +44,29 @@ void input_tick(){
 void input_scan_nspire() {
 	if(any_key_pressed()) {
 		int kp = 0;
+		touchpad_report_t report;
+
+		if(!touchpad_scan(&report) && report.pressed) {
+			if(report.arrow == KEY_NSPIRE_UP.tpad_arrow) kp |= 1;
+			if(report.arrow == KEY_NSPIRE_DOWN.tpad_arrow) kp |= 2;
+			if(report.arrow == KEY_NSPIRE_LEFT.tpad_arrow) kp |= 4;
+			if(report.arrow == KEY_NSPIRE_RIGHT.tpad_arrow) kp |= 8;
+			if(!(kp & (1 | 4)) && (report.arrow == KEY_NSPIRE_LEFTUP.tpad_arrow)) kp |= (1 | 4);
+			if(!(kp & (2 | 4)) && (report.arrow == KEY_NSPIRE_DOWNLEFT.tpad_arrow)) kp |= (2 | 4);
+			if(!(kp & (1 | 8)) && (report.arrow == KEY_NSPIRE_UPRIGHT.tpad_arrow)) kp |= (1 | 8);
+			if(!(kp & (2 | 8)) && (report.arrow == KEY_NSPIRE_RIGHTDOWN.tpad_arrow)) kp |= (2 | 8);
+		} else {
+
+		}
 		if(isKeyPressed(KEY_NSPIRE_ESC)) kp |= 64;
-		if(isKeyPressed(KEY_NSPIRE_8) || isKeyPressed(KEY_NSPIRE_UP)) kp |= 1;
-		if(isKeyPressed(KEY_NSPIRE_2) || isKeyPressed(KEY_NSPIRE_DOWN)) kp |= 2;
-		if(isKeyPressed(KEY_NSPIRE_4) || isKeyPressed(KEY_NSPIRE_LEFT)) kp |= 4;
-		if(isKeyPressed(KEY_NSPIRE_6) || isKeyPressed(KEY_NSPIRE_RIGHT)) kp |= 8;
-		if(!(kp & (1 | 4)) && (isKeyPressed(KEY_NSPIRE_7) || isKeyPressed(KEY_NSPIRE_LEFTUP))) kp |= (1 | 4);
-		if(!(kp & (2 | 4)) && (isKeyPressed(KEY_NSPIRE_1) || isKeyPressed(KEY_NSPIRE_DOWNLEFT))) kp |= (2 | 4);
-		if(!(kp & (1 | 8)) && (isKeyPressed(KEY_NSPIRE_9) || isKeyPressed(KEY_NSPIRE_UPRIGHT))) kp |= (1 | 8);
-		if(!(kp & (2 | 8)) && (isKeyPressed(KEY_NSPIRE_3) || isKeyPressed(KEY_NSPIRE_RIGHTDOWN))) kp |= (2 | 8);
+		if(!(kp & 1) && isKeyPressed(KEY_NSPIRE_8)) kp |= 1;
+		if(!(kp & 2) && isKeyPressed(KEY_NSPIRE_2)) kp |= 2;
+		if(!(kp & 4) && isKeyPressed(KEY_NSPIRE_4)) kp |= 4;
+		if(!(kp & 8) && isKeyPressed(KEY_NSPIRE_6)) kp |= 8;
+		if(!(kp & (1 | 4)) && (isKeyPressed(KEY_NSPIRE_7))) kp |= (1 | 4);
+		if(!(kp & (2 | 4)) && (isKeyPressed(KEY_NSPIRE_1))) kp |= (2 | 4);
+		if(!(kp & (1 | 8)) && (isKeyPressed(KEY_NSPIRE_9))) kp |= (1 | 8);
+		if(!(kp & (2 | 8)) && (isKeyPressed(KEY_NSPIRE_3))) kp |= (2 | 8);
 
 		if(isKeyPressed(KEY_NSPIRE_TAB) || isKeyPressed(KEY_NSPIRE_ENTER) || isKeyPressed(KEY_NSPIRE_RET) || isKeyPressed(KEY_NSPIRE_X)) kp |= 16;
 		if(isKeyPressed(KEY_NSPIRE_5) || isKeyPressed(KEY_NSPIRE_CTRL) || isKeyPressed(KEY_NSPIRE_SPACE) || isKeyPressed(KEY_NSPIRE_C)) kp |= 32;

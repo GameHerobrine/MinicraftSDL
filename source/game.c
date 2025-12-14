@@ -45,6 +45,7 @@ char updatePerfctr = 0;
 char running = 1;
 char isingame = 0;
 char game_hasfocus = 0;
+char game_force_single_tick = 0;
 
 #ifdef NSPIRE
 uint16_t sdl_colors[256]; //rgb565
@@ -98,8 +99,10 @@ void game_reset() {
 
 	level_addEntity(game_level, game_player);
 
-	for(int i = 0; i < 5; ++i)
+	for(int i = 0; i < 5; ++i) {
 		level_trySpawn(game_levels + i, 5000);
+	}
+	game_force_single_tick = 1;
 }
 
 void game_init() {
@@ -328,6 +331,7 @@ void game_render() {
 		game_renderFocusNagger();
 	}
 }
+
 #ifdef NSPIRE
 uint16_t* _nsp_screenbuf = 0;
 #endif
@@ -499,7 +503,10 @@ int main(int argc, char** argv) {
 
 		unprocessed += (float)passed / usPerTick;
 #endif
-
+		if(game_force_single_tick) {
+			unprocessed = 1;
+			game_force_single_tick = 0;
+		}
 		while(unprocessed >= 1) {
 			++ticks;
 			game_tick();
@@ -607,7 +614,7 @@ int main(int argc, char** argv) {
 			continue;
 		}
 #endif
-		if(needsFlip) {
+		if(1 || needsFlip) {
 #ifdef NSPIRE
 			lcd_blit(_nsp_screenbuf, lcdtype);
 #else

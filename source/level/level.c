@@ -80,7 +80,7 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 	int xo = xScroll >> 4;
 	int yo = yScroll >> 4;
 	int w = (screen->w + 15) >> 4;
-	int h = (screen->h + 15) >> 4;
+	int h = (screen->h - 8) >> 4; //lowered from +15 to -8 cuz of the bottom bar that is hiding part of the world
 	
 	screen_set_offset(screen, xScroll, yScroll);
 	for(int y = yo; y <= h + yo; ++y){
