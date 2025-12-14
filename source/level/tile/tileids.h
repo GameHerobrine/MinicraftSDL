@@ -1,8 +1,9 @@
 #ifndef LEVEL_TILE_TILEIDS_H_
 #define LEVEL_TILE_TILEIDS_H_
 
+
 typedef enum tileid_{
-	GRASS,
+	GRASS = 1,
 	ROCK,
 	WATER,
 	FLOWER,

@@ -9,6 +9,7 @@
 #include <entity/slime.h>
 #include <entity/zombie.h>
 #include <entity/airwizard.h>
+#include <game.h>
 
 void level_init(Level* lvl, int w, int h, int level, Level* parent){
 	random_set_seed(&lvl->random, getTimeMS());
@@ -87,6 +88,12 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 		for(int x = xo; x <= w + xo; ++x){
 			unsigned char tile = level_get_tile(level, x, y);
 			tile_render(tile, screen, level, x, y);
+		}
+	}
+
+	for(int y = 0; y < screen->h; ++y) {
+		for(int x = 0; x < screen->w; ++x) {
+			screen->pixels[x + y * screen->w] = game_fullRendererScreen[(xScroll + x) + (yScroll + y) * (TILE_SIZE*LEVEL_WIDTH)];
 		}
 	}
 	
@@ -191,11 +198,6 @@ void renderLight(Level* level, Screen* screen, int xScroll, int yScroll){
 	}
 	
 	screen_set_offset(screen, 0, 0);
-}
-
-extern inline unsigned char level_get_tile(Level* level, int x, int y){
-	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return ROCK;
-	return level->tiles[x + y*level->w];
 }
 
 void level_set_tile(Level* level, int x, int y, int id, int data){

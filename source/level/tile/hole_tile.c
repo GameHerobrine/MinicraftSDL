@@ -23,16 +23,20 @@ void holetile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	char sd = d && tiles[level_get_tile(level, x, y + 1)].connectsToSand;
 	char sl = l && tiles[level_get_tile(level, x - 1, y)].connectsToSand;
 	char sr = r && tiles[level_get_tile(level, x + 1, y)].connectsToSand;
+	unsigned int spr = (HOLE) | (u << 8) | (d << 9) | (l << 10) | (r << 11) | (su << 12) | (sd << 13) | (sl << 14) | (sr << 15) | ((level->depth < 0) << 16);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		if (!u && !l) render_to_global(screen, x * 16 + 0, y * 16 + 0, 0, col, 0);
+		else render_to_global(screen, x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
 
-	if (!u && !l) render_screen(screen, x * 16 + 0, y * 16 + 0, 0, col, 0);
-	else render_screen(screen, x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+		if (!u && !r) render_to_global(screen, x * 16 + 8, y * 16 + 0, 1, col, 0);
+		else render_to_global(screen, x * 16 + 8, y * 16 + 0, (r ? 16 : 15) + (u ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
 
-	if (!u && !r) render_screen(screen, x * 16 + 8, y * 16 + 0, 1, col, 0);
-	else render_screen(screen, x * 16 + 8, y * 16 + 0, (r ? 16 : 15) + (u ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+		if (!d && !l) render_to_global(screen, x * 16 + 0, y * 16 + 8, 2, col, 0);
+		else render_to_global(screen, x * 16 + 0, y * 16 + 8, (l ? 14 : 15) + (d ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
 
-	if (!d && !l) render_screen(screen, x * 16 + 0, y * 16 + 8, 2, col, 0);
-	else render_screen(screen, x * 16 + 0, y * 16 + 8, (l ? 14 : 15) + (d ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
-	
-	if (!d && !r) render_screen(screen, x * 16 + 8, y * 16 + 8, 3, col, 0);
-	else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+		if (!d && !r) render_to_global(screen, x * 16 + 8, y * 16 + 8, 3, col, 0);
+		else render_to_global(screen, x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+	}
+
 }

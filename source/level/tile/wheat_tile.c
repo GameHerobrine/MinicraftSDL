@@ -70,11 +70,14 @@ void wheattile_render(TileID id, Screen* screen, Level* level, int x, int y){
 		if (age == 50) col = getColor4(0, 0, 50 + (icon) * 100, 40 + (icon - 3) * 2 * 100);
 		icon = 3;
 	}
-	
-	render_screen(screen, x * 16 + 0, y * 16 + 0, 4 + 3 * 32 + icon, col, 0);
-	render_screen(screen, x * 16 + 8, y * 16 + 0, 4 + 3 * 32 + icon, col, 0);
-	render_screen(screen, x * 16 + 0, y * 16 + 8, 4 + 3 * 32 + icon, col, 1);
-	render_screen(screen, x * 16 + 8, y * 16 + 8, 4 + 3 * 32 + icon, col, 1);
+	unsigned int spr = (WHEAT) |((level->depth < 0) << 8) | (icon << 9);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		render_to_global(screen, x * 16 + 0, y * 16 + 0, 4 + 3 * 32 + icon, col, 0);
+		render_to_global(screen, x * 16 + 8, y * 16 + 0, 4 + 3 * 32 + icon, col, 0);
+		render_to_global(screen, x * 16 + 0, y * 16 + 8, 4 + 3 * 32 + icon, col, 1);
+		render_to_global(screen, x * 16 + 8, y * 16 + 8, 4 + 3 * 32 + icon, col, 1);
+	}
 }
 
 

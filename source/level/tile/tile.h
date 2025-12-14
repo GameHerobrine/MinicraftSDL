@@ -22,10 +22,10 @@ typedef struct{
 		add_ore_ ore;
 	} add;
 	
-	char connectsToGrass : 1;
-	char connectsToSand : 1;
-	char connectsToLava : 1;
-	char connectsToWater : 1;
+	char connectsToGrass;
+	char connectsToSand;
+	char connectsToLava;
+	char connectsToWater;
 } Tile;
 struct _Player;
 struct _Item;

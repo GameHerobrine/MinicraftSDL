@@ -11,11 +11,17 @@ void cactustile_init(TileID id){
 
 void cactustile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(20, 40, 50, level->sandColor);
-	
-	render_screen(screen, x*16 + 0, y * 16 + 0, 8 + 2 * 32, col, 0);
-	render_screen(screen, x*16 + 8, y * 16 + 0, 9 + 2 * 32, col, 0);
-	render_screen(screen, x*16 + 0, y * 16 + 8, 8 + 3 * 32, col, 0);
-	render_screen(screen, x*16 + 8, y * 16 + 8, 9 + 3 * 32, col, 0);
+
+	static unsigned int spr = CACTUS;
+
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		render_to_global(screen, x * 16 + 0, y * 16 + 0, 8 + 2 * 32, col, 0);
+		render_to_global(screen, x*16 + 8, y * 16 + 0, 9 + 2 * 32, col, 0);
+		render_to_global(screen, x*16 + 0, y * 16 + 8, 8 + 3 * 32, col, 0);
+		render_to_global(screen, x*16 + 8, y * 16 + 8, 9 + 3 * 32, col, 0);
+	}
+
 }
 
 

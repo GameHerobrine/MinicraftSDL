@@ -64,18 +64,21 @@ void grasstile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	char d = !tiles[level_get_tile(level, x, y + 1)].connectsToGrass;
 	char l = !tiles[level_get_tile(level, x - 1, y)].connectsToGrass;
 	char r = !tiles[level_get_tile(level, x + 1, y)].connectsToGrass;
+	unsigned int spr = (GRASS) | (u << 8) | (d << 9) | (l << 10) | (r << 11) | ((level->depth < 0) << 12);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		if (!u && !l) render_to_global(screen, x * 16 + 0, y * 16 + 0, 0, col, 0);
+		else render_to_global(screen, x * 16 + 0, y * 16 + 0, (l ? 11 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
 
-	if (!u && !l) render_screen(screen, x * 16 + 0, y * 16 + 0, 0, col, 0);
-	else render_screen(screen, x * 16 + 0, y * 16 + 0, (l ? 11 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
+		if (!u && !r) render_to_global(screen, x * 16 + 8, y * 16 + 0, 1, col, 0);
+		else render_to_global(screen, x * 16 + 8, y * 16 + 0, (r ? 13 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
 
-	if (!u && !r) render_screen(screen, x * 16 + 8, y * 16 + 0, 1, col, 0);
-	else render_screen(screen, x * 16 + 8, y * 16 + 0, (r ? 13 : 12) + (u ? 0 : 1) * 32, transitionColor, 0);
+		if (!d && !l) render_to_global(screen, x * 16 + 0, y * 16 + 8, 2, col, 0);
+		else render_to_global(screen, x * 16 + 0, y * 16 + 8, (l ? 11 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
 
-	if (!d && !l) render_screen(screen, x * 16 + 0, y * 16 + 8, 2, col, 0);
-	else render_screen(screen, x * 16 + 0, y * 16 + 8, (l ? 11 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
-	
-	if (!d && !r) render_screen(screen, x * 16 + 8, y * 16 + 8, 3, col, 0);
-	else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 13 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
+		if (!d && !r) render_to_global(screen, x * 16 + 8, y * 16 + 8, 3, col, 0);
+		else render_to_global(screen, x * 16 + 8, y * 16 + 8, (r ? 13 : 12) + (d ? 2 : 1) * 32, transitionColor, 0);
+	}
 }	
 
 void grasstile_tick(TileID id, Level* level, int xt, int yt){

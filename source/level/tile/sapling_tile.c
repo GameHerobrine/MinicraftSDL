@@ -19,7 +19,11 @@ void saplingtile_init(TileID id, TileID onType, TileID growsTo){
 void saplingtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	tile_render(tiles[id].add.sapling.onType, screen, level, x, y);
 	int col = getColor4(10, 40, 50, -1);
-	render_screen(screen, x * 16 + 4, y * 16 + 4, 11 + 3 * 32, col, 0);
+	unsigned int spr = (id) | ((level->depth < 0) << 8);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		render_to_global(screen, x * 16 + 4, y * 16 + 4, 11 + 3 * 32, col, 0);
+	}
 }
 
 void saplingtile_tick(TileID id, Level* level, int xt, int yt){

@@ -1,4 +1,5 @@
 #include "screen.h"
+#include <game.h>
 
 const int BIT_MIRROR_X = 0x01;
 const int BIT_MIRROR_Y = 0x02;
@@ -17,6 +18,31 @@ void create_screen(Screen* screen, int w, int h, SpriteSheet* sheet){
 void clear_screen(Screen* screen, int color){
 	for(int i = 0; i < screen->pixelsSize; ++i){
 		screen->pixels[i] = color & 255;
+	}
+}
+
+void render_to_global(Screen* screen, int xp, int yp, int tile, int colors, int bits) {
+	char mirrorX = (bits & BIT_MIRROR_X);
+	char mirrorY = (bits & BIT_MIRROR_Y);
+	int xTile = tile % 32;
+	int yTile = tile / 32;
+	int toffs = xTile * 8 + yTile * 8 * screen->sheet->width;
+
+	for(int y = 0; y < 8; ++y){
+		int ys = y;
+		if(mirrorY) ys = 7 - y;
+		if(y + yp < 0 || y + yp >= TILE_SIZE*LEVEL_HEIGHT) continue;
+
+		for(int x = 0; x < 8; ++x){
+			if(x + xp < 0 || x + xp >= TILE_SIZE*LEVEL_WIDTH) continue;
+
+			int xs = x;
+			if(mirrorX) xs = 7 - x;
+			unsigned char col = (colors >> (screen->sheet->pixels[xs + ys * screen->sheet->width + toffs] * 8)) & 255;
+			if(col < 255) {
+				game_fullRendererScreen[(x + xp) + (y + yp) * (TILE_SIZE*LEVEL_WIDTH)] = col;
+			}
+		}
 	}
 }
 

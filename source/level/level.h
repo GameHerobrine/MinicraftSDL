@@ -4,6 +4,7 @@
 #include <utils/arraylist.h>
 #include <utils/javarandom.h>
 #include <entity/entity.h>
+#include <level/tile/tileids.h>
 
 typedef struct _Level{
 	Random random;
@@ -21,7 +22,10 @@ typedef struct _Level{
 
 void level_trySpawn(Level* level, int count);
 void level_init(Level* lvl, int w, int h, int level, Level* parent);
-unsigned char level_get_tile(Level* level, int x, int y);
+static inline unsigned char level_get_tile(Level* level, int x, int y){
+	if(x < 0 || y < 0 || x >= level->w || y >= level->h) return ROCK;
+	return level->tiles[x + y*level->w];
+}
 unsigned char level_get_data(Level* level, int x, int y);
 void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScroll);
 void level_tick(Level* level);

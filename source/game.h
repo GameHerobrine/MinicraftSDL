@@ -1,6 +1,7 @@
-#include "gfx/spritesheet.h"
+#include <gfx/spritesheet.h>
 #include <entity/player.h>
 #include <screen/menu.h>
+#include <game2.h>
 
 extern Player* game_player;
 extern int game_gameTime;
@@ -15,7 +16,6 @@ void game_won();
 
 #define HEIGHT 120
 #define WIDTH 160
-
 #ifndef NSPIRE
 #define SCALE 3
 #else

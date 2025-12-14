@@ -28,6 +28,8 @@
 Screen game_screen;
 Screen game_lightScreen;
 Level game_levels[5] = {0};
+unsigned char game_fullRendererScreen[TILE_SIZE * TILE_SIZE * LEVEL_WIDTH * LEVEL_HEIGHT];
+unsigned int game_levelSpriteIds[LEVEL_WIDTH * LEVEL_HEIGHT];
 char click_to_focus[] = "Click to focus!";
 Level* game_level;
 Player* game_player = 0;
@@ -82,6 +84,8 @@ void game_reset() {
 	}
 	if(!isingame) return;
 	memset(game_levels, 0, sizeof(game_levels));
+	memset(game_fullRendererScreen, 0, sizeof(game_fullRendererScreen));
+	memset(game_levelSpriteIds, 0, sizeof(game_levelSpriteIds));
 	game_currentLevel = 3;
 	level_init(game_levels + 4, 128, 128, 1, 0);
 	level_init(game_levels + 3, 128, 128, 0, game_levels + 4);
@@ -126,6 +130,10 @@ void game_init() {
 				int g1 = ((gg + mid * 1) / 2) * 230 / 255 + 10;
 				int b1 = ((bb + mid * 1) / 2) * 230 / 255 + 10;
 #ifdef NSPIRE
+				if(r == 0 && g == 0 && b == 0) r1 = g1 = b1 = 0;
+				//TODO better rgb->rgb565 translation: the current one results in ghost pixels when sprites change sometimes
+				//(most noticeable if u remove the above line and switch screens when in main menu:
+				//the text stays on the screen but it is way harder to see)
 				sdl_colors[pp] = ((r1 & 0b11111000) << 8) | ((g1 & 0b11111100) << 3) | (b1 >> 3);
 #else
 				sdl_colors[pp].r = r1;

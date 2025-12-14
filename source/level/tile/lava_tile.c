@@ -27,17 +27,18 @@ void lavatile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	char sl = l && tiles[level_get_tile(level, x - 1, y)].connectsToSand;
 	char sr = r && tiles[level_get_tile(level, x + 1, y)].connectsToSand;
 
-	if (!u && !l) render_screen(screen, x * 16 + 0, y * 16 + 0, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
-	else render_screen(screen, x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
+	screen_set_sprite(x, y, 0);
+	if (!u && !l) render_to_global(screen, x * 16 + 0, y * 16 + 0, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
+	else render_to_global(screen, x * 16 + 0, y * 16 + 0, (l ? 14 : 15) + (u ? 0 : 1) * 32, (su || sl) ? transitionColor2 : transitionColor1, 0);
 
-	if (!u && !r) render_screen(screen, x * 16 + 8, y * 16 + 0, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
-	else render_screen(screen, x * 16 + 8, y * 16 + 0, (r ? 16 : 15) + (u ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
+	if (!u && !r) render_to_global(screen, x * 16 + 8, y * 16 + 0, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
+	else render_to_global(screen, x * 16 + 8, y * 16 + 0, (r ? 16 : 15) + (u ? 0 : 1) * 32, (su || sr) ? transitionColor2 : transitionColor1, 0);
 
-	if (!d && !l) render_screen(screen, x * 16 + 0, y * 16 + 8, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
-	else render_screen(screen, x * 16 + 0, y * 16 + 8, (l ? 14 : 15) + (d ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
-	
-	if (!d && !r) render_screen(screen, x * 16 + 8, y * 16 + 8, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
-	else render_screen(screen, x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
+	if (!d && !l) render_to_global(screen, x * 16 + 0, y * 16 + 8, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
+	else render_to_global(screen, x * 16 + 0, y * 16 + 8, (l ? 14 : 15) + (d ? 2 : 1) * 32, (sd || sl) ? transitionColor2 : transitionColor1, 0);
+
+	if (!d && !r) render_to_global(screen, x * 16 + 8, y * 16 + 8, random_next_int(&wRandom, 4), col, random_next_int(&wRandom, 4));
+	else render_to_global(screen, x * 16 + 8, y * 16 + 8, (r ? 16 : 15) + (d ? 2 : 1) * 32, (sd || sr) ? transitionColor2 : transitionColor1, 0);
 }
 
 void lavatile_tick(TileID id, Level* level, int xt, int yt){

@@ -14,13 +14,16 @@ void flowertile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int data = level_get_data(level, x, y);
 	int shape = (data / 16) % 2;
 	int flowerCol = getColor4(10, level->grassColor, 555, 440);
-	
-	if(shape == 0) render_screen(screen, x * 16 + 0, y * 16 + 0, 1 + 1 * 32, flowerCol, 0);
-	if(shape == 1) render_screen(screen, x * 16 + 8, y * 16 + 0, 1 + 1 * 32, flowerCol, 0);
-	
-	if(shape == 1) render_screen(screen, x * 16 + 0, y * 16 + 8, 1 + 1 * 32, flowerCol, 0);
-	if(shape == 0) render_screen(screen, x * 16 + 8, y * 16 + 8, 1 + 1 * 32, flowerCol, 0);
-	
+
+	unsigned int spr = (id) | (shape << 8) | ((level->depth < 0) << 9);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		if(shape == 0) render_to_global(screen, x * 16 + 0, y * 16 + 0, 1 + 1 * 32, flowerCol, 0);
+		if(shape == 1) render_to_global(screen, x * 16 + 8, y * 16 + 0, 1 + 1 * 32, flowerCol, 0);
+
+		if(shape == 1) render_to_global(screen, x * 16 + 0, y * 16 + 8, 1 + 1 * 32, flowerCol, 0);
+		if(shape == 0) render_to_global(screen, x * 16 + 8, y * 16 + 8, 1 + 1 * 32, flowerCol, 0);
+	}
 }
 
 char flowertile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){

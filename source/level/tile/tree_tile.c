@@ -79,18 +79,21 @@ void treetile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	char ur = level_get_tile(level, x + 1, y - 1) == id;
 	char dl = level_get_tile(level, x - 1, y + 1) == id;
 	char dr = level_get_tile(level, x + 1, y + 1) == id;
-	
-	if(u && ul && l) render_screen(screen, x * 16 + 0, y * 16 + 0, 10 + 1 * 32, col, 0);
-	else render_screen(screen, x * 16 + 0, y * 16 + 0, 9 + 0 * 32, col, 0);
-	
-	if(u && ur && r) render_screen(screen, x * 16 + 8, y * 16 + 0, 10 + 2 * 32, barkCol2, 0);
-	else render_screen(screen, x * 16 + 8, y * 16 + 0, 10 + 0 * 32, col, 0);
-	
-	if(d && dl && l) render_screen(screen, x * 16 + 0, y * 16 + 8, 10 + 2 * 32, barkCol2, 0);
-	else render_screen(screen, x * 16 + 0, y * 16 + 8, 9 + 1 * 32, barkCol1, 0);
-	
-	if(d && dr && r) render_screen(screen, x * 16 + 8, y * 16 + 8, 10 + 1 * 32, col, 0);
-	else render_screen(screen, x * 16 + 8, y * 16 + 8, 10 + 3 * 32, barkCol2, 0);
+	unsigned int spr = (TREE) | (u << 8) | (d << 9) | (l << 10) | (r << 11) | (ul << 12) | (ur << 13) | (dl << 14) | (dr << 15) | ((level->depth < 0) << 16);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		if(u && ul && l) render_to_global(screen, x * 16 + 0, y * 16 + 0, 10 + 1 * 32, col, 0);
+		else render_to_global(screen, x * 16 + 0, y * 16 + 0, 9 + 0 * 32, col, 0);
+
+		if(u && ur && r) render_to_global(screen, x * 16 + 8, y * 16 + 0, 10 + 2 * 32, barkCol2, 0);
+		else render_to_global(screen, x * 16 + 8, y * 16 + 0, 10 + 0 * 32, col, 0);
+
+		if(d && dl && l) render_to_global(screen, x * 16 + 0, y * 16 + 8, 10 + 2 * 32, barkCol2, 0);
+		else render_to_global(screen, x * 16 + 0, y * 16 + 8, 9 + 1 * 32, barkCol1, 0);
+
+		if(d && dr && r) render_to_global(screen, x * 16 + 8, y * 16 + 8, 10 + 1 * 32, col, 0);
+		else render_to_global(screen, x * 16 + 8, y * 16 + 8, 10 + 3 * 32, barkCol2, 0);
+	}
 }
 
 void treetile_tick(TileID id, Level* level, int xt, int yt){

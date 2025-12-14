@@ -16,11 +16,14 @@ void oretile_init(TileID id, Resource* toDrop){
 }
 void oretile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	tiles[id].add.ore.color = (tiles[id].add.ore.toDrop->color & 0xffffff00) + getColor(level->dirtColor);
-	
-	render_screen(screen, x * 16 + 0, y * 16 + 0, 17 + 1 * 32, tiles[id].add.ore.color, 0);
-	render_screen(screen, x * 16 + 8, y * 16 + 0, 18 + 1 * 32, tiles[id].add.ore.color, 0);
-	render_screen(screen, x * 16 + 0, y * 16 + 8, 17 + 2 * 32, tiles[id].add.ore.color, 0);
-	render_screen(screen, x * 16 + 8, y * 16 + 8, 18 + 2 * 32, tiles[id].add.ore.color, 0);
+	unsigned int spr = (id) | ((level->depth < 0) << 8);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		render_to_global(screen, x * 16 + 0, y * 16 + 0, 17 + 1 * 32, tiles[id].add.ore.color, 0);
+		render_to_global(screen, x * 16 + 8, y * 16 + 0, 18 + 1 * 32, tiles[id].add.ore.color, 0);
+		render_to_global(screen, x * 16 + 0, y * 16 + 8, 17 + 2 * 32, tiles[id].add.ore.color, 0);
+		render_to_global(screen, x * 16 + 8, y * 16 + 8, 18 + 2 * 32, tiles[id].add.ore.color, 0);
+	}
 }
 
 

@@ -1,15 +1,19 @@
-#include "tile.h"
+#include <level/tile/tile.h>
 #include <gfx/color.h>
 #include <entity/player.h>
 #include <item/item.h>
 
 void farmlandtile_render(TileID id, Screen* screen, Level* level, int x, int y){
 	int col = getColor4(level->dirtColor - 121, level->dirtColor - 11, level->dirtColor, level->dirtColor + 111);
-	
-	render_screen(screen, x*16 + 0, y * 16 + 0, 2 + 32, col, 1);
-	render_screen(screen, x*16 + 8, y * 16 + 0, 2 + 32, col, 0);
-	render_screen(screen, x*16 + 0, y * 16 + 8, 2 + 32, col, 0);
-	render_screen(screen, x*16 + 8, y * 16 + 8, 2 + 32, col, 1);
+
+	unsigned int spr = FARMLAND | ((level->depth < 0) << 8);
+	if(screen_get_sprite(x, y) != spr) {
+		screen_set_sprite(x, y, spr);
+		render_to_global(screen, x*16 + 0, y * 16 + 0, 2 + 32, col, 1);
+		render_to_global(screen, x*16 + 8, y * 16 + 0, 2 + 32, col, 0);
+		render_to_global(screen, x*16 + 0, y * 16 + 8, 2 + 32, col, 0);
+		render_to_global(screen, x*16 + 8, y * 16 + 8, 2 + 32, col, 1);
+	}
 }
 
 char farmtile_interact(TileID id, Level* level, int xt, int yt, Player* player, Item* item, int attackDir){

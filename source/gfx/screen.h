@@ -1,6 +1,6 @@
 #ifndef GFX_SCREEN_H_
 #define GFX_SCREEN_H_
-
+#include <game2.h>
 #include "spritesheet.h"
 
 extern const int BIT_MIRROR_X;
@@ -19,7 +19,12 @@ typedef struct _Screen{
 	SpriteSheet* sheet;
 } Screen;
 
-
+static inline unsigned int screen_get_sprite(int x, int y) {
+	return game_levelSpriteIds[(x) + (y) * (LEVEL_WIDTH)];
+}
+static inline void screen_set_sprite(int x, int y, unsigned int sprite){
+	game_levelSpriteIds[(x) + (y) * (LEVEL_WIDTH)] = sprite;
+}
 void create_screen(Screen* screen, int w, int h, SpriteSheet* sheet);
 void clear_screen(Screen* screen, int color);
 void render_screen(Screen* screen, int xp, int yp, int tile, int colors, int bits);
@@ -27,5 +32,6 @@ void screen_set_offset(Screen* screen, int x, int y);
 void screen_overlay(Screen* screen, Screen* screen2, int xa, int ya);
 void screen_render_light(Screen* screen, int x, int y, int r);
 void delete_screen(Screen* screen);
+void render_to_global(Screen* screen, int xp, int yp, int tile, int colors, int bits);
 
 #endif
