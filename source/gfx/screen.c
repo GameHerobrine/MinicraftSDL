@@ -5,7 +5,7 @@ const int BIT_MIRROR_X = 0x01;
 const int BIT_MIRROR_Y = 0x02;
 const int dither[] = {0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5, };
 
-void create_screen(Screen* screen, int w, int h, SpriteSheet* sheet){
+void create_screen(Screen* screen, int w, int h, const SpriteSheet* sheet){
 	screen->sheet = sheet;
 	screen->w = w;
 	screen->h = h;
@@ -39,9 +39,7 @@ void render_to_global(Screen* screen, int xp, int yp, int tile, int colors, int 
 			int xs = x;
 			if(mirrorX) xs = 7 - x;
 			unsigned char col = (colors >> (screen->sheet->pixels[xs + ys * screen->sheet->width + toffs] * 8)) & 255;
-			if(col < 255) {
-				game_fullRendererScreen[(x + xp) + (y + yp) * (TILE_SIZE*LEVEL_WIDTH)] = col;
-			}
+			game_fullRendererScreen[(x + xp) + (y + yp) * (TILE_SIZE*LEVEL_WIDTH)] = col;
 		}
 	}
 }

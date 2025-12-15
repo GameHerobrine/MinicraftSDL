@@ -1,28 +1,6 @@
 #include "javarandom.h"
 #include <math.h>
-static const long long int multiplier = 0x5DEECE66D;
-static const long long int mask = ((long long int)1 << 48) - 1;
-static const long long int addend = 0xB;
 
-extern inline void random_set_seed(Random* random, int seed){
-	random->seed = (seed ^ multiplier) & mask;
-	random->haveNextNextGaussian = 0;
-}
-
-extern inline int random_next(Random* random, int bits){
-	long long int oldseed = 0, nextseed = 0;
-	long long int seed = random->seed;
-	
-	oldseed = seed;
-	nextseed = (oldseed * multiplier + addend) & mask;
-	
-	random->seed = nextseed;
-	
-	return (int)((unsigned long long int)nextseed >> (48 - bits));
-}
-extern inline char random_next_boolean(Random* random){
-	return random_next(random, 1) != 0;
-}
 extern inline int random_next_int(Random* random, int bound){
 	
 	int r = random_next(random, 31);

@@ -86,7 +86,7 @@ void game_reset() {
 	memset(game_levels, 0, sizeof(game_levels));
 	memset(game_fullRendererScreen, 0, sizeof(game_fullRendererScreen));
 	memset(game_levelSpriteIds, 0, sizeof(game_levelSpriteIds));
-	game_currentLevel = 3;
+	game_currentLevel = 4;
 	level_init(game_levels + 4, 128, 128, 1, 0);
 	level_init(game_levels + 3, 128, 128, 0, game_levels + 4);
 	level_init(game_levels + 2, 128, 128, -1, game_levels + 3);
@@ -552,7 +552,6 @@ int main(int argc, char** argv) {
 		flipYMin = winHeight;
 		flipYMax = 0;
 #ifdef LIMITFPS
-
 		if(now < nextExceptedFrameRenderTime) {
 			goto SKIP_RENDER;
 		} else {
@@ -611,7 +610,6 @@ int main(int argc, char** argv) {
 #endif
 #endif
 				}
-
 			}
 		}
 
@@ -636,7 +634,9 @@ int main(int argc, char** argv) {
 	#define PRNT_DELAY 1000000
 #endif
 		if(now - lastPrinted > PRNT_DELAY){
+#ifndef NSPIRE
 			printf("%d ticks, %d fps\n", ticks, frames);
+#endif
 			g_ticks = ticks;
 			g_frames = frames;
 			ticks = 0;

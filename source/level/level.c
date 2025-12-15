@@ -91,11 +91,26 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 		}
 	}
 
-	for(int y = 0; y < screen->h; ++y) {
-		for(int x = 0; x < screen->w; ++x) {
-			screen->pixels[x + y * screen->w] = game_fullRendererScreen[(xScroll + x) + (yScroll + y) * (TILE_SIZE*LEVEL_WIDTH)];
+
+	if(level->depth > 0) {
+		for(int y = 0; y < screen->h; ++y) {
+			int ypx = (yScroll + y);
+			for(int x = 0; x < screen->w; ++x) {
+				int xpx = (xScroll + x);
+				unsigned char c = game_fullRendererScreen[xpx + ypx * (TILE_SIZE * LEVEL_WIDTH)];
+				if(c < 255) {
+					screen->pixels[x + y * screen->w] = c;
+				}
+			}
+		}
+	}else{
+		for(int y = 0; y < screen->h; ++y) {
+			for(int x = 0; x < screen->w; ++x) {
+				screen->pixels[x + y * screen->w] = game_fullRendererScreen[(xScroll + x) + (yScroll + y) * (TILE_SIZE*LEVEL_WIDTH)];
+			}
 		}
 	}
+
 	
 	screen_set_offset(screen, 0, 0);
 	

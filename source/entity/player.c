@@ -450,7 +450,7 @@ char player_findStartPos(Player* player, Level* level){
 		int x = random_next_int(random, level->w);
 		int y = random_next_int(random, level->h);
 
-		if(level_get_tile(level, x, y) == GRASS){
+		if(level_get_tile(level, x, y) == CLOUD){
 			player->mob.entity.x = x * 16 + 8;
 			player->mob.entity.y = y * 16 + 8;
 			return 1;

@@ -16,7 +16,7 @@ typedef struct _Screen{
 	unsigned char* pixels;
 	int pixelsSize;
 
-	SpriteSheet* sheet;
+	const SpriteSheet* sheet;
 } Screen;
 
 static inline unsigned int screen_get_sprite(int x, int y) {
@@ -25,7 +25,7 @@ static inline unsigned int screen_get_sprite(int x, int y) {
 static inline void screen_set_sprite(int x, int y, unsigned int sprite){
 	game_levelSpriteIds[(x) + (y) * (LEVEL_WIDTH)] = sprite;
 }
-void create_screen(Screen* screen, int w, int h, SpriteSheet* sheet);
+void create_screen(Screen* screen, int w, int h, const SpriteSheet* sheet);
 void clear_screen(Screen* screen, int color);
 void render_screen(Screen* screen, int xp, int yp, int tile, int colors, int bits);
 void screen_set_offset(Screen* screen, int x, int y);

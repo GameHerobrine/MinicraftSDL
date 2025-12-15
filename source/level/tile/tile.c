@@ -128,7 +128,11 @@ void tile_render(TileID id, Screen* screen, Level* level, int x, int y){
 			break;
 		default:
 		case INFINITE_FALL:
-			//render nothing
+			for(int xx = 0; xx < 16; ++xx){
+				for(int yy = 0; yy < 16; ++yy){
+					game_fullRendererScreen[(x* 16 + xx) + (y* 16 + yy) * (TILE_SIZE*LEVEL_WIDTH)] = 255;
+				}
+			}
 			break;
 	}
 }
