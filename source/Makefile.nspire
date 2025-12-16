@@ -6,7 +6,7 @@ GXX = nspire-g++
 LD  = nspire-ld
 GENZEHN = genzehn
 
-GCCFLAGS = -Wall -W -marm -I. -DNSPIRE -DFPS_AND_TICKS
+GCCFLAGS = -Wall -W -marm -I. -DNSPIRE -DFPS_AND_TICKS -DGODMODE
 LDFLAGS = 
 ZEHNFLAGS = --name "minicraft-sdl" --uses-lcd-blit true
 

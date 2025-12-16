@@ -605,7 +605,7 @@ int main(int argc, char** argv) {
 
 		SKIP_RENDER:
 #ifdef NSPIRE
-		if(nsp_exit.down && current_menu == mid_TITLE){
+		if(nsp_exit.down/* && current_menu == mid_TITLE*/){
 			running = 0;
 			continue;
 		}
