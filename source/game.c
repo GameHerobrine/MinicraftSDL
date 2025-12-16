@@ -130,11 +130,10 @@ void game_init() {
 				int g1 = ((gg + mid * 1) / 2) * 230 / 255 + 10;
 				int b1 = ((bb + mid * 1) / 2) * 230 / 255 + 10;
 #ifdef NSPIRE
-				if(r == 0 && g == 0 && b == 0) r1 = g1 = b1 = 0;
-				//TODO better rgb->rgb565 translation: the current one results in ghost pixels when sprites change sometimes
-				//(most noticeable if u remove the above line and switch screens when in main menu:
-				//the text stays on the screen but it is way harder to see)
-				sdl_colors[pp] = ((r1 & 0b11111000) << 8) | ((g1 & 0b11111100) << 3) | (b1 >> 3);
+				r1 /= 8;
+				g1 /= 8;
+				b1 /= 8;
+				sdl_colors[pp] = (r1 << 10) | (g1 << 5) | (b1);
 #else
 				sdl_colors[pp].r = r1;
 				sdl_colors[pp].g = g1;
@@ -331,7 +330,7 @@ void game_render() {
 }
 
 #ifdef NSPIRE
-uint16_t* _nsp_screenbuf = 0;
+uint8_t* _nsp_screenbuf = 0;
 #endif
 int main(int argc, char** argv) {
 	unsigned long long int lastTime = getTimeUS();
@@ -399,11 +398,16 @@ int main(int argc, char** argv) {
 		if(b == 1) goto QUIT;
 		lcdtype = SCR_320x240_565;
 	}
+
 	_nsp_screenbuf = malloc(sizeof(*_nsp_screenbuf) * 320 * 240);
 	for(int i = 0; i < 320 * 240; ++i)
 		_nsp_screenbuf[i] = 0x0000;
 
-	lcd_init(lcdtype);
+	lcd_init(SCR_320x240_8);
+	volatile unsigned int* palette = (volatile unsigned int*)0xC0000200;
+	for(int i = 0; i < 128; ++i) {
+		palette[i] = (sdl_colors[i*2 + 1] << 16) | (sdl_colors[i*2] << 0);
+	}
 #endif
 
 #ifdef LEVELGENTEST
@@ -561,22 +565,22 @@ int main(int argc, char** argv) {
 			for(int x = 0; x < game_screen.w; ++x) {
 				pixel.x = x * SCALE;
 				int index = y * game_screen.w + x;
-				int screen_px = game_screen.pixels[index];
+				unsigned char screen_px = game_screen.pixels[index];
 
 				if(screen_px != prevBuf[index]) {
 					prevBuf[index] = screen_px;
 					needsFlip = 1;
 #ifdef NSPIRE
 					if(lcdtype == SCR_240x320_565) {
-						_nsp_screenbuf[pixel.x*240 + pixel.y] = sdl_colors[screen_px];
-						_nsp_screenbuf[(pixel.x+1)*240 + pixel.y] = sdl_colors[screen_px];
-						_nsp_screenbuf[(pixel.x)*240 + (pixel.y+1)] = sdl_colors[screen_px];
-						_nsp_screenbuf[(pixel.x+1)*240 + (pixel.y+1)] = sdl_colors[screen_px];
+						_nsp_screenbuf[pixel.x*240 + pixel.y] = screen_px;
+						_nsp_screenbuf[(pixel.x+1)*240 + pixel.y] = screen_px;
+						_nsp_screenbuf[(pixel.x)*240 + (pixel.y+1)] = screen_px;
+						_nsp_screenbuf[(pixel.x+1)*240 + (pixel.y+1)] = screen_px;
 					} else {
-						_nsp_screenbuf[pixel.x + pixel.y*320] = sdl_colors[screen_px];
-						_nsp_screenbuf[(pixel.x+1) + pixel.y*320] = sdl_colors[screen_px];
-						_nsp_screenbuf[(pixel.x) + (pixel.y+1)*320] = sdl_colors[screen_px];
-						_nsp_screenbuf[(pixel.x+1) + (pixel.y+1)*320] = sdl_colors[screen_px];
+						_nsp_screenbuf[pixel.x + pixel.y*320] = screen_px;
+						_nsp_screenbuf[(pixel.x+1) + pixel.y*320] = screen_px;
+						_nsp_screenbuf[(pixel.x) + (pixel.y+1)*320] = screen_px;
+						_nsp_screenbuf[(pixel.x+1) + (pixel.y+1)*320] = screen_px;
 					}
 #else
 					int xmin = pixel.x;
@@ -612,7 +616,13 @@ int main(int argc, char** argv) {
 #endif
 		if(1 || needsFlip) {
 #ifdef NSPIRE
-			lcd_blit(_nsp_screenbuf, lcdtype);
+			if(lcdtype == SCR_240x320_565) {
+				//imagine not having 240x320_8
+				//must use raw copy to avoid extreme slowdown by compat mode
+				memcpy(REAL_SCREEN_BASE_ADDRESS, _nsp_screenbuf, 320 * 240 * sizeof(uint8_t));
+			} else {
+				lcd_blit(_nsp_screenbuf, SCR_320x240_8);
+			}
 #else
 			SDL_UpdateRect(surface, flipXMin, flipYMin, flipXMax-flipXMin, flipYMax-flipYMin);
 #endif
