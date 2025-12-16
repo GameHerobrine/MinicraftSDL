@@ -314,16 +314,6 @@ void game_render() {
 		if(xScroll > game_level->w * 16 - game_screen.w - 16) xScroll = game_level->w * 16 - game_screen.w - 16;
 		if(yScroll > game_level->h * 16 - game_screen.h - 16) yScroll = game_level->h * 16 - game_screen.h - 16;
 
-		if(game_currentLevel > 3) {
-			int col = getColor4(20, 20, 121, 121);
-
-			for(int y = 0; y < 14; ++y) {
-				for(int x = 0; x < 24; ++x) {
-					render_screen(&game_screen, x * 8 - ((xScroll / 4) & 7), y * 8 - ((yScroll / 4) & 7), 0, col, 0);
-				}
-			}
-		}
-
 		level_renderBackground(game_level, &game_screen, xScroll, yScroll);
 		level_renderSprites(game_level, &game_screen, xScroll, yScroll);
 

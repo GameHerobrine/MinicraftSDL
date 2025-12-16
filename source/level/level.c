@@ -1,6 +1,6 @@
 #include <utils/javarandom.h>
 #include <utils/utils.h>
-#include "../gfx/screen.h"
+#include <gfx/screen.h>
 #include "tile/tile.h"
 #include <utils/arraylist.h>
 #include "level.h"
@@ -10,6 +10,7 @@
 #include <entity/zombie.h>
 #include <entity/airwizard.h>
 #include <game.h>
+#include <gfx/color.h>
 
 void level_init(Level* lvl, int w, int h, int level, Level* parent){
 	random_set_seed(&lvl->random, getTimeMS());
@@ -91,8 +92,20 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 		}
 	}
 
+	/*
+	if(game_currentLevel > 3) {
+			int col = getColor4(20, 20, 121, 121);
+
+		for(int y = 0; y < 14; ++y) {
+			for(int x = 0; x < 24; ++x) {
+				render_screen(&game_screen, x * 8 - ((xScroll / 4) & 7), y * 8 - ((yScroll / 4) & 7), 0, col, 0);
+			}
+		}
+	}
+	*/
 
 	if(level->depth > 0) {
+		int col = getColor4(20, 20, 121, 121);
 		for(int y = 0; y < screen->h; ++y) {
 			int ypx = (yScroll + y);
 			for(int x = 0; x < screen->w; ++x) {
@@ -100,6 +113,12 @@ void level_renderBackground(Level* level, Screen* screen, int xScroll, int yScro
 				unsigned char c = game_fullRendererScreen[xpx + ypx * (TILE_SIZE * LEVEL_WIDTH)];
 				if(c < 255) {
 					screen->pixels[x + y * screen->w] = c;
+				} else {
+					unsigned int xx = (x + ((xScroll / 4) & 7));
+					unsigned int yy = (y + ((yScroll / 4) & 7));
+
+					unsigned char coll = (col >> (screen->sheet->pixels[(xx % 8) + (yy % 8) * screen->sheet->width] * 8)) & 255;
+					screen->pixels[x + y * screen->w] = coll;
 				}
 			}
 		}
