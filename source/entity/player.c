@@ -321,7 +321,7 @@ void player_tick(Player* player){
 
 	if(player->staminaRechargeDelay == 0){
 		++player->staminaRecharge;
-		if(call_entity_isSwimming(player)){
+		if(call_entity_isSwimming(&player->mob.entity)){
 			player->staminaRecharge = 0;
 		}
 
@@ -338,9 +338,9 @@ void player_tick(Player* player){
 	if(left.down) --xa;
 	if(right.down) ++xa;
 
-	if(call_entity_isSwimming(player) && player->mob.tickTime % 60 == 0){
+	if(call_entity_isSwimming(&player->mob.entity) && player->mob.tickTime % 60 == 0){
 		if(player->stamina > 0) --player->stamina;
-		else mob_hurt(&player->mob, player, 1, player->mob.dir ^ 1);
+		else mob_hurt(&player->mob, &player->mob, 1, player->mob.dir ^ 1);
 	}
 
 	if(player->staminaRechargeDelay % 2 == 0){
@@ -392,7 +392,7 @@ void player_render(Player* player, Screen* screen){
 	int xo = player->mob.entity.x - 8;
 	int yo = player->mob.entity.y - 11;
 
-	if(call_entity_isSwimming(player)){
+	if(call_entity_isSwimming(&player->mob.entity)){
 		yo += 4;
 		int waterColor = getColor4(-1, -1, 115, 335);
 		if(player->mob.tickTime / 8 % 2 == 0){
@@ -415,7 +415,7 @@ void player_render(Player* player, Screen* screen){
 	if(player->activeItem && player->activeItem->id == FURNITURE) yt += 2;
 	render_screen(screen, xo + 8 * flip1, yo + 0, xt + yt*32, col, flip1);
 	render_screen(screen, xo + 8 - 8 * flip1, yo + 0, xt + 1 + yt*32, col, flip1);
-	if(!call_entity_isSwimming(player)){
+	if(!call_entity_isSwimming(&player->mob.entity)){
 		render_screen(screen, xo + 8 * flip2, yo + 8, xt + (yt + 1) * 32, col, flip2);
 		render_screen(screen, xo + 8 - 8 * flip2, yo + 8, xt + 1 + (yt + 1) * 32, col, flip2);
 	}
@@ -440,7 +440,7 @@ void player_render(Player* player, Screen* screen){
 	if(player->activeItem && player->activeItem->id == FURNITURE){
 		player->activeItem->add.furniture.furniture->entity.x = player->mob.entity.x;
 		player->activeItem->add.furniture.furniture->entity.y = yo;
-		call_entity_render(player->activeItem->add.furniture.furniture, screen);
+		call_entity_render(&player->activeItem->add.furniture.furniture->entity, screen);
 	}
 }
 
@@ -450,7 +450,7 @@ char player_findStartPos(Player* player, Level* level){
 		int x = random_next_int(random, level->w);
 		int y = random_next_int(random, level->h);
 
-		if(level_get_tile(level, x, y) == CLOUD){
+		if(level_get_tile(level, x, y) == GRASS){
 			player->mob.entity.x = x * 16 + 8;
 			player->mob.entity.y = y * 16 + 8;
 			return 1;

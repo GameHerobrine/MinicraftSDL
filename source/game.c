@@ -86,7 +86,7 @@ void game_reset() {
 	memset(game_levels, 0, sizeof(game_levels));
 	memset(game_fullRendererScreen, 0, sizeof(game_fullRendererScreen));
 	memset(game_levelSpriteIds, 0, sizeof(game_levelSpriteIds));
-	game_currentLevel = 4;
+	game_currentLevel = 3;
 	level_init(game_levels + 4, 128, 128, 1, 0);
 	level_init(game_levels + 3, 128, 128, 0, game_levels + 4);
 	level_init(game_levels + 2, 128, 128, -1, game_levels + 3);
@@ -130,10 +130,17 @@ void game_init() {
 				int g1 = ((gg + mid * 1) / 2) * 230 / 255 + 10;
 				int b1 = ((bb + mid * 1) / 2) * 230 / 255 + 10;
 #ifdef NSPIRE
-				r1 /= 8;
-				g1 /= 8;
-				b1 /= 8;
-				sdl_colors[pp] = (r1 << 10) | (g1 << 5) | (b1);
+				if(is_cx2) {
+					r1 /= 8;
+					g1 /= 4;
+					b1 /= 8;
+					sdl_colors[pp] = (r1 << 11) | (g1 << 5)| (b1);
+				} else {
+					r1 /= 8;
+					g1 /= 8;
+					b1 /= 8;
+					sdl_colors[pp] = (r1 << 10) | (g1 << 5) | (b1);
+				}
 #else
 				sdl_colors[pp].r = r1;
 				sdl_colors[pp].g = g1;
@@ -330,7 +337,7 @@ void game_render() {
 }
 
 #ifdef NSPIRE
-uint8_t* _nsp_screenbuf = 0;
+void* _nsp_screenbuf = 0;
 #endif
 int main(int argc, char** argv) {
 	unsigned long long int lastTime = getTimeUS();
@@ -367,6 +374,7 @@ int main(int argc, char** argv) {
 	{
 		int x, y;
 	} pixel = {0, 0};
+	const char iscx2 = is_cx2;
 #endif
 	char cwd[PATH_MAX];
 	if(getcwd(cwd, sizeof(cwd)) != NULL) {
@@ -399,15 +407,27 @@ int main(int argc, char** argv) {
 		lcdtype = SCR_320x240_565;
 	}
 
-	_nsp_screenbuf = malloc(sizeof(*_nsp_screenbuf) * 320 * 240);
-	for(int i = 0; i < 320 * 240; ++i)
-		_nsp_screenbuf[i] = 0x0000;
+	if(iscx2){
+		_nsp_screenbuf = malloc(2 * 320 * 240);
+		for(int i = 0; i < 320 * 240; ++i)
+			((uint16_t*)_nsp_screenbuf)[i] = 0x0000;
 
-	lcd_init(SCR_320x240_8);
-	volatile unsigned int* palette = (volatile unsigned int*)0xC0000200;
-	for(int i = 0; i < 128; ++i) {
-		palette[i] = (sdl_colors[i*2 + 1] << 16) | (sdl_colors[i*2] << 0);
+		lcd_init(lcdtype);
+	}else{
+		_nsp_screenbuf = malloc(1 * 320 * 240);
+		for(int i = 0; i < 320 * 240; ++i)
+			((uint8_t*)_nsp_screenbuf)[i] = 0x0000;
+
+		lcd_init(SCR_320x240_8);
+		volatile unsigned int* palette = (volatile unsigned int*)0xC0000200;
+		for(int i = 0; i < 128; ++i) {
+			palette[i] = (sdl_colors[i*2 + 1] << 16) | (sdl_colors[i*2] << 0);
+		}
 	}
+	uint16_t* bufcx2 = (uint16_t*) _nsp_screenbuf;
+	uint8_t* bufcx1 = (uint8_t*) _nsp_screenbuf;
+
+
 #endif
 
 #ifdef LEVELGENTEST
@@ -461,7 +481,7 @@ int main(int argc, char** argv) {
 
 	prevBuf = malloc(game_screen.h * game_screen.w);
 	for(int i = 0; i < game_screen.h * game_screen.w; ++i)
-		prevBuf[i] = 0;
+		prevBuf[i] = 255;
 	game_hasfocus = 1;
 
 #ifdef NSPIRE
@@ -560,6 +580,8 @@ int main(int argc, char** argv) {
 		++frames;
 		game_render();
 
+
+
 		for(int y = 0; y < game_screen.h; ++y) {
 			pixel.y = y * SCALE;
 			for(int x = 0; x < game_screen.w; ++x) {
@@ -571,17 +593,34 @@ int main(int argc, char** argv) {
 					prevBuf[index] = screen_px;
 					needsFlip = 1;
 #ifdef NSPIRE
-					if(lcdtype == SCR_240x320_565) {
-						_nsp_screenbuf[pixel.x*240 + pixel.y] = screen_px;
-						_nsp_screenbuf[(pixel.x+1)*240 + pixel.y] = screen_px;
-						_nsp_screenbuf[(pixel.x)*240 + (pixel.y+1)] = screen_px;
-						_nsp_screenbuf[(pixel.x+1)*240 + (pixel.y+1)] = screen_px;
+					if(iscx2) {
+						uint16_t col = sdl_colors[screen_px];
+						if(lcdtype == SCR_240x320_565) {
+							bufcx2[pixel.x * 240 + pixel.y] = col;
+							bufcx2[(pixel.x + 1) * 240 + pixel.y] = col;
+							bufcx2[(pixel.x) * 240 + (pixel.y + 1)] = col;
+							bufcx2[(pixel.x + 1) * 240 + (pixel.y + 1)] = col;
+						}
+						else {
+							bufcx2[pixel.x + pixel.y*320] = col;
+							bufcx2[(pixel.x+1) + pixel.y*320] = col;
+							bufcx2[(pixel.x) + (pixel.y+1)*320] = col;
+							bufcx2[(pixel.x+1) + (pixel.y+1)*320] = col;
+						}
 					} else {
-						_nsp_screenbuf[pixel.x + pixel.y*320] = screen_px;
-						_nsp_screenbuf[(pixel.x+1) + pixel.y*320] = screen_px;
-						_nsp_screenbuf[(pixel.x) + (pixel.y+1)*320] = screen_px;
-						_nsp_screenbuf[(pixel.x+1) + (pixel.y+1)*320] = screen_px;
+						if(lcdtype == SCR_240x320_565) {
+							bufcx1[pixel.x*240 + pixel.y] = screen_px;
+							bufcx1[(pixel.x+1)*240 + pixel.y] = screen_px;
+							bufcx1[(pixel.x)*240 + (pixel.y+1)] = screen_px;
+							bufcx1[(pixel.x+1)*240 + (pixel.y+1)] = screen_px;
+						} else {
+							bufcx1[pixel.x + pixel.y*320] = screen_px;
+							bufcx1[(pixel.x+1) + pixel.y*320] = screen_px;
+							bufcx1[(pixel.x) + (pixel.y+1)*320] = screen_px;
+							bufcx1[(pixel.x+1) + (pixel.y+1)*320] = screen_px;
+						}
 					}
+
 #else
 					int xmin = pixel.x;
 					int xmax = xmin + SCALE;
@@ -614,15 +653,20 @@ int main(int argc, char** argv) {
 			continue;
 		}
 #endif
-		if(1 || needsFlip) {
+		if(needsFlip) {
 #ifdef NSPIRE
-			if(lcdtype == SCR_240x320_565) {
-				//imagine not having 240x320_8
-				//must use raw copy to avoid extreme slowdown by compat mode
-				memcpy(REAL_SCREEN_BASE_ADDRESS, _nsp_screenbuf, 320 * 240 * sizeof(uint8_t));
+			if(iscx2) {
+				lcd_blit(_nsp_screenbuf, lcdtype);
 			} else {
-				lcd_blit(_nsp_screenbuf, SCR_320x240_8);
+				if(lcdtype == SCR_240x320_565) {
+					//imagine not having 240x320_8
+					//must use raw copy to avoid extreme slowdown by compat mode
+					memcpy(REAL_SCREEN_BASE_ADDRESS, _nsp_screenbuf, 320 * 240 * sizeof(uint8_t));
+				} else {
+					lcd_blit(_nsp_screenbuf, SCR_320x240_8);
+				}
 			}
+
 #else
 			SDL_UpdateRect(surface, flipXMin, flipYMin, flipXMax-flipXMin, flipYMax-flipYMin);
 #endif
